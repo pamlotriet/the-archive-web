@@ -1,25 +1,53 @@
 <div class="flex flex-col items-center gap-4">
   <div class="flex justify-center">
-    <button pButton [rounded]="rounded()" [severity]="severity()" [variant]="variant()">buttonText()</button>
+    <button
+      pButton
+      [class]="customClass()"
+      [rounded]="rounded()"
+      [severity]="severity()"
+      [variant]="variant()"
+    >
+      buttonText()
+    </button>
   </div>
   @if (showIcon()) {
     @if (iconPosition() == 'left') {
       <div class="flex flex-wrap gap-4 justify-center">
-        <button pButton [rounded]="rounded()" [severity]="severity()" [variant]="variant()">
+        <button
+          pButton
+          [class]="customClass()"
+          [rounded]="rounded()"
+          [severity]="severity()"
+          [variant]="variant()"
+        >
           <i class="pi" [class]="iconName()"></i> buttonText()
         </button>
       </div>
     }
     @if (iconPosition() == 'right') {
       <div class="flex flex-wrap gap-4 justify-center">
-        <button pButton [rounded]="rounded()" [severity]="severity()" [variant]="variant()">
+        <button
+          pButton
+          [class]="customClass()"
+          [rounded]="rounded()"
+          [severity]="severity()"
+          [variant]="variant()"
+        >
           {{ buttonText() }} <i class="pi" [class]="iconName()"></i>
         </button>
       </div>
     }
     @if (iconOnly()) {
       <div class="flex flex-wrap gap-4 justify-center">
-        <button pButton [rounded]="rounded()" [severity]="severity()" [variant]="variant()" iconOnly aria-label="Save">
+        <button
+          pButton
+          [class]="customClass()"
+          [rounded]="rounded()"
+          [severity]="severity()"
+          [variant]="variant()"
+          iconOnly
+          aria-label="Save"
+        >
           <i class="pi" [class]="iconName()"></i>
         </button>
       </div>

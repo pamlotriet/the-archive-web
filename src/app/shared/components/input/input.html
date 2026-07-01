@@ -1,10 +1,15 @@
-    <div class="flex flex-wrap justify-center items-end gap-4">
-            <p-floatlabel>
-                <input pInputText id="over_label" [formControl]="control()" autocomplete="off" />
-                <label for="over_label">{{floatLabel()}}</label>
-            </p-floatlabel>
-            @if(errorMessage())
-            {
-                <small id="username-help" class="text-sm text-red-500">{{errorMessage()}}</small>
-            }
-        </div>
+<div class="flex flex-wrap justify-center items-end gap-4">
+  <p-floatlabel>
+    <input
+      pInputText
+      id="over_label"
+      [class]="customClass()"
+      [formControl]="control()"
+      autocomplete="off"
+    />
+    <label for="over_label">{{ floatLabel() }}</label>
+  </p-floatlabel>
+  @if (errorMessage()) {
+    <small id="username-help" class="text-sm text-red-500">{{ errorMessage() }}</small>
+  }
+</div>

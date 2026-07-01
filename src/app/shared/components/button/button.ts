@@ -17,4 +17,5 @@ export class Button {
   severity = input<ButtonSeverity>('primary');
   variant = input<ButtonVariant>();
   rounded = input<boolean>(false);
+  customClass = input<string>('');
 }
