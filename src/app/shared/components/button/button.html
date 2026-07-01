@@ -7,7 +7,7 @@
       [severity]="severity()"
       [variant]="variant()"
     >
-      buttonText()
+      {{ buttonText() | translate }}
     </button>
   </div>
   @if (showIcon()) {
@@ -20,7 +20,7 @@
           [severity]="severity()"
           [variant]="variant()"
         >
-          <i class="pi" [class]="iconName()"></i> buttonText()
+          <i class="pi" [class]="iconName()"></i> {{ buttonText() | translate }}
         </button>
       </div>
     }
@@ -33,7 +33,7 @@
           [severity]="severity()"
           [variant]="variant()"
         >
-          {{ buttonText() }} <i class="pi" [class]="iconName()"></i>
+          {{ buttonText() | translate }} <i class="pi" [class]="iconName()"></i>
         </button>
       </div>
     }
@@ -46,7 +46,7 @@
           [severity]="severity()"
           [variant]="variant()"
           iconOnly
-          aria-label="Save"
+          [attr.aria-label]="'common.actions.save' | translate"
         >
           <i class="pi" [class]="iconName()"></i>
         </button>
