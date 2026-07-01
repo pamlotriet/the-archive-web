@@ -1,3 +1,6 @@
-<div class="flex">
-  <router-outlet></router-outlet>
+<div class="flex min-h-screen w-full flex-col bg-background text-foreground">
+  <app-app-bar />
+  <main class="flex flex-1">
+    <router-outlet></router-outlet>
+  </main>
 </div>
