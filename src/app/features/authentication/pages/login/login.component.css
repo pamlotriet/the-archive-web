@@ -1,0 +1,287 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.login-shell {
+  --auth-text: #182233;
+  --auth-muted: rgb(24 34 51 / 68%);
+  --auth-accent: #9a6814;
+  --auth-line: rgb(154 104 20 / 32%);
+  --auth-brand-bg: linear-gradient(135deg, rgb(255 253 247 / 96%), rgb(245 238 222 / 90%));
+  --auth-card-bg: linear-gradient(145deg, rgb(255 255 255 / 94%), rgb(250 247 239 / 91%));
+  --auth-field-bg: rgb(255 255 255 / 82%);
+  --auth-field-border: rgb(154 104 20 / 42%);
+  --auth-button-bg: rgb(255 255 255 / 76%);
+  --auth-button-hover: rgb(247 239 219 / 94%);
+  --auth-shadow: rgb(49 38 17 / 18%);
+
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(18rem, 34%) 1fr;
+  color: var(--auth-text);
+  background:
+    linear-gradient(90deg, rgb(255 252 244 / 62%), rgb(255 255 255 / 72%)),
+    url('/assets/images/library-login-background.png') center / cover fixed;
+}
+
+:host-context(.dark) .login-shell {
+  --auth-text: #f7f4ed;
+  --auth-muted: rgb(247 244 237 / 68%);
+  --auth-accent: #e8b84f;
+  --auth-line: rgb(220 169 69 / 34%);
+  --auth-brand-bg: linear-gradient(135deg, rgb(2 7 13 / 94%), rgb(5 12 21 / 82%));
+  --auth-card-bg: linear-gradient(145deg, rgb(8 18 31 / 92%), rgb(5 13 24 / 88%));
+  --auth-field-bg: rgb(2 9 17 / 74%);
+  --auth-field-border: rgb(220 169 69 / 46%);
+  --auth-button-bg: rgb(3 10 19 / 66%);
+  --auth-button-hover: rgb(15 26 41 / 86%);
+  --auth-shadow: rgb(0 0 0 / 45%);
+
+  background:
+    linear-gradient(90deg, rgb(3 8 15 / 45%), rgb(3 11 22 / 30%)),
+    url('/assets/images/library-login-background.png') center / cover fixed;
+}
+
+.brand-panel {
+  display: grid;
+  place-items: center;
+  padding: 3rem;
+  border-right: 1px solid var(--auth-line);
+  background: var(--auth-brand-bg);
+  backdrop-filter: blur(4px);
+}
+
+.brand-content {
+  width: min(100%, 24rem);
+  text-align: center;
+}
+
+.brand-logo {
+  width: 11rem;
+  margin-inline: auto;
+  filter: drop-shadow(0 12px 30px rgb(0 0 0 / 55%));
+}
+
+.brand-name {
+  margin-top: 1rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  line-height: 1;
+}
+
+.brand-kicker {
+  margin-top: 1.2rem;
+  color: var(--auth-accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.brand-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem auto 1.5rem;
+  color: var(--auth-accent);
+}
+
+.brand-divider::before,
+.brand-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, var(--auth-line));
+}
+
+.brand-divider::after {
+  background: linear-gradient(90deg, var(--auth-line), transparent);
+}
+
+.brand-description {
+  color: var(--auth-muted);
+  line-height: 1.8;
+}
+
+.form-panel {
+  display: grid;
+  place-items: center;
+  padding: 6rem 2rem 3rem;
+}
+
+.login-card {
+  width: min(100%, 46rem);
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 1px solid var(--auth-line);
+  border-radius: 1.25rem;
+  background: var(--auth-card-bg);
+  box-shadow: 0 30px 80px var(--auth-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.card-mark {
+  width: 4.5rem;
+  margin-inline: auto;
+  border-radius: 1rem;
+}
+
+h1 {
+  margin-top: 1rem;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 700;
+}
+
+.subtitle {
+  max-width: 26rem;
+  margin: 0.5rem auto 2.25rem;
+  color: var(--auth-muted);
+  text-align: center;
+}
+
+.login-form,
+.password-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form {
+  gap: 1.25rem;
+}
+
+app-input,
+app-button {
+  display: block;
+  width: 100%;
+}
+
+.password-group {
+  gap: 0.55rem;
+}
+
+.forgot-link {
+  align-self: flex-end;
+  color: var(--auth-accent);
+  font-size: 0.875rem;
+}
+
+.forgot-link:hover,
+.register-row a:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--auth-muted);
+  font-size: 0.8rem;
+}
+
+.separator span {
+  height: 1px;
+  flex: 1;
+  background: var(--auth-line);
+}
+
+.google-button {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--auth-field-border);
+  border-radius: 0.5rem;
+  background: var(--auth-button-bg);
+  color: var(--auth-text);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.google-button:hover {
+  border-color: var(--auth-accent);
+  background: var(--auth-button-hover);
+}
+
+.google-mark {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #4285f4;
+}
+
+.register-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--auth-muted);
+  font-size: 0.9rem;
+}
+
+.register-row a {
+  color: var(--auth-accent);
+  font-weight: 700;
+}
+
+:host ::ng-deep .login-input {
+  width: 100%;
+  min-height: 3.35rem;
+  border-color: var(--auth-field-border) !important;
+  background: var(--auth-field-bg) !important;
+  color: var(--auth-text) !important;
+}
+
+:host ::ng-deep app-input > div,
+:host ::ng-deep app-input p-floatlabel,
+:host ::ng-deep app-button > div,
+:host ::ng-deep app-button > div > div {
+  width: 100%;
+}
+
+:host ::ng-deep .login-submit {
+  width: 100%;
+  min-height: 3.4rem;
+  border: 0 !important;
+  background: linear-gradient(100deg, #dca945, #f2c65f) !important;
+  color: #10151d !important;
+  font-weight: 800;
+}
+
+:host ::ng-deep .login-submit:hover {
+  filter: brightness(1.06);
+}
+
+@media (max-width: 800px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+    background-position: 35% center;
+  }
+
+  .brand-panel {
+    min-height: 18rem;
+    padding: 5rem 1.5rem 2rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--auth-line);
+  }
+
+  .brand-logo {
+    width: 7rem;
+  }
+
+  .brand-name {
+    font-size: 2.2rem;
+  }
+
+  .brand-description,
+  .brand-divider {
+    display: none;
+  }
+
+  .form-panel {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .login-card {
+    padding: 2rem 1.25rem;
+  }
+}

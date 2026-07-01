@@ -1,0 +1,70 @@
+<div class="login-shell">
+  <aside class="brand-panel">
+    <div class="brand-content">
+      <img
+        src="assets/images/archive-logo.png"
+        [alt]="'auth.login.logoAltText' | translate"
+        class="brand-logo"
+      />
+      <p class="brand-name">{{ 'app.name' | translate }}</p>
+      <p class="brand-kicker">{{ 'auth.login.brandTagline' | translate }}</p>
+      <div class="brand-divider"><span>✦</span></div>
+      <p class="brand-description">{{ 'auth.login.brandDescription' | translate }}</p>
+    </div>
+  </aside>
+
+  <section class="form-panel">
+    <div class="login-card">
+      <img
+        src="assets/images/archive-logo.png"
+        [alt]="'auth.login.logoAltText' | translate"
+        class="card-mark"
+      />
+
+      <h1>{{ 'auth.login.title' | translate }}</h1>
+      <p class="subtitle">{{ 'auth.login.subtitle' | translate }}</p>
+
+      <form class="login-form">
+        <app-input
+          floatLabel="auth.login.email.label"
+          type="email"
+          severity="success"
+          customClass="login-input"
+        ></app-input>
+
+        <div class="password-group">
+          <app-input
+            floatLabel="auth.login.password.label"
+            type="password"
+            severity="success"
+            customClass="login-input"
+          ></app-input>
+          <a href="#" class="forgot-link">
+            {{ 'common.actions.forgotPassword' | translate }}
+          </a>
+        </div>
+
+        <app-button
+          buttonText="auth.login.submit"
+          customClass="login-submit"
+        ></app-button>
+
+        <div class="separator">
+          <span></span>
+          <p>{{ 'common.actions.or' | translate }}</p>
+          <span></span>
+        </div>
+
+        <button type="button" class="google-button">
+          <span class="google-mark">G</span>
+          {{ 'common.actions.continueWithGoogle' | translate }}
+        </button>
+
+        <div class="register-row">
+          <span>{{ 'common.actions.noAccount' | translate }}</span>
+          <a href="#">{{ 'common.actions.register' | translate }}</a>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
