@@ -1,0 +1,46 @@
+{
+  "app": {
+    "name": "The Archive"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Please enter your credentials to login",
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "submit": "Login",
+      "logoAltText": "The Archive logo",
+      "brandTagline": "Your personal library of everything",
+      "brandDescription": "Collect. Organize. Reflect. All the things that inspire you, in one beautiful place."
+    }
+  },
+  "common": {
+    "input": {
+      "defaultLabel": "Enter text"
+    },
+    "button": {
+      "defaultLabel": "Button"
+    },
+    "actions": {
+      "save": "Save",
+      "show": "Show",
+      "hide": "Hide",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "forgotPassword": "Forgot password?",
+      "register": "Register",
+      "noAccount": "Don't have an account?",
+      "or": "OR",
+      "continueWithGoogle": "Continue with Google",
+      "theme": "Theme",
+      "useLightMode": "Switch to light mode",
+      "useDarkMode": "Switch to dark mode"
+    }
+  }
+}
