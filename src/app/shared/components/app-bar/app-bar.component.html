@@ -1,0 +1,20 @@
+<header
+  class="fixed inset-x-0 top-0 z-50 flex h-20 w-full items-center justify-end px-6 text-foreground"
+>
+  <button
+    type="button"
+    class="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-gold/40 bg-background/70 px-4 text-gold shadow-lg backdrop-blur-md transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    [attr.aria-label]="
+      (isDark() ? 'common.actions.useLightMode' : 'common.actions.useDarkMode') | translate
+    "
+    [attr.aria-pressed]="isDark()"
+    (click)="toggleTheme()"
+  >
+    @if (isDark()) {
+      <svg data-p-icon="sun" class="size-5" aria-hidden="true"></svg>
+    } @else {
+      <svg data-p-icon="moon" class="size-5" aria-hidden="true"></svg>
+    }
+    <span class="text-sm">{{ 'common.actions.theme' | translate }}</span>
+  </button>
+</header>
