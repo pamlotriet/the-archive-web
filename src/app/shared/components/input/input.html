@@ -1,15 +1,61 @@
 <div class="flex flex-wrap justify-center items-end gap-4">
-  <p-floatlabel>
+  <p-floatlabel variant="on">
     <input
       pInputText
-      id="over_label"
-      [class]="customClass()"
+      id="on_label"
+      [type]="displayedType()"
+      [class]="(type() === 'password' ? 'pr-12 ' : '') + customClass()"
       [formControl]="control()"
+      [placeholder]="placeholder() | translate"
       autocomplete="off"
     />
-    <label for="over_label">{{ floatLabel() }}</label>
+    <label for="on_label">{{ floatLabel() | translate }}</label>
+    @if (type() === 'password') {
+      <button
+        type="button"
+        class="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center text-muted-foreground transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        [attr.aria-label]="
+          (passwordVisible() ? 'common.actions.hidePassword' : 'common.actions.showPassword')
+            | translate
+        "
+        [attr.aria-pressed]="passwordVisible()"
+        (click)="togglePasswordVisibility()"
+      >
+        @if (passwordVisible()) {
+          <svg
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m2 2 20 20" />
+            <path d="M6.7 6.7C4.8 8 3.3 9.8 2 12c2.3 4 5.6 6 10 6 1.6 0 3-.3 4.3-.8" />
+            <path d="M10.7 10.7a2 2 0 0 0 2.6 2.6" />
+            <path d="M9.9 4.2A10 10 0 0 1 12 4c4.4 0 7.7 2 10 6a16 16 0 0 1-2.1 2.9" />
+          </svg>
+        } @else {
+          <svg
+            class="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="2.5" />
+          </svg>
+        }
+      </button>
+    }
   </p-floatlabel>
   @if (errorMessage()) {
-    <small id="username-help" class="text-sm text-red-500">{{ errorMessage() }}</small>
+    <small id="username-help" class="text-sm text-red-500">{{ errorMessage() | translate }}</small>
   }
 </div>
