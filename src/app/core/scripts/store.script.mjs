@@ -8,11 +8,26 @@ if (!storeName) {
   process.exit(1);
 }
 
-const basePath = `src/app/features/${storeName}/store`;
+// npm runs scripts from the directory containing package.json, even when the
+// command was started in a nested directory. INIT_CWD preserves that directory.
+const basePath = process.env.INIT_CWD || process.cwd();
 
 fs.mkdirSync(basePath, { recursive: true });
 
 const files = {
+  [`${storeName}.interface.ts`]: `export interface ${capitalize(storeName)} {
+
+}
+`,
+
+  [`${storeName}.service.ts`]: `import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ${capitalize(storeName)}Service {}
+`,
+
   [`${storeName}.actions.ts`]: `import { createActionGroup, emptyProps } from '@ngrx/store';
 
 export const ${capitalize(storeName)}Actions = createActionGroup({
@@ -58,10 +73,32 @@ export class ${capitalize(storeName)}Effects {
 }
 `,
 
+  [`${storeName}.facade.ts`]: `import { inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { ${capitalize(storeName)}Actions } from './${storeName}.actions';
+import { select${capitalize(storeName)}State } from './${storeName}.selectors';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ${capitalize(storeName)}Facade {
+  private readonly store = inject(Store);
+
+  readonly state = this.store.selectSignal(select${capitalize(storeName)}State);
+
+  load(): void {
+    this.store.dispatch(${capitalize(storeName)}Actions.load());
+  }
+}
+`,
+
   ['index.ts']: `export * from './${storeName}.actions';
 export * from './${storeName}.effects';
+export * from './${storeName}.facade';
+export * from './${storeName}.interface';
 export * from './${storeName}.reducer';
 export * from './${storeName}.selectors';
+export * from './${storeName}.service';
 export * from './${storeName}.state';
 `,
 };
