@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
     const uid = storage?.getItem('userId');
 
     if (!uid) {
-      return this.router.createUrlTree(['/login']);
+      return this.router.createUrlTree(['/authentication']);
     }
 
     return this.authService.restoreAuthenticatedUser(uid).then((user) => {
@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
       storage?.removeItem('isAuthenticated');
       storage?.removeItem('userId');
 
-      return this.router.createUrlTree(['/login']);
+      return this.router.createUrlTree(['/authentication']);
     });
   }
 }

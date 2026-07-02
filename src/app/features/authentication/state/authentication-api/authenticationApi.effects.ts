@@ -110,6 +110,81 @@ export class AuthenticationApiEffects {
     ),
   );
 
+  readonly registerWithCredentials$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationApiActions.registerWithEmailAndPassword),
+      exhaustMap(({ user }) =>
+        defer(() => this.authService.registerWithEmailAndPassword(user)).pipe(
+          map((registeredUser) =>
+            AuthenticationApiActions.registerWithEmailAndPasswordSuccess({
+              user: registeredUser,
+            }),
+          ),
+          catchError((error: unknown) =>
+            of(
+              AuthenticationApiActions.registerWithEmailAndPasswordFailure({
+                error:
+                  error instanceof Error
+                    ? error.message
+                    : 'Unable to register',
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  readonly completeRegistration$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationApiActions.registerWithEmailAndPasswordSuccess),
+      tap(({ user }) => {
+        const storage = this.document.defaultView?.localStorage;
+        storage?.setItem('userId', user.uid);
+        storage?.setItem('isAuthenticated', 'true');
+      }),
+      tap(() => void this.router.navigate(['/dashboard'])),
+    ),
+    { dispatch: false },
+  );
+
+  readonly authenticateWithGoogle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationApiActions.authenticateWithGoogle),
+      exhaustMap(() =>
+        defer(() => this.authService.authenticateWithGoogle()).pipe(
+          map((user) =>
+            AuthenticationApiActions.authenticateWithGoogleSuccess({ user }),
+          ),
+          catchError((error: unknown) =>
+            of(
+              AuthenticationApiActions.authenticateWithGoogleFailure({
+                error:
+                  error instanceof Error
+                    ? error.message
+                    : 'Unable to authenticate with Google',
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  readonly completeGoogleAuthentication$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthenticationApiActions.authenticateWithGoogleSuccess),
+        tap(({ user }) => {
+          const storage = this.document.defaultView?.localStorage;
+          storage?.setItem('userId', user.uid);
+          storage?.setItem('isAuthenticated', 'true');
+        }),
+        tap(() => void this.router.navigate(['/dashboard'])),
+      ),
+    { dispatch: false },
+  );
+
   readonly loadUserProfile$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationApiActions.loadUserProfile),
@@ -181,7 +256,7 @@ export class AuthenticationApiEffects {
         ofType(AuthenticationApiActions.logoutSuccess),
         tap(() => {
           this.clearStoredAuthentication();
-          void this.router.navigate(['/login']);
+          void this.router.navigate(['/authentication']);
         }),
       ),
     { dispatch: false },

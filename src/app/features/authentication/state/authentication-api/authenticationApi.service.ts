@@ -4,12 +4,14 @@ import {
   signOut,
   User,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, setDoc, where } from 'firebase/firestore';
 import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
 import { AuthenticationApiInterface } from './authenticationApi.interface';
 import { AppUser, UserProfile } from '../../models/user.models';
-import { UserCredentials } from '../../models/auth.models';
+import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
 
 @Injectable({
   providedIn: 'root',
@@ -64,21 +66,78 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
     };
   }
 
-  async registerWithEmailAndPassword(user: UserCredentials): Promise<AppUser> {
+  async registerWithEmailAndPassword(user: RegistrationDetails): Promise<AppUser> {
     const credential = await createUserWithEmailAndPassword(
       firebaseAuth,
       user.email,
       user.password,
     );
-    return this.toAppUser(credential.user);
+    const profile: UserProfile = {
+      name: user.name,
+      lastname: user.lastname,
+    };
+
+    await this.addUserProfileToFirestore(
+      credential.user.uid,
+      profile,
+      credential.user.email,
+    );
+
+    return {
+      ...this.toAppUser(credential.user),
+      ...profile,
+    };
   }
 
-  private addUserProfileToFirestore(uid: string, profile: UserProfile): Promise<void> {
+  private addUserProfileToFirestore(
+    uid: string,
+    profile: UserProfile,
+    email: string | null,
+  ): Promise<void> {
     const userProfileRef = doc(firebaseFirestore, 'users', uid);
 
     return setDoc(userProfileRef, {
       ...profile,
       uuid: uid,
+      email,
     });
+  }
+
+  async authenticateWithGoogle(): Promise<AppUser> {
+    const credential = await signInWithPopup(
+      firebaseAuth,
+      new GoogleAuthProvider(),
+    );
+    const appUser = this.toAppUser(credential.user);
+    const existingProfile = await this.getUserProfile(appUser.uid);
+
+    if (existingProfile) {
+      return {
+        ...appUser,
+        ...existingProfile,
+      };
+    }
+
+    const [name = null, ...lastNameParts] = (
+      credential.user.displayName ?? ''
+    )
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    const profile: UserProfile = {
+      name,
+      lastname: lastNameParts.join(' ') || null,
+    };
+
+    await this.addUserProfileToFirestore(
+      appUser.uid,
+      profile,
+      credential.user.email,
+    );
+
+    return {
+      ...appUser,
+      ...profile,
+    };
   }
 }

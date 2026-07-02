@@ -21,6 +21,36 @@ export const authenticationApiReducer = createReducer(
     loading: false,
     error,
   })),
+  on(AuthenticationApiActions.registerWithEmailAndPassword, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(AuthenticationApiActions.registerWithEmailAndPasswordSuccess, (state, { user }) => ({
+    ...state,
+    loading: false,
+    user,
+  })),
+  on(AuthenticationApiActions.registerWithEmailAndPasswordFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+  on(AuthenticationApiActions.authenticateWithGoogle, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(AuthenticationApiActions.authenticateWithGoogleSuccess, (state, { user }) => ({
+    ...state,
+    loading: false,
+    user,
+  })),
+  on(AuthenticationApiActions.authenticateWithGoogleFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
   on(AuthenticationApiActions.restoreAuthentication, (state) => ({
     ...state,
     loading: true,

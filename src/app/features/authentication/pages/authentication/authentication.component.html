@@ -1,0 +1,168 @@
+<div
+  class="grid min-h-screen grid-cols-[minmax(18rem,34%)_1fr] bg-[linear-gradient(90deg,rgb(255_252_244/0.62),rgb(255_255_255/0.72)),url('/assets/images/library-login-background.png')] bg-cover bg-center bg-fixed text-foreground dark:bg-[linear-gradient(90deg,rgb(3_8_15/0.45),rgb(3_11_22/0.3)),url('/assets/images/library-login-background.png')] max-md:grid-cols-1 max-md:bg-[position:35%_center]"
+>
+  <aside
+    class="grid place-items-center border-r border-gold/30 bg-[linear-gradient(135deg,rgb(255_253_247/0.96),rgb(245_238_222/0.9))] p-12 backdrop-blur-sm dark:bg-[linear-gradient(135deg,rgb(2_7_13/0.94),rgb(5_12_21/0.82))] max-md:min-h-72 max-md:border-r-0 max-md:border-b max-md:px-6 max-md:pt-20 max-md:pb-8"
+  >
+    <div class="w-full max-w-96 text-center">
+      <img
+        src="assets/images/archive-logo.png"
+        [alt]="'auth.shared.logoAltText' | translate"
+        class="mx-auto w-44 drop-shadow-[0_12px_30px_rgb(0_0_0/0.55)] max-md:w-28"
+      />
+      <p class="mt-4 font-serif text-[clamp(2.1rem,4vw,3.2rem)] leading-none max-md:text-4xl">
+        {{ 'app.name' | translate }}
+      </p>
+      <p class="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-gold">
+        {{ 'auth.shared.brandTagline' | translate }}
+      </p>
+      <div class="mx-auto my-8 flex items-center gap-4 text-gold max-md:hidden">
+        <span class="h-px flex-1 bg-linear-to-r from-transparent to-gold/35"></span>
+        <span>✦</span>
+        <span class="h-px flex-1 bg-linear-to-r from-gold/35 to-transparent"></span>
+      </div>
+      <p class="leading-7 text-muted-foreground max-md:hidden">
+        {{ 'auth.shared.brandDescription' | translate }}
+      </p>
+    </div>
+  </aside>
+
+  <section class="grid place-items-center px-8 pt-24 pb-12 max-md:px-4 max-md:py-8">
+    <div
+      class="w-full max-w-3xl rounded-2xl border border-gold/30 bg-card/90 p-[clamp(2rem,5vw,4rem)] shadow-[0_30px_80px_rgb(49_38_17/0.18)] backdrop-blur-2xl dark:shadow-[0_30px_80px_rgb(0_0_0/0.45)] max-md:px-5 max-md:py-8"
+    >
+      <img
+        src="assets/images/archive-logo.png"
+        [alt]="'auth.shared.logoAltText' | translate"
+        class="mx-auto w-18 rounded-2xl"
+      />
+
+      <h1 class="mt-4 text-center font-serif text-[clamp(2.25rem,4vw,3.25rem)] font-bold">
+        {{ (isRegistering() ? 'auth.register.title' : 'auth.login.title') | translate }}
+      </h1>
+      <p class="mx-auto mt-2 mb-9 max-w-md text-center text-muted-foreground">
+        {{ (isRegistering() ? 'auth.register.subtitle' : 'auth.login.subtitle') | translate }}
+      </p>
+
+      <form
+        class="flex flex-col gap-5"
+        [formGroup]="authenticationForm"
+        (ngSubmit)="onSubmit()"
+      >
+        @if (authenticationError(); as error) {
+          <p
+            class="rounded-lg border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+            role="alert"
+          >
+            {{ error }}
+          </p>
+        }
+
+        @if (authenticationForm.touched && authenticationForm.invalid) {
+          <p
+            class="rounded-lg border border-warning/35 bg-warning/10 px-4 py-3 text-sm text-warning"
+            role="alert"
+          >
+            {{ 'auth.validation.invalidForm' | translate }}
+          </p>
+        }
+
+        @if (isRegistering()) {
+          <div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
+            <app-input
+              class="block w-full [&>div]:w-full [&_p-floatlabel]:w-full"
+              [control]="authenticationForm.controls.name"
+              floatLabel="auth.register.name.label"
+              type="text"
+              customClass="w-full min-h-13 !border-gold/40 !bg-background/80 !text-foreground"
+            ></app-input>
+
+            <app-input
+              class="block w-full [&>div]:w-full [&_p-floatlabel]:w-full"
+              [control]="authenticationForm.controls.lastname"
+              floatLabel="auth.register.lastname.label"
+              type="text"
+              customClass="w-full min-h-13 !border-gold/40 !bg-background/80 !text-foreground"
+            ></app-input>
+          </div>
+        }
+
+        <app-input
+          class="block w-full [&>div]:w-full [&_p-floatlabel]:w-full"
+          [control]="authenticationForm.controls.email"
+          floatLabel="auth.shared.email.label"
+          type="email"
+          customClass="w-full min-h-13 !border-gold/40 !bg-background/80 !text-foreground"
+        ></app-input>
+
+        <div class="flex flex-col gap-2">
+          <app-input
+            class="block w-full [&>div]:w-full [&_p-floatlabel]:w-full"
+            [control]="authenticationForm.controls.password"
+            floatLabel="auth.shared.password.label"
+            type="password"
+            customClass="w-full min-h-13 !border-gold/40 !bg-background/80 !text-foreground"
+          ></app-input>
+
+          @if (!isRegistering()) {
+            <a
+              href="#"
+              class="self-end text-sm text-gold hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+            >
+              {{ 'common.actions.forgotPassword' | translate }}
+            </a>
+          }
+        </div>
+
+        <app-button
+          class="block w-full [&>div]:w-full [&>div>div]:w-full"
+          [buttonText]="
+            authenticationLoading()
+              ? 'auth.shared.working'
+              : isRegistering()
+                ? 'auth.register.submit'
+                : 'auth.login.submit'
+          "
+          customClass="!w-full !min-h-14 !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !font-extrabold !text-slate-950 hover:brightness-105"
+        ></app-button>
+
+        <div class="flex items-center gap-4 text-xs text-muted-foreground">
+          <span class="h-px flex-1 bg-gold/30"></span>
+          <p>{{ 'common.actions.or' | translate }}</p>
+          <span class="h-px flex-1 bg-gold/30"></span>
+        </div>
+
+        <button
+          type="button"
+          class="flex min-h-13 items-center justify-center gap-3 rounded-lg border border-gold/40 bg-background/75 text-foreground transition hover:border-gold hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          (click)="authenticateWithGoogle()"
+        >
+          <span class="text-lg font-extrabold text-blue-500">G</span>
+          {{ 'common.actions.continueWithGoogle' | translate }}
+        </button>
+
+        <div class="flex justify-center gap-1.5 text-sm text-muted-foreground">
+          @if (isRegistering()) {
+            <span>{{ 'common.actions.haveAccount' | translate }}</span>
+            <a
+              class="font-bold text-gold hover:underline"
+              [routerLink]="['/authentication']"
+              [queryParams]="{ mode: 'login' }"
+            >
+              {{ 'common.actions.login' | translate }}
+            </a>
+          } @else {
+            <span>{{ 'common.actions.noAccount' | translate }}</span>
+            <a
+              class="font-bold text-gold hover:underline"
+              [routerLink]="['/authentication']"
+              [queryParams]="{ mode: 'register' }"
+            >
+              {{ 'common.actions.register' | translate }}
+            </a>
+          }
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

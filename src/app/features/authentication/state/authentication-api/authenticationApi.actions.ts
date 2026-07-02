@@ -1,5 +1,8 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { UserCredentials } from '../../models/auth.models';
+import {
+  RegistrationDetails,
+  UserCredentials,
+} from '../../models/auth.models';
 import { AppUser, UserProfile } from '../../models/user.models';
 
 export const AuthenticationApiActions = createActionGroup({
@@ -9,6 +12,12 @@ export const AuthenticationApiActions = createActionGroup({
     loginWithEmailAndPassword: props<{ user: UserCredentials }>(),
     loginWithEmailAndPasswordSuccess: props<{ user: AppUser }>(),
     loginWithEmailAndPasswordFailure: props<{ error: string }>(),
+    registerWithEmailAndPassword: props<{ user: RegistrationDetails }>(),
+    registerWithEmailAndPasswordSuccess: props<{ user: AppUser }>(),
+    registerWithEmailAndPasswordFailure: props<{ error: string }>(),
+    authenticateWithGoogle: emptyProps(),
+    authenticateWithGoogleSuccess: props<{ user: AppUser }>(),
+    authenticateWithGoogleFailure: props<{ error: string }>(),
     restoreAuthentication: props<{ uid: string }>(),
     restoreAuthenticationSuccess: props<{ user: AppUser }>(),
     restoreAuthenticationFailure: props<{ error: string }>(),

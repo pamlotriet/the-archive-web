@@ -19,6 +19,23 @@
     }
   },
   "auth": {
+    "validation": {
+      "invalidForm": "Enter a valid email, a password of at least 6 characters, and all required fields."
+    },
+    "shared": {
+      "working": "Please wait...",
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "logoAltText": "The Archive logo",
+      "brandTagline": "Your personal library of everything",
+      "brandDescription": "Collect. Organize. Reflect. All the things that inspire you, in one beautiful place."
+    },
     "login": {
       "title": "Welcome Back",
       "subtitle": "Please enter your credentials to login",
@@ -34,6 +51,17 @@
       "logoAltText": "The Archive logo",
       "brandTagline": "Your personal library of everything",
       "brandDescription": "Collect. Organize. Reflect. All the things that inspire you, in one beautiful place."
+    },
+    "register": {
+      "title": "Create Your Archive",
+      "subtitle": "Create an account to begin collecting what inspires you",
+      "name": {
+        "label": "First name"
+      },
+      "lastname": {
+        "label": "Last name"
+      },
+      "submit": "Create account"
     }
   },
   "common": {
@@ -50,8 +78,10 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password",
       "forgotPassword": "Forgot password?",
+      "login": "Login",
       "register": "Register",
       "noAccount": "Don't have an account?",
+      "haveAccount": "Already have an account?",
       "or": "OR",
       "continueWithGoogle": "Continue with Google",
       "logout": "Log out",

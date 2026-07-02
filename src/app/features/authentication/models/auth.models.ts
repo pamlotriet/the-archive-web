@@ -12,3 +12,8 @@ export type UserCredentials = {
   email: string;
   password: string;
 };
+
+export type RegistrationDetails = UserCredentials & {
+  name: string;
+  lastname: string;
+};

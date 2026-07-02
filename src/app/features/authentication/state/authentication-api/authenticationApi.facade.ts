@@ -1,6 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { UserCredentials } from '../../models/auth.models';
+import {
+  RegistrationDetails,
+  UserCredentials,
+} from '../../models/auth.models';
 import { AuthenticationApiActions } from './authenticationApi.actions';
 import {
   selectAuthenticationError,
@@ -28,6 +31,16 @@ export class AuthenticationApiFacade {
 
   loginWithEmailAndPassword(user: UserCredentials): void {
     this.store.dispatch(AuthenticationApiActions.loginWithEmailAndPassword({ user }));
+  }
+
+  registerWithEmailAndPassword(user: RegistrationDetails): void {
+    this.store.dispatch(
+      AuthenticationApiActions.registerWithEmailAndPassword({ user }),
+    );
+  }
+
+  authenticateWithGoogle(): void {
+    this.store.dispatch(AuthenticationApiActions.authenticateWithGoogle());
   }
 
   loadUserProfile(uid: string): void {
