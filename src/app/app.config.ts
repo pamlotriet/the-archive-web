@@ -22,8 +22,6 @@ export const appConfig: ApplicationConfig = {
       }),
     }),
     providePrimeNG({
-      license:
-        'eyJpZCI6ImQ3MDUwYzY4LTA5M2EtNGY2Yi04NmE3LTQ0Y2IwMjA3YmU4NSIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODI4OTYzMDEsImV4cCI6MTgxNDQzMjMwMX0.xYswTGP0Qm39f3ZhUVoC7rr5Wbe0ZQ6vAaQzC66N5GnL_-usDAKDKXE-JEuyjvzgLaEikXlMbJilnAfdRw5XDg',
       theme: {
         preset: Aura,
         options: {
