@@ -5,6 +5,9 @@ import { AuthenticationApiActions } from './authenticationApi.actions';
 import {
   selectAuthenticationError,
   selectAuthenticationLoading,
+  selectAuthenticationProfile,
+  selectAuthenticationProfileError,
+  selectAuthenticationProfileLoading,
   selectAuthenticationUser,
   selectIsAuthenticated,
 } from './authenticationApi.selectors';
@@ -18,11 +21,27 @@ export class AuthenticationApiFacade {
   readonly user = this.store.selectSignal(selectAuthenticationUser);
   readonly loading = this.store.selectSignal(selectAuthenticationLoading);
   readonly error = this.store.selectSignal(selectAuthenticationError);
+  readonly profile = this.store.selectSignal(selectAuthenticationProfile);
+  readonly profileLoading = this.store.selectSignal(
+    selectAuthenticationProfileLoading,
+  );
+  readonly profileError = this.store.selectSignal(
+    selectAuthenticationProfileError,
+  );
   readonly isAuthenticated = this.store.selectSignal(selectIsAuthenticated);
 
   loginWithEmailAndPassword(user: UserCredentials): void {
     this.store.dispatch(
       AuthenticationApiActions.loginWithEmailAndPassword({ user }),
+    );
+  }
+
+  loadUserProfile(uid: string): void {
+    this.store.dispatch(
+      AuthenticationApiActions.loadUserProfile({
+        uid,
+        redirectAfterLoad: false,
+      }),
     );
   }
 

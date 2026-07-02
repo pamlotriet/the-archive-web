@@ -20,6 +20,27 @@ export const selectAuthenticationError = createSelector(
   (state) => state.error,
 );
 
+export const selectAuthenticationProfileLoading = createSelector(
+  selectAuthenticationApiState,
+  (state) => state.profileLoading,
+);
+
+export const selectAuthenticationProfileError = createSelector(
+  selectAuthenticationApiState,
+  (state) => state.profileError,
+);
+
+export const selectAuthenticationProfile = createSelector(
+  selectAuthenticationUser,
+  (user) =>
+    user
+      ? {
+          name: user.name,
+          lastname: user.lastname,
+        }
+      : null,
+);
+
 export const selectIsAuthenticated = createSelector(
   selectAuthenticationUser,
   (user) => user !== null,

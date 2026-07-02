@@ -4,6 +4,8 @@ export interface AuthenticationApiState {
   user: AppUser | null;
   loading: boolean;
   error: string | null;
+  profileLoading: boolean;
+  profileError: string | null;
 }
 
 export type UserCredentials = {

@@ -21,6 +21,21 @@ export const authenticationApiReducer = createReducer(
     loading: false,
     error,
   })),
+  on(AuthenticationApiActions.loadUserProfile, (state) => ({
+    ...state,
+    profileLoading: true,
+    profileError: null,
+  })),
+  on(AuthenticationApiActions.loadUserProfileSuccess, (state, { profile }) => ({
+    ...state,
+    profileLoading: false,
+    user: state.user ? { ...state.user, ...profile } : null,
+  })),
+  on(AuthenticationApiActions.loadUserProfileFailure, (state, { error }) => ({
+    ...state,
+    profileLoading: false,
+    profileError: error,
+  })),
   on(AuthenticationApiActions.logout, (state) => ({
     ...state,
     loading: true,
@@ -30,6 +45,8 @@ export const authenticationApiReducer = createReducer(
     ...state,
     loading: false,
     user: null,
+    profileLoading: false,
+    profileError: null,
   })),
   on(AuthenticationApiActions.logoutFailure, (state, { error }) => ({
     ...state,

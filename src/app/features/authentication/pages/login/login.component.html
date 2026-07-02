@@ -24,8 +24,9 @@
       <h1>{{ 'auth.login.title' | translate }}</h1>
       <p class="subtitle">{{ 'auth.login.subtitle' | translate }}</p>
 
-      <form class="login-form">
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <app-input
+          [control]="loginForm.controls.email"
           floatLabel="auth.login.email.label"
           type="email"
           severity="success"
@@ -34,6 +35,7 @@
 
         <div class="password-group">
           <app-input
+            [control]="loginForm.controls.password"
             floatLabel="auth.login.password.label"
             type="password"
             severity="success"
@@ -44,10 +46,7 @@
           </a>
         </div>
 
-        <app-button
-          buttonText="auth.login.submit"
-          customClass="login-submit"
-        ></app-button>
+        <app-button buttonText="auth.login.submit" customClass="login-submit"></app-button>
 
         <div class="separator">
           <span></span>
