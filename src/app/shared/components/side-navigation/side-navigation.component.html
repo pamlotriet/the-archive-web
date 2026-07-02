@@ -42,7 +42,6 @@
                 aria-hidden="true"
               ></span>
             }
-
             <span
               [class]="
                 activeLink.isActive
@@ -56,13 +55,49 @@
           </a>
         </li>
       }
+
+      <li class="hidden max-md:block max-md:min-w-17 max-md:flex-1">
+        <button
+          type="button"
+          class="flex min-h-14 w-full flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent px-1 py-1 text-muted-foreground transition hover:border-gold/20 hover:bg-gold/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          (click)="logout()"
+        >
+          <span class="grid size-8 place-items-center">
+            <svg pIcon="sign-out" [size]="20" aria-hidden="true"></svg>
+          </span>
+          <span class="text-[0.65rem]">{{ 'common.actions.logout' | translate }}</span>
+        </button>
+      </li>
     </ul>
   </nav>
 
-  <div class="flex border-border/70 rounded-2xl"></div>
-  <p
-    class="mt-auto border-t border-border/70 px-3 pt-5 font-serif text-xs italic leading-5 text-muted-foreground max-md:hidden"
-  >
-    {{ 'navigation.footer' | translate }}
-  </p>
+  <div class="mt-auto max-md:hidden">
+    <p
+      class="border-b border-border/70 py-3 pb-5 mb-5 font-serif text-xs italic leading-5 text-muted-foreground"
+    >
+      {{ 'navigation.footer' | translate }}
+    </p>
+
+    <div class="flex items-center gap-3 rounded-2xl border border-border bg-muted/35 p-3 shadow-sm">
+      <span
+        class="grid size-10 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-300 to-gold text-xs font-extrabold text-gold-foreground"
+        aria-hidden="true"
+      >
+        {{ userInitials() }}
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-semibold text-foreground">{{ userName() }}</p>
+        <p class="truncate text-xs text-muted-foreground">{{ user()?.email }}</p>
+      </div>
+      <button
+        type="button"
+        class="grid size-9 shrink-0 place-items-center rounded-lg text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        [attr.aria-label]="'common.actions.logout' | translate"
+        [title]="'common.actions.logout' | translate"
+        (click)="logout()"
+      >
+        <svg pIcon="sign-out" [size]="18" aria-hidden="true"></svg>
+      </button>
+    </div>
+  </div>
 </aside>

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NavigationItem } from '@app/shared/types/side-navigation.types';
+import { AuthenticationApiFacade } from '@features/authentication/state/authentication-api';
 
 @Component({
   selector: 'app-side-navigation',
@@ -11,6 +12,29 @@ import { NavigationItem } from '@app/shared/types/side-navigation.types';
   styleUrl: './side-navigation.component.css',
 })
 export class SideNavigationComponent {
+  private readonly authenticationFacade = inject(AuthenticationApiFacade);
+
+  protected readonly user = this.authenticationFacade.user;
+  protected readonly userName = computed(() => {
+    const user = this.user();
+
+    return (
+      [user?.name, user?.lastname].filter(Boolean).join(' ') ||
+      user?.displayName ||
+      user?.email ||
+      ''
+    );
+  });
+  protected readonly userInitials = computed(() =>
+    this.userName()
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join(''),
+  );
+
   readonly navigationItems: NavigationItem[] = [
     {
       labelKey: 'navigation.items.dashboard',
@@ -61,4 +85,8 @@ export class SideNavigationComponent {
       action: () => {},
     },
   ];
+
+  protected logout(): void {
+    this.authenticationFacade.logout();
+  }
 }

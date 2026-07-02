@@ -21,6 +21,22 @@ export const authenticationApiReducer = createReducer(
     loading: false,
     error,
   })),
+  on(AuthenticationApiActions.restoreAuthentication, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(AuthenticationApiActions.restoreAuthenticationSuccess, (state, { user }) => ({
+    ...state,
+    loading: false,
+    user,
+  })),
+  on(AuthenticationApiActions.restoreAuthenticationFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+    user: null,
+  })),
   on(AuthenticationApiActions.loadUserProfile, (state) => ({
     ...state,
     profileLoading: true,

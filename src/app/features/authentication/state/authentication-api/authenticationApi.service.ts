@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
-import { signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
+import { collection, doc, getDocs, limit, query, setDoc, where } from 'firebase/firestore';
 import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
 import { AuthenticationApiInterface } from './authenticationApi.interface';
 import { AppUser, UserProfile } from '../../models/user.models';
@@ -17,6 +22,13 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
 
   logout(): Promise<void> {
     return signOut(firebaseAuth);
+  }
+
+  async restoreAuthenticatedUser(uid: string): Promise<AppUser | null> {
+    await firebaseAuth.authStateReady();
+    const user = firebaseAuth.currentUser;
+
+    return user?.uid === uid ? this.toAppUser(user) : null;
   }
 
   async getUserProfile(uid: string): Promise<UserProfile | null> {
@@ -50,5 +62,23 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
       displayName: user.displayName,
       photoUrl: user.photoURL,
     };
+  }
+
+  async registerWithEmailAndPassword(user: UserCredentials): Promise<AppUser> {
+    const credential = await createUserWithEmailAndPassword(
+      firebaseAuth,
+      user.email,
+      user.password,
+    );
+    return this.toAppUser(credential.user);
+  }
+
+  private addUserProfileToFirestore(uid: string, profile: UserProfile): Promise<void> {
+    const userProfileRef = doc(firebaseFirestore, 'users', uid);
+
+    return setDoc(userProfileRef, {
+      ...profile,
+      uuid: uid,
+    });
   }
 }

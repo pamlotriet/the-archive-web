@@ -1,15 +1,76 @@
+import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { catchError, defer, exhaustMap, filter, map, of, tap } from 'rxjs';
 import { AuthenticationApiActions } from './authenticationApi.actions';
 import { AuthenticationApiService } from './authenticationApi.service';
 
 @Injectable()
 export class AuthenticationApiEffects {
+  private readonly document = inject(DOCUMENT);
   private readonly actions$ = inject(Actions);
   private readonly authService = inject(AuthenticationApiService);
   private readonly router = inject(Router);
+
+  readonly restoreAuthenticationOnInit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      map(
+        () =>
+          this.document.defaultView?.localStorage.getItem('userId') ?? null,
+      ),
+      filter((uid): uid is string => uid !== null),
+      map((uid) => AuthenticationApiActions.restoreAuthentication({ uid })),
+    ),
+  );
+
+  readonly restoreAuthentication$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationApiActions.restoreAuthentication),
+      exhaustMap(({ uid }) =>
+        defer(() => this.authService.restoreAuthenticatedUser(uid)).pipe(
+          map((user) => {
+            if (!user) {
+              this.clearStoredAuthentication();
+
+              return AuthenticationApiActions.restoreAuthenticationFailure({
+                error: 'Stored authentication session is no longer valid',
+              });
+            }
+
+            return AuthenticationApiActions.restoreAuthenticationSuccess({
+              user,
+            });
+          }),
+          catchError((error: unknown) => {
+            this.clearStoredAuthentication();
+
+            return of(
+              AuthenticationApiActions.restoreAuthenticationFailure({
+                error:
+                  error instanceof Error
+                    ? error.message
+                    : 'Unable to restore authentication',
+              }),
+            );
+          }),
+        ),
+      ),
+    ),
+  );
+
+  readonly loadUserProfileAfterRestore$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthenticationApiActions.restoreAuthenticationSuccess),
+      map(({ user }) =>
+        AuthenticationApiActions.loadUserProfile({
+          uid: user.uid,
+          redirectAfterLoad: true,
+        }),
+      ),
+    ),
+  );
 
   readonly loginWithCredentials$ = createEffect(() =>
     this.actions$.pipe(
@@ -37,6 +98,9 @@ export class AuthenticationApiEffects {
   readonly loadUserProfileAfterLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationApiActions.loginWithEmailAndPasswordSuccess),
+      tap(({ user }) =>
+        this.document.defaultView?.localStorage.setItem('userId', user.uid),
+      ),
       map(({ user }) =>
         AuthenticationApiActions.loadUserProfile({
           uid: user.uid,
@@ -80,7 +144,13 @@ export class AuthenticationApiEffects {
       this.actions$.pipe(
         ofType(AuthenticationApiActions.loadUserProfileSuccess),
         filter(({ redirectAfterLoad }) => redirectAfterLoad),
-        tap(() => void this.router.navigate(['/dashboard'])),
+        tap(() => {
+          this.document.defaultView?.localStorage.setItem(
+            'isAuthenticated',
+            'true',
+          );
+          void this.router.navigate(['/dashboard']);
+        }),
       ),
     { dispatch: false },
   );
@@ -104,4 +174,21 @@ export class AuthenticationApiEffects {
       ),
     ),
   );
+
+  readonly navigateToLoginAfterLogout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthenticationApiActions.logoutSuccess),
+        tap(() => {
+          this.clearStoredAuthentication();
+          void this.router.navigate(['/login']);
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  private clearStoredAuthentication(): void {
+    this.document.defaultView?.localStorage.removeItem('isAuthenticated');
+    this.document.defaultView?.localStorage.removeItem('userId');
+  }
 }

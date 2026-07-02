@@ -9,6 +9,9 @@ export const AuthenticationApiActions = createActionGroup({
     loginWithEmailAndPassword: props<{ user: UserCredentials }>(),
     loginWithEmailAndPasswordSuccess: props<{ user: AppUser }>(),
     loginWithEmailAndPasswordFailure: props<{ error: string }>(),
+    restoreAuthentication: props<{ uid: string }>(),
+    restoreAuthenticationSuccess: props<{ user: AppUser }>(),
+    restoreAuthenticationFailure: props<{ error: string }>(),
     loadUserProfile: props<{ uid: string; redirectAfterLoad: boolean }>(),
     loadUserProfileSuccess: props<{
       profile: UserProfile;
