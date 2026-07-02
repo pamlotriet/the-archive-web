@@ -2,10 +2,10 @@ import { Component, input } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonDirective } from 'primeng/button';
 import { ButtonSeverity, ButtonVariant } from '@shared/components/button/types/button.types';
-
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-button',
-  imports: [ButtonDirective, TranslatePipe],
+  imports: [ButtonDirective, TranslatePipe, ButtonModule],
   templateUrl: './button.html',
   styleUrl: './button.css',
 })

@@ -5,7 +5,7 @@
       [class]="customClass()"
       [rounded]="rounded()"
       [severity]="severity()"
-      [variant]="variant()"
+      variant="'variant()'"
     >
       {{ buttonText() | translate }}
     </button>
@@ -18,7 +18,7 @@
           [class]="customClass()"
           [rounded]="rounded()"
           [severity]="severity()"
-          [variant]="variant()"
+          variant="'variant()'"
         >
           <i class="pi" [class]="iconName()"></i> {{ buttonText() | translate }}
         </button>
@@ -31,7 +31,7 @@
           [class]="customClass()"
           [rounded]="rounded()"
           [severity]="severity()"
-          [variant]="variant()"
+          variant="'variant()'"
         >
           {{ buttonText() | translate }} <i class="pi" [class]="iconName()"></i>
         </button>
@@ -44,7 +44,7 @@
           [class]="customClass()"
           [rounded]="rounded()"
           [severity]="severity()"
-          [variant]="variant()"
+          variant="'variant()'"
           iconOnly
           [attr.aria-label]="'common.actions.save' | translate"
         >
