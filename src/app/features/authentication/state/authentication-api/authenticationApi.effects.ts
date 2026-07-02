@@ -1,15 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  catchError,
-  defer,
-  exhaustMap,
-  filter,
-  map,
-  of,
-  tap,
-} from 'rxjs';
+import { catchError, defer, exhaustMap, filter, map, of, tap } from 'rxjs';
 import { AuthenticationApiActions } from './authenticationApi.actions';
 import { AuthenticationApiService } from './authenticationApi.service';
 
@@ -74,10 +66,7 @@ export class AuthenticationApiEffects {
           catchError((error: unknown) =>
             of(
               AuthenticationApiActions.loadUserProfileFailure({
-                error:
-                  error instanceof Error
-                    ? error.message
-                    : 'Unable to load user profile',
+                error: error instanceof Error ? error.message : 'Unable to load user profile',
               }),
             ),
           ),

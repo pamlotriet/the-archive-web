@@ -3,7 +3,7 @@
 >
   <div class="flex min-h-14 items-center gap-3 px-2 pb-6 max-md:hidden">
     <span
-      class="grid size-11 shrink-0 place-items-center rounded-xl border border-gold/50 bg-gradient-to-br from-gold to-amber-700 font-serif text-xl font-bold text-gold-foreground shadow-lg shadow-gold/20"
+      class="grid size-11 shrink-0 place-items-center rounded-xl border border-gold/50 bg-linear-to-br from-gold to-amber-700 font-serif text-xl font-bold text-gold-foreground shadow-lg shadow-gold/20"
       aria-hidden="true"
     >
       A
@@ -24,7 +24,7 @@
     </p>
 
     <ul
-      class="m-0 grid list-none gap-1 p-0 max-md:flex max-md:overflow-x-auto max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden"
+      class="m-0 grid list-none gap-1 p-0 max-md:flex max-md:overflow-x-auto max-md:scrollbar-none max-md:[&::-webkit-scrollbar]:hidden"
     >
       @for (item of navigationItems; track item.route) {
         <li class="max-md:min-w-17 max-md:flex-1">
@@ -59,6 +59,7 @@
     </ul>
   </nav>
 
+  <div class="flex border-border/70 rounded-2xl"></div>
   <p
     class="mt-auto border-t border-border/70 px-3 pt-5 font-serif text-xs italic leading-5 text-muted-foreground max-md:hidden"
   >

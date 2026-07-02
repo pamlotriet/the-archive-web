@@ -1,20 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  User,
-} from 'firebase/auth';
-import {
-  collection,
-  getDocs,
-  limit,
-  query,
-  where,
-} from 'firebase/firestore';
-import {
-  firebaseAuth,
-  firebaseFirestore,
-} from '../../../../core/data/firebase/firebase.config';
+import { signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
 import { AuthenticationApiInterface } from './authenticationApi.interface';
 import { AppUser, UserProfile } from '../../models/user.models';
 import { UserCredentials } from '../../models/auth.models';
@@ -24,11 +11,7 @@ import { UserCredentials } from '../../models/auth.models';
 })
 export class AuthenticationApiService implements AuthenticationApiInterface {
   async loginWithEmailAndPassword(user: UserCredentials): Promise<AppUser> {
-    const credential = await signInWithEmailAndPassword(
-      firebaseAuth,
-      user.email,
-      user.password,
-    );
+    const credential = await signInWithEmailAndPassword(firebaseAuth, user.email, user.password);
     return this.toAppUser(credential.user);
   }
 
@@ -42,7 +25,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
       where('uuid', '==', uid),
       limit(1),
     );
-    
+
     const snapshot = await getDocs(profileQuery);
     const document = snapshot.docs[0];
 
@@ -54,8 +37,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
 
     return {
       name: typeof data['name'] === 'string' ? data['name'] : null,
-      lastname:
-        typeof data['lastname'] === 'string' ? data['lastname'] : null,
+      lastname: typeof data['lastname'] === 'string' ? data['lastname'] : null,
     };
   }
 

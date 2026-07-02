@@ -2,8 +2,9 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthenticationApiState } from '../../models/auth.models';
 import { authenticationApiFeatureKey } from './authenticationApi.reducer';
 
-export const selectAuthenticationApiState =
-  createFeatureSelector<AuthenticationApiState>(authenticationApiFeatureKey);
+export const selectAuthenticationApiState = createFeatureSelector<AuthenticationApiState>(
+  authenticationApiFeatureKey,
+);
 
 export const selectAuthenticationUser = createSelector(
   selectAuthenticationApiState,
@@ -30,15 +31,13 @@ export const selectAuthenticationProfileError = createSelector(
   (state) => state.profileError,
 );
 
-export const selectAuthenticationProfile = createSelector(
-  selectAuthenticationUser,
-  (user) =>
-    user
-      ? {
-          name: user.name,
-          lastname: user.lastname,
-        }
-      : null,
+export const selectAuthenticationProfile = createSelector(selectAuthenticationUser, (user) =>
+  user
+    ? {
+        name: user.name,
+        lastname: user.lastname,
+      }
+    : null,
 );
 
 export const selectIsAuthenticated = createSelector(

@@ -1,7 +1,3 @@
-export interface AuthenticationPageState {
+export interface AuthenticationPageState {}
 
-}
-
-export const initialState: AuthenticationPageState = {
-
-};
+export const initialState: AuthenticationPageState = {};

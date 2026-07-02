@@ -22,9 +22,7 @@ export class LoginComponent {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      this.authenticationApiFacade.loginWithEmailAndPassword(
-        this.loginForm.getRawValue(),
-      );
+      this.authenticationApiFacade.loginWithEmailAndPassword(this.loginForm.getRawValue());
     }
   }
 }

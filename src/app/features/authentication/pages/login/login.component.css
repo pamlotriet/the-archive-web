@@ -196,7 +196,9 @@ app-button {
   border-radius: 0.5rem;
   background: var(--auth-button-bg);
   color: var(--auth-text);
-  transition: border-color 160ms ease, background 160ms ease;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
 }
 
 .google-button:hover {
