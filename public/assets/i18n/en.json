@@ -2,6 +2,22 @@
   "app": {
     "name": "The Archive"
   },
+  "navigation": {
+    "ariaLabel": "Primary navigation",
+    "subtitle": "Personal library",
+    "sectionLabel": "Explore",
+    "footer": "A quiet place for everything worth keeping.",
+    "items": {
+      "dashboard": "Dashboard",
+      "library": "Library",
+      "collections": "Collections",
+      "quotes": "Quotes",
+      "notes": "Notes",
+      "stats": "Stats",
+      "tags": "Tags",
+      "settings": "Settings"
+    }
+  },
   "auth": {
     "login": {
       "title": "Welcome Back",

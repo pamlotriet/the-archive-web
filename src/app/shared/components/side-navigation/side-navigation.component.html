@@ -1,0 +1,67 @@
+<aside
+  class="fixed inset-y-0 left-0 z-40 flex w-68 flex-col border-r border-gold/20 bg-surface-elevated/95 p-4 shadow-[14px_0_40px_rgb(15_23_42/0.06)] backdrop-blur-xl max-md:inset-x-0 max-md:top-auto max-md:h-19 max-md:w-auto max-md:border-r-0 max-md:border-t max-md:p-2 max-md:shadow-[0_-12px_30px_rgb(15_23_42/0.1)]"
+>
+  <div class="flex min-h-14 items-center gap-3 px-2 pb-6 max-md:hidden">
+    <span
+      class="grid size-11 shrink-0 place-items-center rounded-xl border border-gold/50 bg-gradient-to-br from-gold to-amber-700 font-serif text-xl font-bold text-gold-foreground shadow-lg shadow-gold/20"
+      aria-hidden="true"
+    >
+      A
+    </span>
+    <div>
+      <p class="m-0 font-serif text-lg font-bold tracking-wide">{{ 'app.name' | translate }}</p>
+      <p class="mt-0.5 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+        {{ 'navigation.subtitle' | translate }}
+      </p>
+    </div>
+  </div>
+
+  <nav [attr.aria-label]="'navigation.ariaLabel' | translate">
+    <p
+      class="m-0 px-3 pb-3 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-muted-foreground max-md:hidden"
+    >
+      {{ 'navigation.sectionLabel' | translate }}
+    </p>
+
+    <ul
+      class="m-0 grid list-none gap-1 p-0 max-md:flex max-md:overflow-x-auto max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden"
+    >
+      @for (item of navigationItems; track item.route) {
+        <li class="max-md:min-w-17 max-md:flex-1">
+          <a
+            #activeLink="routerLinkActive"
+            class="group relative flex min-h-12 items-center gap-3 rounded-xl border border-transparent px-3 py-2 text-muted-foreground no-underline transition duration-150 hover:translate-x-0.5 hover:border-gold/20 hover:bg-gold/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring max-md:min-h-14 max-md:flex-col max-md:justify-center max-md:gap-0.5 max-md:px-1 max-md:py-1 max-md:hover:translate-x-0"
+            routerLinkActive="border-gold/30 bg-gold/15 font-bold text-foreground"
+            [routerLink]="item.route"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+            ariaCurrentWhenActive="page"
+          >
+            @if (activeLink.isActive) {
+              <span
+                class="absolute -left-4 h-6 w-0.75 rounded-r-full bg-gold shadow-[0_0_14px] shadow-gold/60 max-md:inset-x-[20%] max-md:-bottom-2 max-md:left-auto max-md:h-0.75 max-md:w-auto max-md:rounded-t-full"
+                aria-hidden="true"
+              ></span>
+            }
+
+            <span
+              [class]="
+                activeLink.isActive
+                  ? 'grid size-8 shrink-0 place-items-center rounded-lg bg-gold/20 text-gold'
+                  : 'grid size-8 shrink-0 place-items-center rounded-lg bg-muted/70 text-current max-md:bg-transparent'
+              "
+            >
+              <svg [pIcon]="item.icon" [size]="20" aria-hidden="true"></svg>
+            </span>
+            <span class="text-sm max-md:text-[0.65rem]">{{ item.labelKey | translate }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <p
+    class="mt-auto border-t border-border/70 px-3 pt-5 font-serif text-xs italic leading-5 text-muted-foreground max-md:hidden"
+  >
+    {{ 'navigation.footer' | translate }}
+  </p>
+</aside>

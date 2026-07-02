@@ -1,6 +1,15 @@
 <div class="flex min-h-screen w-full flex-col bg-background text-foreground">
+  @if (isAuthenticated()) {
+    <app-side-navigation />
+  }
   <app-app-bar />
-  <main class="flex flex-1">
+  <main
+    [class]="
+      isAuthenticated()
+        ? 'ml-68 flex min-w-0 flex-1 pt-20 max-md:ml-0 max-md:pb-19'
+        : 'flex flex-1'
+    "
+  >
     <router-outlet></router-outlet>
   </main>
 </div>
