@@ -64,6 +64,35 @@
       "submit": "Create account"
     }
   },
+  "library": {
+    "title": "Your Library",
+    "subtitle": "Everything in one place",
+    "entries": "{{ amount }} entries",
+    "addEntry": "New",
+    "filter": "Filter",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "categories": {
+      "all": "All",
+      "books": "Books",
+      "movies": "Movies",
+      "series": "Series",
+      "games": "Games",
+      "music": "Music",
+      "podcasts": "Podcasts",
+      "audioBooks": "Audio Books"
+    },
+    "content": {
+      "all": "Showing everything in your library.",
+      "books": "Showing the books saved in your library.",
+      "movies": "Showing the movies saved in your library.",
+      "series": "Showing the series saved in your library.",
+      "games": "Showing the games saved in your library.",
+      "music": "Showing the music saved in your library.",
+      "podcasts": "Showing the podcasts saved in your library.",
+      "audioBooks": "Showing the audio books saved in your library."
+    }
+  },
   "common": {
     "input": {
       "defaultLabel": "Enter text"
