@@ -1,11 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, map } from 'rxjs';
@@ -19,13 +14,7 @@ import { AuthenticationForm } from './types/authentication.types';
   host: {
     class: 'block w-full',
   },
-  imports: [
-    InputComponent,
-    ButtonComponent,
-    TranslatePipe,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [InputComponent, ButtonComponent, TranslatePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './authentication.component.html',
 })
 export class AuthenticationComponent {
@@ -61,14 +50,10 @@ export class AuthenticationComponent {
 
   constructor() {
     effect(() => {
-      const profileValidators = this.isRegistering()
-        ? [Validators.required]
-        : [];
+      const profileValidators = this.isRegistering() ? [Validators.required] : [];
 
       this.authenticationForm.controls.name.setValidators(profileValidators);
-      this.authenticationForm.controls.lastname.setValidators(
-        profileValidators,
-      );
+      this.authenticationForm.controls.lastname.setValidators(profileValidators);
       this.authenticationForm.controls.name.updateValueAndValidity({
         emitEvent: false,
       });
@@ -84,8 +69,7 @@ export class AuthenticationComponent {
       return;
     }
 
-    const { name, lastname, email, password } =
-      this.authenticationForm.getRawValue();
+    const { name, lastname, email, password } = this.authenticationForm.getRawValue();
 
     if (this.isRegistering()) {
       this.authenticationApiFacade.registerWithEmailAndPassword({
