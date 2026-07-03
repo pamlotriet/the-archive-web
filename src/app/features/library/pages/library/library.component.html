@@ -1,0 +1,95 @@
+<div class="flex flex-col p-12 w-full">
+  <h2 class="text-xl font-bold">
+    {{ 'library.title' | translate }}
+  </h2>
+  <h1 class="font-serif text-4xl font-bold">
+    {{ 'library.subtitle' | translate }}
+  </h1>
+  <div class="flex w-full flex-row items-center justify-between gap-4">
+    <div class="flex w-2/4">
+      <h3 class="font-bold">
+        {{ 'library.entries' | translate: { amount: entriesAmount } }}
+      </h3>
+    </div>
+    <div class="ml-auto flex items-center justify-end gap-2">
+      <app-button
+        class="shrink-0"
+        buttonText="library.addEntry"
+        iconName="plus"
+        iconPosition="left"
+        [showIcon]="true"
+        customClass="!w-fit !p-2 !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !font-extrabold !text-slate-950 hover:brightness-105"
+      ></app-button>
+      <app-button
+        class="shrink-0"
+        buttonText="library.gridView"
+        iconName="grid-2"
+        [iconOnly]="true"
+        [active]="viewMode() === 'grid'"
+        variant="outlined"
+        [customClass]="
+          viewMode() === 'grid'
+            ? '!rounded-md !border-[#dca945] !bg-[#dca945]/10 !text-[#dca945]'
+            : '!rounded-md !border-border !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]'
+        "
+        (buttonClick)="setViewMode('grid')"
+      ></app-button>
+      <app-button
+        class="shrink-0"
+        buttonText="library.listView"
+        iconName="list"
+        [iconOnly]="true"
+        [active]="viewMode() === 'list'"
+        variant="outlined"
+        [customClass]="
+          viewMode() === 'list'
+            ? '!rounded-md !border-[#dca945] !bg-[#dca945]/10 !text-[#dca945]'
+            : '!rounded-md !border-border !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]'
+        "
+        (buttonClick)="setViewMode('list')"
+      ></app-button>
+    </div>
+  </div>
+  <div class="mt-8 flex w-full flex-row items-center gap-4">
+    <app-input
+      class="block w-2/4"
+      iconName="search"
+      iconPosition="left"
+      [showIcon]="true"
+      customClass="!min-h-12 !w-full !border-gold/40 !bg-background/80 !text-foreground pt-"
+    ></app-input>
+    <app-button
+      class="shrink-0"
+      buttonText="library.filter"
+      iconName="filter"
+      iconPosition="left"
+      [showIcon]="true"
+      outlined
+      customClass="!p-3 !w-fit !bg-background/80 !border-gold/40 !rounded-md  !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]"
+    ></app-button>
+  </div>
+  <div class="mt-8 flex flex-row flex-wrap gap-3">
+    @for (category of categories; track category.id) {
+      <app-button
+        class="shrink-0"
+        [buttonText]="category.labelKey"
+        [active]="selectedCategory() === category.id"
+        variant="outlined"
+        [rounded]="true"
+        [customClass]="
+          selectedCategory() === category.id
+            ? '!border-[#dca945] !bg-[#dca945]/15 !text-[#dca945]'
+            : '!border-border !bg-transparent !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]'
+        "
+        (buttonClick)="selectCategory(category.id)"
+      ></app-button>
+    }
+  </div>
+
+  <div
+    class="mt-6 rounded-xl border border-border bg-card/50 p-6 text-muted-foreground"
+    aria-live="polite"
+  >
+    {{ selectedCategoryContentKey() | translate }}
+  </div>
+</div>
