@@ -102,6 +102,7 @@
     margin: 0;
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: Roboto, Arial, Helvetica, sans-serif;
   }
 
   app-root {

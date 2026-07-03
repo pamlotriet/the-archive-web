@@ -1,56 +1,38 @@
-<div class="flex flex-col items-center gap-4">
-  <div class="flex justify-center">
-    <button
-      pButton
-      [class]="customClass()"
-      [rounded]="rounded()"
-      [severity]="severity()"
-      variant="'variant()'"
-    >
-      {{ buttonText() | translate }}
-    </button>
-  </div>
-  @if (showIcon()) {
-    @if (iconPosition() == 'left') {
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button
-          pButton
-          [class]="customClass()"
-          [rounded]="rounded()"
-          [severity]="severity()"
-          variant="'variant()'"
-        >
-          <i class="pi" [class]="iconName()"></i> {{ buttonText() | translate }}
-        </button>
-      </div>
-    }
-    @if (iconPosition() == 'right') {
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button
-          pButton
-          [class]="customClass()"
-          [rounded]="rounded()"
-          [severity]="severity()"
-          variant="'variant()'"
-        >
-          {{ buttonText() | translate }} <i class="pi" [class]="iconName()"></i>
-        </button>
-      </div>
-    }
-    @if (iconOnly()) {
-      <div class="flex flex-wrap gap-4 justify-center">
-        <button
-          pButton
-          [class]="customClass()"
-          [rounded]="rounded()"
-          [severity]="severity()"
-          variant="'variant()'"
-          iconOnly
-          [attr.aria-label]="'common.actions.save' | translate"
-        >
-          <i class="pi" [class]="iconName()"></i>
-        </button>
-      </div>
-    }
+<button
+  pButton
+  class="inline-flex items-center justify-center gap-2"
+  [ngClass]="customClass()"
+  [rounded]="rounded()"
+  [severity]="severity()"
+  [outlined]="variant() === 'outlined'"
+  [text]="variant() === 'text'"
+  [class.p-button-link]="variant() === 'link'"
+  [attr.aria-label]="iconOnly() ? (buttonText() | translate) : null"
+  [attr.aria-pressed]="iconOnly() ? active() : null"
+  (click)="buttonClick.emit()"
+>
+  @if ((showIcon() || iconOnly()) && iconPosition() === 'left' && iconName()) {
+    <svg
+      pButtonIcon
+      class="p-button-icon size-4.5 shrink-0 text-current"
+      [class]="iconOnly() ? 'mr-0' : 'mr-2'"
+      [pIcon]="iconName()"
+      [size]="18"
+      aria-hidden="true"
+    ></svg>
   }
-</div>
+
+  @if (!iconOnly()) {
+    <span>{{ buttonText() | translate }}</span>
+  }
+
+  @if ((showIcon() || iconOnly()) && iconPosition() === 'right' && iconName()) {
+    <svg
+      pButtonIcon
+      class="p-button-icon size-4.5 shrink-0 text-current"
+      [pIcon]="iconName()"
+      [size]="18"
+      aria-hidden="true"
+    ></svg>
+  }
+</button>
