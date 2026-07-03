@@ -16,10 +16,7 @@ export class AuthenticationApiEffects {
   readonly restoreAuthenticationOnInit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ROOT_EFFECTS_INIT),
-      map(
-        () =>
-          this.document.defaultView?.localStorage.getItem('userId') ?? null,
-      ),
+      map(() => this.document.defaultView?.localStorage.getItem('userId') ?? null),
       filter((uid): uid is string => uid !== null),
       map((uid) => AuthenticationApiActions.restoreAuthentication({ uid })),
     ),
@@ -48,10 +45,7 @@ export class AuthenticationApiEffects {
 
             return of(
               AuthenticationApiActions.restoreAuthenticationFailure({
-                error:
-                  error instanceof Error
-                    ? error.message
-                    : 'Unable to restore authentication',
+                error: error instanceof Error ? error.message : 'Unable to restore authentication',
               }),
             );
           }),
@@ -98,9 +92,7 @@ export class AuthenticationApiEffects {
   readonly loadUserProfileAfterLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationApiActions.loginWithEmailAndPasswordSuccess),
-      tap(({ user }) =>
-        this.document.defaultView?.localStorage.setItem('userId', user.uid),
-      ),
+      tap(({ user }) => this.document.defaultView?.localStorage.setItem('userId', user.uid)),
       map(({ user }) =>
         AuthenticationApiActions.loadUserProfile({
           uid: user.uid,
@@ -123,10 +115,7 @@ export class AuthenticationApiEffects {
           catchError((error: unknown) =>
             of(
               AuthenticationApiActions.registerWithEmailAndPasswordFailure({
-                error:
-                  error instanceof Error
-                    ? error.message
-                    : 'Unable to register',
+                error: error instanceof Error ? error.message : 'Unable to register',
               }),
             ),
           ),
@@ -135,16 +124,17 @@ export class AuthenticationApiEffects {
     ),
   );
 
-  readonly completeRegistration$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AuthenticationApiActions.registerWithEmailAndPasswordSuccess),
-      tap(({ user }) => {
-        const storage = this.document.defaultView?.localStorage;
-        storage?.setItem('userId', user.uid);
-        storage?.setItem('isAuthenticated', 'true');
-      }),
-      tap(() => void this.router.navigate(['/dashboard'])),
-    ),
+  readonly completeRegistration$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthenticationApiActions.registerWithEmailAndPasswordSuccess),
+        tap(({ user }) => {
+          const storage = this.document.defaultView?.localStorage;
+          storage?.setItem('userId', user.uid);
+          storage?.setItem('isAuthenticated', 'true');
+        }),
+        tap(() => void this.router.navigate(['/dashboard'])),
+      ),
     { dispatch: false },
   );
 
@@ -153,16 +143,12 @@ export class AuthenticationApiEffects {
       ofType(AuthenticationApiActions.authenticateWithGoogle),
       exhaustMap(() =>
         defer(() => this.authService.authenticateWithGoogle()).pipe(
-          map((user) =>
-            AuthenticationApiActions.authenticateWithGoogleSuccess({ user }),
-          ),
+          map((user) => AuthenticationApiActions.authenticateWithGoogleSuccess({ user })),
           catchError((error: unknown) =>
             of(
               AuthenticationApiActions.authenticateWithGoogleFailure({
                 error:
-                  error instanceof Error
-                    ? error.message
-                    : 'Unable to authenticate with Google',
+                  error instanceof Error ? error.message : 'Unable to authenticate with Google',
               }),
             ),
           ),
@@ -220,10 +206,7 @@ export class AuthenticationApiEffects {
         ofType(AuthenticationApiActions.loadUserProfileSuccess),
         filter(({ redirectAfterLoad }) => redirectAfterLoad),
         tap(() => {
-          this.document.defaultView?.localStorage.setItem(
-            'isAuthenticated',
-            'true',
-          );
+          this.document.defaultView?.localStorage.setItem('isAuthenticated', 'true');
           void this.router.navigate(['/dashboard']);
         }),
       ),

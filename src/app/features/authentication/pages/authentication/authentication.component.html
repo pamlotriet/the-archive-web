@@ -44,11 +44,7 @@
         {{ (isRegistering() ? 'auth.register.subtitle' : 'auth.login.subtitle') | translate }}
       </p>
 
-      <form
-        class="flex flex-col gap-5"
-        [formGroup]="authenticationForm"
-        (ngSubmit)="onSubmit()"
-      >
+      <form class="flex flex-col gap-5" [formGroup]="authenticationForm" (ngSubmit)="onSubmit()">
         @if (authenticationError(); as error) {
           <p
             class="rounded-lg border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm text-destructive"

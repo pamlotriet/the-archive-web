@@ -8,14 +8,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 
-export type InputType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number'
-  | 'tel'
-  | 'url'
-  | 'search';
+export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 
 @Component({
   selector: 'app-input',
@@ -47,9 +40,7 @@ export class InputComponent {
   protected readonly passwordVisible = signal(false);
 
   protected displayedType(): InputType {
-    return this.type() === 'password' && this.passwordVisible()
-      ? 'text'
-      : this.type();
+    return this.type() === 'password' && this.passwordVisible() ? 'text' : this.type();
   }
 
   protected inputClasses(): string {

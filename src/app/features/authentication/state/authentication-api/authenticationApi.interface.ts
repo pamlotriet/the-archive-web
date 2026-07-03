@@ -1,7 +1,4 @@
-import {
-  RegistrationDetails,
-  UserCredentials,
-} from '../../models/auth.models';
+import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
 import { AppUser, UserProfile } from '../../models/user.models';
 
 export interface AuthenticationApiInterface {

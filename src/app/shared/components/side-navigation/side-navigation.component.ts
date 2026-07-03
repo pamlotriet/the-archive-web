@@ -15,7 +15,7 @@ export class SideNavigationComponent {
   private readonly authenticationFacade = inject(AuthenticationApiFacade);
 
   protected readonly user = this.authenticationFacade.user;
-  
+
   protected readonly userName = computed(() => {
     const user = this.user();
 
@@ -41,42 +41,42 @@ export class SideNavigationComponent {
     {
       labelKey: 'navigation.items.dashboard',
       route: '/dashboard',
-      icon: 'home'
+      icon: 'home',
     },
     {
       labelKey: 'navigation.items.library',
       route: '/library',
-      icon: 'book'
+      icon: 'book',
     },
     {
       labelKey: 'navigation.items.collections',
       route: '/collections',
-      icon: 'folder'
+      icon: 'folder',
     },
     {
       labelKey: 'navigation.items.quotes',
       route: '/quotes',
-      icon: 'comment'
+      icon: 'comment',
     },
     {
       labelKey: 'navigation.items.notes',
       route: '/notes',
-      icon: 'file-edit'
+      icon: 'file-edit',
     },
     {
       labelKey: 'navigation.items.stats',
       route: '/stats',
-      icon: 'chart-bar'
+      icon: 'chart-bar',
     },
     {
       labelKey: 'navigation.items.tags',
       route: '/tags',
-      icon: 'tags'
+      icon: 'tags',
     },
     {
       labelKey: 'navigation.items.settings',
       route: '/settings',
-      icon: 'cog'
+      icon: 'cog',
     },
   ];
 

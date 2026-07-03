@@ -38,9 +38,8 @@ export class LibraryComponent {
   protected readonly selectedCategory = signal<CategoryId>('all');
   protected readonly selectedCategoryContentKey = computed(
     () =>
-      this.categories.find(
-        (category) => category.id === this.selectedCategory(),
-      )?.contentKey ?? 'library.content.all',
+      this.categories.find((category) => category.id === this.selectedCategory())?.contentKey ??
+      'library.content.all',
   );
 
   protected setViewMode(mode: 'grid' | 'list'): void {

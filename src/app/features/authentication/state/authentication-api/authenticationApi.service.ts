@@ -77,11 +77,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
       lastname: user.lastname,
     };
 
-    await this.addUserProfileToFirestore(
-      credential.user.uid,
-      profile,
-      credential.user.email,
-    );
+    await this.addUserProfileToFirestore(credential.user.uid, profile, credential.user.email);
 
     return {
       ...this.toAppUser(credential.user),
@@ -104,10 +100,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
   }
 
   async authenticateWithGoogle(): Promise<AppUser> {
-    const credential = await signInWithPopup(
-      firebaseAuth,
-      new GoogleAuthProvider(),
-    );
+    const credential = await signInWithPopup(firebaseAuth, new GoogleAuthProvider());
     const appUser = this.toAppUser(credential.user);
     const existingProfile = await this.getUserProfile(appUser.uid);
 
@@ -118,9 +111,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
       };
     }
 
-    const [name = null, ...lastNameParts] = (
-      credential.user.displayName ?? ''
-    )
+    const [name = null, ...lastNameParts] = (credential.user.displayName ?? '')
       .trim()
       .split(/\s+/)
       .filter(Boolean);
@@ -129,11 +120,7 @@ export class AuthenticationApiService implements AuthenticationApiInterface {
       lastname: lastNameParts.join(' ') || null,
     };
 
-    await this.addUserProfileToFirestore(
-      appUser.uid,
-      profile,
-      credential.user.email,
-    );
+    await this.addUserProfileToFirestore(appUser.uid, profile, credential.user.email);
 
     return {
       ...appUser,
