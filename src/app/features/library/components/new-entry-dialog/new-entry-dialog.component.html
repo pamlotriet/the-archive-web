@@ -1,0 +1,170 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-6 backdrop-blur-sm"
+  role="presentation"
+  (click)="close()"
+>
+  <section
+    class="flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gold/25 bg-surface-elevated shadow-2xl shadow-slate-950/40"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="new-entry-title"
+    (click)="$event.stopPropagation()"
+  >
+    <header
+      class="flex items-start justify-between gap-4 border-b border-border/80 bg-card px-6 py-5"
+    >
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold">
+          {{ 'library.newEntry.eyebrow' | translate }}
+        </p>
+        <h2 id="new-entry-title" class="mt-1 font-serif text-2xl font-bold">
+          {{ 'library.newEntry.title' | translate }}
+        </h2>
+        <p class="mt-1 text-sm text-muted-foreground">
+          {{ 'library.newEntry.description' | translate }}
+        </p>
+      </div>
+      <button
+        type="button"
+        class="grid size-10 shrink-0 place-items-center rounded-xl text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        [attr.aria-label]="'library.newEntry.closeLabel' | translate"
+        (click)="close()"
+      >
+        <svg class="size-5" pIcon="times" aria-hidden="true"></svg>
+      </button>
+    </header>
+
+    <form class="overflow-y-auto px-6 py-5">
+      <div class="grid w-full gap-4">
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.title.label' | translate }}
+          </span>
+          <input
+            type="text"
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [placeholder]="'library.newEntry.fields.title.placeholder' | translate"
+          />
+        </label>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.creator.label' | translate }}
+          </span>
+          <input
+            type="text"
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [placeholder]="'library.newEntry.fields.creator.placeholder' | translate"
+          />
+        </label>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.type.label' | translate }}
+            </span>
+            <select
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+            >
+              @for (type of entryTypes; track type.id) {
+                <option [value]="type.id">{{ type.labelKey | translate }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.status.label' | translate }}
+            </span>
+            <select
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+            >
+              @for (status of entryStatuses; track status.id) {
+                <option [value]="status.id">{{ status.labelKey | translate }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.rating.label' | translate }}
+            </span>
+            <input class="accent-gold" type="range" min="0" max="5" step="0.5" value="4" />
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.progress.label' | translate }}
+            </span>
+            <input class="accent-gold" type="range" min="0" max="100" step="1" value="0" />
+          </label>
+        </div>
+
+        <div class="grid gap-4 rounded-xl border border-border bg-muted/25 p-4 md:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.currentPage.label' | translate }}
+            </span>
+            <input
+              type="number"
+              min="0"
+              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [placeholder]="'library.newEntry.fields.currentPage.placeholder' | translate"
+            />
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.totalPages.label' | translate }}
+            </span>
+            <input
+              type="number"
+              min="1"
+              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [placeholder]="'library.newEntry.fields.totalPages.placeholder' | translate"
+            />
+          </label>
+        </div>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.tags.label' | translate }}
+          </span>
+          <input
+            type="text"
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [placeholder]="'library.newEntry.fields.tags.placeholder' | translate"
+          />
+        </label>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.note.label' | translate }}
+          </span>
+          <textarea
+            class="min-h-28 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [placeholder]="'library.newEntry.fields.note.placeholder' | translate"
+          ></textarea>
+        </label>
+      </div>
+    </form>
+    <footer class="flex items-center justify-end gap-3 border-t border-border/80 bg-card px-6 py-4">
+      <button
+        type="button"
+        class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+        (click)="close()"
+      >
+        {{ 'library.newEntry.actions.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
+        (click)="close()"
+      >
+        {{ 'library.newEntry.actions.save' | translate }}
+      </button>
+    </footer>
+  </section>
+</div>

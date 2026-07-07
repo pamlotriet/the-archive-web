@@ -19,6 +19,7 @@
         iconPosition="left"
         [showIcon]="true"
         customClass="!w-fit !p-2 !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !font-extrabold !text-slate-950 hover:brightness-105"
+        (buttonClick)="openNewEntry()"
       ></app-button>
       <app-button
         class="shrink-0"
@@ -85,11 +86,13 @@
       ></app-button>
     }
   </div>
-
-  <div
-    class="mt-6 rounded-xl border border-border bg-card/50 p-6 text-muted-foreground"
-    aria-live="polite"
-  >
-    {{ selectedCategoryContentKey() | translate }}
+  <div class="grid grid-cols-4 gap-4 mt-8">
+    @for (item of filteredItems; track item.id) {
+      <app-item-card [item]="item"></app-item-card>
+    }
   </div>
+
+  @if (isNewEntryOpen()) {
+    <app-new-entry-dialog (dialogClose)="closeNewEntry()"></app-new-entry-dialog>
+  }
 </div>

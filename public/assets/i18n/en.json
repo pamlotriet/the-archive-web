@@ -91,6 +91,89 @@
       "music": "Showing the music saved in your library.",
       "podcasts": "Showing the podcasts saved in your library.",
       "audioBooks": "Showing the audio books saved in your library."
+    },
+    "statuses": {
+      "wantToWatch": "Want to watch",
+      "watching": "Watching",
+      "watched": "Watched",
+      "wantToRead": "Want to read",
+      "reading": "Reading",
+      "read": "Read",
+      "wantToPlay": "Want to play",
+      "playing": "Playing",
+      "played": "Played",
+      "wantToListen": "Want to listen",
+      "listening": "Listening",
+      "listened": "Listened"
+    },
+    "newEntry": {
+      "eyebrow": "Library",
+      "title": "New entry",
+      "description": "Capture the essentials now. You can add richer notes later.",
+      "closeLabel": "Close new entry popup",
+      "types": {
+        "books": "Book",
+        "movies": "Movie",
+        "series": "Series",
+        "games": "Game",
+        "music": "Music",
+        "podcasts": "Podcast",
+        "audioBooks": "Audiobook"
+      },
+      "statuses": {
+        "wantToStart": "Want to start",
+        "inProgress": "In progress",
+        "completed": "Completed"
+      },
+      "fields": {
+        "title": {
+          "label": "Title",
+          "placeholder": "The Left Hand of Darkness"
+        },
+        "creator": {
+          "label": "Creator",
+          "placeholder": "Author, director, studio..."
+        },
+        "type": {
+          "label": "Type"
+        },
+        "status": {
+          "label": "Status"
+        },
+        "rating": {
+          "label": "Rating"
+        },
+        "progress": {
+          "label": "Progress"
+        },
+        "currentPage": {
+          "label": "Current page",
+          "placeholder": "320"
+        },
+        "totalPages": {
+          "label": "Total pages",
+          "placeholder": "896"
+        },
+        "tags": {
+          "label": "Tags",
+          "placeholder": "classic, sci-fi, comfort-watch"
+        },
+        "note": {
+          "label": "Note",
+          "placeholder": "What made this worth saving?"
+        }
+      },
+      "preview": {
+        "status": "In progress",
+        "optionsLabel": "Preview options",
+        "label": "Preview",
+        "title": "The Archive Entry",
+        "creator": "Creator name"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save entry"
+      }
     }
   },
   "common": {

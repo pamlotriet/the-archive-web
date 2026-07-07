@@ -1,0 +1,92 @@
+@let currentItem = item();
+
+@if (currentItem) {
+  <div
+    class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md"
+  >
+    <div class="relative h-64 shrink-0 overflow-hidden rounded-xl bg-slate-900">
+      <img
+        class="h-full w-full object-cover opacity-80"
+        [src]="currentItem.imageUrl"
+        [alt]="currentItem.title"
+      />
+      <div
+        class="absolute inset-0 bg-linear-to-b from-slate-950/10 via-slate-950/25 to-slate-950/80"
+      ></div>
+
+      <div class="absolute left-3 top-3">
+        <span
+          class="rounded-full px-3 py-1 text-xs font-bold tracking-wide"
+          [class]="statusClass(currentItem.status)"
+        >
+          {{ statusLabel(currentItem.status) }}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="absolute right-3 top-3 flex size-10 items-center justify-center rounded-full bg-slate-950/55 text-white"
+        aria-label="More options"
+        [attr.aria-expanded]="isActionsOpen()"
+        aria-haspopup="menu"
+        (click)="toggleActions()"
+      >
+        <svg class="size-5" pIcon="ellipsis-h" aria-hidden="true"></svg>
+      </button>
+
+      @if (isActionsOpen()) {
+        <div
+          class="absolute right-3 top-15 z-10 w-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1 text-sm text-white shadow-xl shadow-slate-950/40 backdrop-blur"
+          role="menu"
+        >
+          <button
+            type="button"
+            class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+            role="menuitem"
+            (click)="closeActions()"
+          >
+            <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+            <span>Edit</span>
+          </button>
+          <button
+            type="button"
+            class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+            role="menuitem"
+            (click)="closeActions()"
+          >
+            <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
+            <span>Delete</span>
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col px-1 pt-3">
+      <div class="flex items-center gap-2 text-xs font-medium tracking-wide text-muted-foreground">
+        <svg
+          class="size-4 shrink-0"
+          [pIcon]="categoryIcon(currentItem.category)"
+          aria-hidden="true"
+        ></svg>
+        <span>{{ categoryLabel(currentItem.category) }}</span>
+      </div>
+
+      <h3 class="mt-2 line-clamp-2 font-serif text-lg font-bold leading-tight text-foreground">
+        {{ currentItem.title }}
+      </h3>
+      <p class="mt-1 truncate text-sm text-muted-foreground">
+        {{ creator(currentItem) }}
+      </p>
+
+      <div class="mt-auto flex items-end gap-3 pt-3 text-sm">
+        <span class="flex items-center gap-1 font-bold text-[#e3b34c]">
+          <svg class="size-4" pIcon="star-fill" aria-hidden="true"></svg>
+          {{ currentItem.rating.toFixed(1) }}
+        </span>
+        <span class="ml-auto text-right text-xs text-muted-foreground">
+          {{ progressLabel(currentItem) }}
+        </span>
+      </div>
+    </div>
+  </div>
+}
