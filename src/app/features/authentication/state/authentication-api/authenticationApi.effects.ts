@@ -60,7 +60,7 @@ export class AuthenticationApiEffects {
       map(({ user }) =>
         AuthenticationApiActions.loadUserProfile({
           uid: user.uid,
-          redirectAfterLoad: true,
+          redirectAfterLoad: false,
         }),
       ),
     ),

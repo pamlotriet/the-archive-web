@@ -43,7 +43,9 @@
           <input
             type="text"
             class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="title()"
             [placeholder]="'library.newEntry.fields.title.placeholder' | translate"
+            (input)="setTitle($event)"
           />
         </label>
 
@@ -54,7 +56,22 @@
           <input
             type="text"
             class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="creator()"
             [placeholder]="'library.newEntry.fields.creator.placeholder' | translate"
+            (input)="setCreator($event)"
+          />
+        </label>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.imageUrl.label' | translate }}
+          </span>
+          <input
+            type="url"
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="imageUrl()"
+            [placeholder]="'library.newEntry.fields.imageUrl.placeholder' | translate"
+            (input)="setImageUrl($event)"
           />
         </label>
 
@@ -65,6 +82,8 @@
             </span>
             <select
               class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="category()"
+              (change)="setCategory($event)"
             >
               @for (type of entryTypes; track type.id) {
                 <option [value]="type.id">{{ type.labelKey | translate }}</option>
@@ -78,6 +97,8 @@
             </span>
             <select
               class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="statusMode()"
+              (change)="setStatusMode($event)"
             >
               @for (status of entryStatuses; track status.id) {
                 <option [value]="status.id">{{ status.labelKey | translate }}</option>
@@ -89,55 +110,101 @@
         <div class="grid gap-4 md:grid-cols-2">
           <label class="grid gap-2">
             <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.rating.label' | translate }}
-            </span>
-            <input class="accent-gold" type="range" min="0" max="5" step="0.5" value="4" />
-          </label>
-
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.progress.label' | translate }}
-            </span>
-            <input class="accent-gold" type="range" min="0" max="100" step="1" value="0" />
-          </label>
-        </div>
-
-        <div class="grid gap-4 rounded-xl border border-border bg-muted/25 p-4 md:grid-cols-2">
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.currentPage.label' | translate }}
+              {{ 'library.newEntry.fields.rating.label' | translate }}: {{ rating() }}
             </span>
             <input
-              type="number"
+              class="accent-gold"
+              type="range"
               min="0"
-              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-              [placeholder]="'library.newEntry.fields.currentPage.placeholder' | translate"
+              max="5"
+              step="0.5"
+              [value]="rating()"
+              (input)="setRating($event)"
             />
           </label>
 
           <label class="grid gap-2">
             <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.totalPages.label' | translate }}
+              {{ 'library.newEntry.fields.progress.label' | translate }}: {{ progress() }}%
             </span>
             <input
-              type="number"
-              min="1"
-              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-              [placeholder]="'library.newEntry.fields.totalPages.placeholder' | translate"
+              class="accent-gold"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              [value]="progress()"
+              [disabled]="isProgressCalculatedFromPages()"
+              (input)="setProgress($event)"
             />
           </label>
         </div>
 
-        <label class="grid gap-2">
+        @if (category() === 'books') {
+          <div class="grid gap-4 rounded-xl border border-border bg-muted/25 p-4 md:grid-cols-2">
+            <label class="grid gap-2">
+              <span class="text-sm font-bold text-foreground">
+                {{ 'library.newEntry.fields.currentPage.label' | translate }}
+              </span>
+              <input
+                type="number"
+                min="0"
+                class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+                [value]="currentPage() ?? ''"
+                [placeholder]="'library.newEntry.fields.currentPage.placeholder' | translate"
+                (input)="setCurrentPage($event)"
+              />
+            </label>
+
+            <label class="grid gap-2">
+              <span class="text-sm font-bold text-foreground">
+                {{ 'library.newEntry.fields.totalPages.label' | translate }}
+              </span>
+              <input
+                type="number"
+                min="1"
+                class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+                [value]="totalPages() ?? ''"
+                [placeholder]="'library.newEntry.fields.totalPages.placeholder' | translate"
+                (input)="setTotalPages($event)"
+              />
+            </label>
+          </div>
+        }
+
+        <fieldset class="grid gap-2">
           <span class="text-sm font-bold text-foreground">
             {{ 'library.newEntry.fields.tags.label' | translate }}
           </span>
-          <input
-            type="text"
-            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-            [placeholder]="'library.newEntry.fields.tags.placeholder' | translate"
-          />
-        </label>
+          @if (firebaseTags().length > 0) {
+            <div class="flex flex-wrap gap-2">
+              @for (tag of firebaseTags(); track tag.id) {
+                <button
+                  type="button"
+                  class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  [class]="
+                    isTagSelected(tag.name)
+                      ? 'border-gold bg-gold/15 text-gold'
+                      : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
+                  "
+                  [attr.aria-pressed]="isTagSelected(tag.name)"
+                  (click)="toggleTag(tag.name)"
+                >
+                  <span
+                    class="size-3 rounded-full"
+                    [style.background]="tag.color"
+                    aria-hidden="true"
+                  ></span>
+                  <span>{{ tag.name }}</span>
+                </button>
+              }
+            </div>
+          } @else {
+            <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+              {{ 'library.newEntry.fields.tags.empty' | translate }}
+            </p>
+          }
+        </fieldset>
 
         <label class="grid gap-2">
           <span class="text-sm font-bold text-foreground">
@@ -145,7 +212,9 @@
           </span>
           <textarea
             class="min-h-28 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="note()"
             [placeholder]="'library.newEntry.fields.note.placeholder' | translate"
+            (input)="setNote($event)"
           ></textarea>
         </label>
       </div>
@@ -161,7 +230,7 @@
       <button
         type="button"
         class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
-        (click)="close()"
+        (click)="save()"
       >
         {{ 'library.newEntry.actions.save' | translate }}
       </button>

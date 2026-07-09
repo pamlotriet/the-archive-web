@@ -7,8 +7,9 @@
     <div class="relative h-64 shrink-0 overflow-hidden rounded-xl bg-slate-900">
       <img
         class="h-full w-full object-cover opacity-80"
-        [src]="currentItem.imageUrl"
+        [src]="imageSource(currentItem)"
         [alt]="currentItem.title"
+        (error)="useFallbackImage($event)"
       />
       <div
         class="absolute inset-0 bg-linear-to-b from-slate-950/10 via-slate-950/25 to-slate-950/80"
@@ -43,7 +44,7 @@
             type="button"
             class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
             role="menuitem"
-            (click)="closeActions()"
+            (click)="editItem(currentItem)"
           >
             <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
             <span>Edit</span>
@@ -52,12 +53,24 @@
             type="button"
             class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
             role="menuitem"
-            (click)="closeActions()"
+            (click)="deleteItem(currentItem)"
           >
             <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
             <span>Delete</span>
           </button>
         </div>
+      }
+
+      @if (currentItem.sourceUrl) {
+        <a
+          class="absolute bottom-3 right-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-slate-950/70 px-3 text-xs font-bold text-white transition hover:bg-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+          [href]="currentItem.sourceUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="size-4" pIcon="external-link" aria-hidden="true"></svg>
+          <span>Open</span>
+        </a>
       }
     </div>
 

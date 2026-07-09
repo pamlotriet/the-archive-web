@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import type { Item } from '../../types/item.types';
 import type { category, status } from '../../types/item.types';
@@ -13,7 +13,11 @@ import type { category, status } from '../../types/item.types';
   styleUrl: './item-card.component.css',
 })
 export class ItemCardComponent {
+  private readonly fallbackImageUrl = '/assets/images/library-login-background.png';
+
   item = input<Item>();
+  readonly itemEdit = output<Item>();
+  readonly itemDelete = output<string>();
   protected readonly isActionsOpen = signal(false);
 
   protected categoryLabel(category: category): string {
@@ -56,12 +60,36 @@ export class ItemCardComponent {
     return `${item.progress}%`;
   }
 
+  protected imageSource(item: Item): string {
+    return item.imageUrl || this.fallbackImageUrl;
+  }
+
+  protected useFallbackImage(event: Event): void {
+    const image = event.target as HTMLImageElement;
+
+    if (image.src.endsWith(this.fallbackImageUrl)) {
+      return;
+    }
+
+    image.src = this.fallbackImageUrl;
+  }
+
   protected toggleActions(): void {
     this.isActionsOpen.update((isOpen) => !isOpen);
   }
 
   protected closeActions(): void {
     this.isActionsOpen.set(false);
+  }
+
+  protected editItem(item: Item): void {
+    this.itemEdit.emit(item);
+    this.closeActions();
+  }
+
+  protected deleteItem(item: Item): void {
+    this.itemDelete.emit(item.id);
+    this.closeActions();
   }
 
   protected statusLabel(status: status): string {
