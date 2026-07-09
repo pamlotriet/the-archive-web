@@ -1,1 +1,218 @@
-<p>settings works!</p>
+<div class="flex min-h-dvh w-full max-w-none flex-col px-6 py-8 sm:px-10 lg:px-12">
+  <header class="border-b border-border/70 pb-8">
+    <p class="text-sm font-bold uppercase tracking-[0.35em] text-muted-foreground">
+      {{ 'settings.title' | translate }}
+    </p>
+    <h1 class="mt-3 font-serif text-4xl font-bold text-foreground sm:text-5xl">
+      {{ 'settings.subtitle' | translate }}
+    </h1>
+  </header>
+
+  <div class="mt-8 grid w-full max-w-none gap-6">
+    <section class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-center gap-3">
+        <svg class="size-5 text-gold" pIcon="user" aria-hidden="true"></svg>
+        <h2 class="font-serif text-2xl font-bold">{{ 'settings.account.title' | translate }}</h2>
+      </div>
+
+      <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <span
+          class="grid size-16 shrink-0 place-items-center rounded-full bg-gold text-lg font-extrabold text-gold-foreground"
+        >
+          {{ userInitials() }}
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-lg font-bold text-foreground">{{ userName() }}</p>
+          <p class="truncate text-muted-foreground">{{ userEmail() }}</p>
+        </div>
+        <button
+          type="button"
+          class="min-h-11 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+          (click)="logout()"
+        >
+          {{ 'settings.account.logout' | translate }}
+        </button>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-center gap-3">
+        <svg class="size-5 text-gold" pIcon="palette" aria-hidden="true"></svg>
+        <h2 class="font-serif text-2xl font-bold">{{ 'settings.appearance.title' | translate }}</h2>
+      </div>
+
+      <div class="mt-6 divide-y divide-border/70">
+        <div class="flex items-center justify-between gap-4 py-4">
+          <div>
+            <p class="font-bold">{{ 'settings.appearance.darkMode.title' | translate }}</p>
+            <p class="text-sm text-muted-foreground">
+              {{ 'settings.appearance.darkMode.description' | translate }}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="relative h-7 w-13 rounded-full bg-muted transition"
+            [class.bg-gold]="isDark()"
+            [attr.aria-pressed]="isDark()"
+            (click)="toggleDarkMode()"
+          >
+            <span
+              class="absolute top-1 size-5 rounded-full bg-background shadow transition"
+              [class.left-7]="isDark()"
+              [class.left-1]="!isDark()"
+            ></span>
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="font-bold">{{ 'settings.appearance.accent.title' | translate }}</p>
+            <p class="text-sm text-muted-foreground">
+              {{ 'settings.appearance.accent.description' | translate }}
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            @for (accent of accentOptions; track accent.id) {
+              <button
+                type="button"
+                class="size-9 rounded-full border-2 border-background shadow-sm outline outline-1 outline-border transition hover:scale-105"
+                [class.!outline-gold]="selectedAccent() === accent.id"
+                [style.background]="accent.color"
+                [attr.aria-label]="accent.label"
+                [attr.aria-pressed]="selectedAccent() === accent.id"
+                (click)="selectAccent(accent.id)"
+              ></button>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 py-4">
+          <div>
+            <p class="font-bold">{{ 'settings.appearance.compact.title' | translate }}</p>
+            <p class="text-sm text-muted-foreground">
+              {{ 'settings.appearance.compact.description' | translate }}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="relative h-7 w-13 rounded-full bg-muted transition"
+            [class.bg-gold]="compactMode()"
+            [attr.aria-pressed]="compactMode()"
+            (click)="toggleCompactMode()"
+          >
+            <span
+              class="absolute top-1 size-5 rounded-full bg-background shadow transition"
+              [class.left-7]="compactMode()"
+              [class.left-1]="!compactMode()"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-center gap-3">
+        <svg class="size-5 text-gold" pIcon="bell" aria-hidden="true"></svg>
+        <h2 class="font-serif text-2xl font-bold">
+          {{ 'settings.notifications.title' | translate }}
+        </h2>
+      </div>
+
+      <div class="mt-6 divide-y divide-border/70">
+        <div class="flex items-center justify-between gap-4 py-4">
+          <div>
+            <p class="font-bold">{{ 'settings.notifications.email.title' | translate }}</p>
+            <p class="text-sm text-muted-foreground">
+              {{ 'settings.notifications.email.description' | translate }}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="relative h-7 w-13 rounded-full bg-muted transition"
+            [class.bg-gold]="emailNotifications()"
+            [attr.aria-pressed]="emailNotifications()"
+            (click)="toggleEmailNotifications()"
+          >
+            <span
+              class="absolute top-1 size-5 rounded-full bg-background shadow transition"
+              [class.left-7]="emailNotifications()"
+              [class.left-1]="!emailNotifications()"
+            ></span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 py-4">
+          <div>
+            <p class="font-bold">{{ 'settings.notifications.reminders.title' | translate }}</p>
+            <p class="text-sm text-muted-foreground">
+              {{ 'settings.notifications.reminders.description' | translate }}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="relative h-7 w-13 rounded-full bg-muted transition"
+            [class.bg-gold]="readingReminders()"
+            [attr.aria-pressed]="readingReminders()"
+            (click)="toggleReadingReminders()"
+          >
+            <span
+              class="absolute top-1 size-5 rounded-full bg-background shadow transition"
+              [class.left-7]="readingReminders()"
+              [class.left-1]="!readingReminders()"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-center gap-3">
+        <svg class="size-5 text-gold" pIcon="lock" aria-hidden="true"></svg>
+        <h2 class="font-serif text-2xl font-bold">{{ 'settings.privacy.title' | translate }}</h2>
+      </div>
+
+      <div class="mt-6 flex items-center justify-between gap-4">
+        <div>
+          <p class="font-bold">{{ 'settings.privacy.privateLibrary.title' | translate }}</p>
+          <p class="text-sm text-muted-foreground">
+            {{ 'settings.privacy.privateLibrary.description' | translate }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="relative h-7 w-13 rounded-full bg-muted transition"
+          [class.bg-gold]="privateLibrary()"
+          [attr.aria-pressed]="privateLibrary()"
+          (click)="togglePrivateLibrary()"
+        >
+          <span
+            class="absolute top-1 size-5 rounded-full bg-background shadow transition"
+            [class.left-7]="privateLibrary()"
+            [class.left-1]="!privateLibrary()"
+          ></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <svg class="size-5 text-gold" pIcon="refresh" aria-hidden="true"></svg>
+            <h2 class="font-serif text-2xl font-bold">{{ 'settings.data.title' | translate }}</h2>
+          </div>
+          <p class="mt-2 text-sm text-muted-foreground">
+            {{ 'settings.data.description' | translate }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="min-h-11 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+          (click)="resetPreferences()"
+        >
+          {{ 'settings.data.reset' | translate }}
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
