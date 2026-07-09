@@ -98,6 +98,22 @@
     min-height: 100vh;
   }
 
+  html.compact {
+    --compact-spacing: 0.86;
+  }
+
+  html.compact body {
+    line-height: 1.42;
+  }
+
+  html.compact .p-12 {
+    padding: 2.5rem;
+  }
+
+  html.compact .gap-6 {
+    gap: 1.25rem;
+  }
+
   body {
     margin: 0;
     background-color: var(--color-background);

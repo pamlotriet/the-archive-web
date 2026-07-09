@@ -1,1 +1,243 @@
-<p>tags works!</p>
+<div class="flex min-h-screen w-full flex-col px-6 py-8 sm:px-10 lg:px-12">
+  <div class="flex w-full flex-col gap-5 border-b border-border/70 pb-8 lg:flex-row lg:items-end lg:justify-between">
+    <div class="max-w-4xl">
+      <h2 class="text-sm font-bold uppercase tracking-[0.35em] text-muted-foreground">
+        {{ 'tags.title' | translate }}
+      </h2>
+      <h1 class="mt-3 max-w-3xl font-serif text-4xl font-bold leading-tight text-foreground sm:text-5xl">
+        {{ 'tags.subtitle' | translate }}
+      </h1>
+      <p class="mt-3 text-base font-medium text-muted-foreground">
+        {{ 'tags.inUse' | translate: { amount: tagsInUseCount() } }}
+      </p>
+    </div>
+
+    <app-button
+      class="shrink-0 self-start lg:self-end"
+      buttonText="tags.newTag"
+      iconName="plus"
+      iconPosition="left"
+      [showIcon]="true"
+      customClass="!min-h-12 !w-fit !rounded-xl !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !px-4 !py-3 !font-extrabold !text-slate-950 hover:brightness-105"
+      (buttonClick)="openNewEntry()"
+    ></app-button>
+  </div>
+
+  <div class="mt-8 grid w-full grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-4">
+    @for (tag of visibleTags(); track tag.id) {
+      <article
+        class="relative grid min-h-25 grid-cols-[3.75rem_minmax(0,1fr)_2.25rem] items-center gap-4 rounded-2xl border border-border bg-card/75 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-gold/25 hover:bg-card"
+      >
+        <div
+          class="grid size-14 place-items-center rounded-xl text-white shadow-lg shadow-slate-950/10"
+          [style]="tagSwatchStyle(tag.color)"
+        >
+          <svg class="size-5" pIcon="tag" aria-hidden="true"></svg>
+        </div>
+
+        <div class="min-w-0">
+          <h3 class="truncate font-serif text-xl font-bold text-foreground">
+            {{ tag.name }}
+          </h3>
+          <p class="mt-1 text-sm font-semibold text-muted-foreground">
+            {{ tag.count }} items
+          </p>
+
+          <div class="mt-3 h-1 w-full max-w-28 overflow-hidden rounded-full bg-muted">
+            <div
+              class="h-full rounded-full bg-gold"
+              [style.width.%]="tagCountProgress(tag.count)"
+            ></div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="grid size-9 place-items-center rounded-xl text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          aria-label="Tag actions"
+          (click)="toggleActions(tag.id)"
+        >
+          <svg class="size-5" pIcon="ellipsis-h" aria-hidden="true"></svg>
+        </button>
+
+        @if (isActionsOpen(tag.id)) {
+          <div
+            class="absolute right-4 top-18 z-20 w-40 overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1 text-sm text-white shadow-xl backdrop-blur"
+            role="menu"
+          >
+            <button
+              type="button"
+              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10"
+              role="menuitem"
+            >
+              <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+              <span>Edit</span>
+            </button>
+
+            <button
+              type="button"
+              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100"
+              role="menuitem"
+              (click)="deleteTag(tag.id)"
+            >
+              <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
+              <span>Delete</span>
+            </button>
+          </div>
+        }
+      </article>
+    }
+  </div>
+
+  @if (isNewEntryOpen()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6"
+      role="presentation"
+      (click)="closeNewEntry()"
+    >
+      <section
+        class="flex max-h-[calc(100vh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gold/25 bg-surface-elevated shadow-2xl shadow-slate-950/40 sm:max-h-[calc(100vh-3rem)]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="new-tag-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header
+          class="flex items-start justify-between gap-4 border-b border-border/80 bg-card px-6 py-5"
+        >
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold">
+              {{ 'tags.newTagDialog.eyebrow' | translate }}
+            </p>
+            <h2 id="new-tag-title" class="mt-1 font-serif text-2xl font-bold">
+              {{ 'tags.newTagDialog.title' | translate }}
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="grid size-10 shrink-0 place-items-center rounded-xl text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            [attr.aria-label]="'tags.newTagDialog.closeLabel' | translate"
+            (click)="closeNewEntry()"
+          >
+            <svg class="size-5" pIcon="times" aria-hidden="true"></svg>
+          </button>
+        </header>
+
+        <form
+          id="new-tag-form"
+          class="grid min-h-0 gap-5 overflow-y-auto px-5 py-5 sm:px-8 sm:py-7"
+          (submit)="saveNewTag($event)"
+        >
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'tags.newTagDialog.fields.name.label' | translate }}
+            </span>
+            <input
+              type="text"
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="newTagName()"
+              [placeholder]="'tags.newTagDialog.fields.name.placeholder' | translate"
+              (input)="setNewTagName($event)"
+            />
+          </label>
+
+          <fieldset class="grid gap-3">
+            <legend class="text-sm font-bold text-foreground">
+              {{ 'tags.newTagDialog.fields.color.label' | translate }}
+            </legend>
+            <div class="grid grid-cols-1 items-center gap-4 sm:grid-cols-[6rem_1fr]">
+              <input
+                class="h-20 w-24 cursor-pointer rounded-2xl border border-border bg-background p-1"
+                type="color"
+                [value]="selectedTagColor()"
+                [attr.aria-label]="'tags.newTagDialog.fields.color.label' | translate"
+                (input)="setTagColor($event)"
+              />
+              <label class="grid gap-2">
+                <span class="text-sm font-bold text-foreground">
+                  {{ selectedTagColor().toUpperCase() }}
+                </span>
+                <input
+                  class="min-h-11 rounded-xl border border-input bg-background px-4 font-mono text-sm uppercase text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+                  type="text"
+                  maxlength="7"
+                  [value]="selectedTagColor().toUpperCase()"
+                  (input)="setTagColor($event)"
+                />
+              </label>
+            </div>
+            <p class="text-xs text-muted-foreground">
+              {{ 'tags.newTagDialog.fields.color.help' | translate }}
+            </p>
+            <div
+              class="h-10 rounded-xl border border-white/10"
+              [style]="tagColorStyle()"
+              aria-hidden="true"
+            ></div>
+
+            <div class="grid grid-cols-4 gap-3 sm:grid-cols-6">
+              @for (color of colorOptions; track color.id) {
+                <button
+                  type="button"
+                  class="grid min-h-13 place-items-center rounded-xl border p-1.5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  [class]="
+                    selectedTagColor() === color.color
+                      ? 'border-gold bg-gold/10'
+                      : 'border-border bg-muted/25 hover:border-gold/50'
+                  "
+                  [attr.aria-label]="color.labelKey | translate"
+                  [attr.aria-pressed]="selectedTagColor() === color.color"
+                  (click)="selectTagColor(color.color)"
+                >
+                  <span
+                    class="size-8 rounded-lg"
+                    [style]="tagSwatchStyle(color.color)"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              }
+            </div>
+          </fieldset>
+
+          <div class="rounded-2xl border border-border bg-muted/25 p-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="grid size-12 place-items-center rounded-2xl text-white"
+                [style]="tagSwatchStyle()"
+              >
+                <svg class="size-5" pIcon="tag" aria-hidden="true"></svg>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                  {{ 'tags.newTagDialog.preview.label' | translate }}
+                </p>
+                <span class="font-serif text-xl font-bold">
+                  {{ previewTagName() }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <footer
+          class="flex items-center justify-end gap-3 border-t border-border/80 bg-card px-6 py-4"
+        >
+          <button
+            type="button"
+            class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+            (click)="closeNewEntry()"
+          >
+            {{ 'tags.newTagDialog.actions.cancel' | translate }}
+          </button>
+          <button
+            type="submit"
+            form="new-tag-form"
+            class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
+          >
+            {{ 'tags.newTagDialog.actions.save' | translate }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  }
+</div>

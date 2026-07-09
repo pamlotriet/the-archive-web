@@ -15,6 +15,12 @@ import {
   authenticationApiFeatureKey,
   authenticationApiReducer,
 } from '@features/authentication/state/authentication-api';
+import {
+  LibraryApiEffects,
+  libraryApiFeatureKey,
+  libraryApiReducer,
+} from '@features/library/state/library-api';
+import { TagsApiEffects, tagsApiFeatureKey, tagsApiReducer } from '@features/tags/state/tags-api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +29,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(),
     provideState(authenticationApiFeatureKey, authenticationApiReducer),
-    provideEffects(AuthenticationApiEffects),
+    provideState(libraryApiFeatureKey, libraryApiReducer),
+    provideState(tagsApiFeatureKey, tagsApiReducer),
+    provideEffects(AuthenticationApiEffects, LibraryApiEffects, TagsApiEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
