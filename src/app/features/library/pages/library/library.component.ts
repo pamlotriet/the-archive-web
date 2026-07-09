@@ -1,120 +1,39 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@app/shared/components/button/button';
-import { InputComponent } from '@app/shared/components/input/input';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PIcon } from '@primeicons/angular/p-icon';
 import { ItemCardComponent } from '../../components/item-card/item-card.component';
 import { NewEntryDialogComponent } from '../../components/new-entry-dialog/new-entry-dialog.component';
-import type { Item } from '../../types/item.types';
+import { LibraryApiFacade } from '../../state/library-api';
+import type { LibraryStatusFilter } from '../../state/library-api';
+import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/item.types';
 
 @Component({
   selector: 'app-library',
   host: {
     class: 'block min-w-0 w-full',
   },
-  imports: [
-    TranslatePipe,
-    ButtonComponent,
-    InputComponent,
-    ItemCardComponent,
-    NewEntryDialogComponent,
-  ],
+  imports: [TranslatePipe, ButtonComponent, ItemCardComponent, NewEntryDialogComponent, PIcon],
   templateUrl: './library.component.html',
   styleUrl: './library.component.css',
 })
-export class LibraryComponent {
+export class LibraryComponent implements OnInit {
+  private readonly libraryApiFacade = inject(LibraryApiFacade);
+
+  protected readonly items = this.libraryApiFacade.items;
+  protected readonly entriesAmount = this.libraryApiFacade.totalItems;
+  protected readonly currentPage = this.libraryApiFacade.page;
+  protected readonly totalPages = this.libraryApiFacade.totalPages;
+  protected readonly pageSize = this.libraryApiFacade.pageSize;
+  protected readonly searchTerm = this.libraryApiFacade.searchTerm;
+  protected readonly selectedCategory = this.libraryApiFacade.categoryFilter;
+  protected readonly selectedStatus = this.libraryApiFacade.statusFilter;
+  protected readonly isLoading = this.libraryApiFacade.loading;
+  protected readonly error = this.libraryApiFacade.error;
+
   protected readonly viewMode = signal<'grid' | 'list'>('grid');
   protected readonly isNewEntryOpen = signal(false);
-  protected readonly items: Item[] = [
-    {
-      id: 'book-dune',
-      title: 'Dune',
-      description: 'A desert planet, a dangerous inheritance, and a family caught inside empire.',
-      category: 'books',
-      imageUrl: 'https://covers.openlibrary.org/b/isbn/0441172717-L.jpg',
-      author: 'Frank Herbert',
-      producer: '',
-      rating: 5,
-      status: 'reading',
-      progress: 62,
-      currentPage: 555,
-      totalPages: 896,
-    },
-    {
-      id: 'movie-arrival',
-      title: 'Arrival',
-      description: 'A linguist works to understand visitors whose language bends time.',
-      category: 'movies',
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/en/d/df/Arrival%2C_Movie_Poster.jpg',
-      author: '',
-      producer: 'Denis Villeneuve',
-      rating: 5,
-      status: 'watched',
-      progress: 100,
-    },
-    {
-      id: 'series-severance',
-      title: 'Severance',
-      description:
-        'A workplace mystery about memory, identity, and the cost of compartmentalizing.',
-      category: 'series',
-      imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Severance_logo.svg/500px-Severance_logo.svg.png',
-      author: '',
-      producer: 'Ben Stiller',
-      rating: 4,
-      status: 'watching',
-      progress: 48,
-    },
-    {
-      id: 'game-hades',
-      title: 'Hades',
-      description: 'A sharp, stylish roguelike escape through the underworld.',
-      category: 'games',
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/en/c/cc/Hades_cover_art.jpg',
-      author: '',
-      producer: 'Supergiant Games',
-      rating: 5,
-      status: 'playing',
-      progress: 74,
-    },
-    {
-      id: 'music-blonde',
-      title: 'Blonde',
-      description: 'A layered album for late-night listening and long walks.',
-      category: 'music',
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg',
-      author: 'Frank Ocean',
-      producer: '',
-      rating: 5,
-      status: 'listened',
-      progress: 100,
-    },
-    {
-      id: 'podcast-articles-of-interest',
-      title: 'Articles of Interest',
-      description: 'Stories about what we wear and the culture stitched into it.',
-      category: 'podcasts',
-      imageUrl:
-        'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=400&q=80',
-      author: 'Avery Trufelman',
-      producer: '',
-      rating: 4,
-      status: 'listening',
-      progress: 35,
-    },
-    {
-      id: 'audiobook-project-hail-mary',
-      title: 'Project Hail Mary',
-      description: 'A lone scientist wakes up far from home with a planet to save.',
-      category: 'audioBooks',
-      imageUrl: 'https://covers.openlibrary.org/b/isbn/9780593395561-L.jpg',
-      author: 'Andy Weir',
-      producer: 'Ray Porter',
-      rating: 4,
-      status: 'wantToListen',
-      progress: 0,
-    },
-  ];
+  protected readonly editingItem = signal<Item | null>(null);
 
   protected readonly categories = [
     { id: 'all', labelKey: 'library.categories.all', contentKey: 'library.content.all' },
@@ -135,25 +54,19 @@ export class LibraryComponent {
     },
   ] as const;
 
-  protected readonly selectedCategory = signal<CategoryId>('all');
-  protected readonly selectedCategoryContentKey = computed(
-    () =>
-      this.categories.find((category) => category.id === this.selectedCategory())?.contentKey ??
-      'library.content.all',
-  );
+  protected readonly statusFilters = [
+    { id: 'all', labelKey: 'library.statusFilters.all' },
+    { id: 'wantToStart', labelKey: 'library.statusFilters.wantToStart' },
+    { id: 'inProgress', labelKey: 'library.statusFilters.inProgress' },
+    { id: 'completed', labelKey: 'library.statusFilters.completed' },
+  ] as const;
 
-  protected get filteredItems(): Item[] {
-    const selectedCategory = this.selectedCategory();
-
-    if (selectedCategory === 'all') {
-      return this.items;
-    }
-
-    return this.items.filter((item) => item.category === selectedCategory);
+  ngOnInit(): void {
+    this.libraryApiFacade.loadItems();
   }
 
-  protected get entriesAmount(): number {
-    return this.filteredItems.length;
+  protected setSearchTerm(event: Event): void {
+    this.libraryApiFacade.setSearchTerm((event.target as HTMLInputElement).value);
   }
 
   protected setViewMode(mode: 'grid' | 'list'): void {
@@ -161,16 +74,62 @@ export class LibraryComponent {
   }
 
   protected selectCategory(category: CategoryId): void {
-    this.selectedCategory.set(category);
+    this.libraryApiFacade.setCategoryFilter(category);
+  }
+
+  protected selectStatus(statusFilter: StatusFilterId): void {
+    this.libraryApiFacade.setStatusFilter(statusFilter);
+  }
+
+  protected setPageSize(event: Event): void {
+    this.libraryApiFacade.setPageSize(Number((event.target as HTMLSelectElement).value));
+  }
+
+  protected previousPage(): void {
+    this.libraryApiFacade.setPage(this.currentPage() - 1);
+  }
+
+  protected nextPage(): void {
+    this.libraryApiFacade.setPage(this.currentPage() + 1);
   }
 
   protected openNewEntry(): void {
+    this.editingItem.set(null);
     this.isNewEntryOpen.set(true);
+  }
+
+  protected editItem(item: Item): void {
+    this.editingItem.set(item);
+    this.isNewEntryOpen.set(true);
+  }
+
+  protected saveItem(item: CreateItemPayload | Item): void {
+    if (this.isExistingItem(item)) {
+      this.libraryApiFacade.updateItem(item);
+    } else {
+      this.libraryApiFacade.addItem(item);
+    }
+  }
+
+  protected deleteItem(id: string): void {
+    this.libraryApiFacade.deleteItem(id);
   }
 
   protected closeNewEntry(): void {
     this.isNewEntryOpen.set(false);
+    this.editingItem.set(null);
+  }
+
+  protected itemsGridClass(): string {
+    return this.viewMode() === 'grid'
+      ? 'mt-8 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4'
+      : 'mt-8 grid max-w-5xl grid-cols-1 gap-4';
+  }
+
+  private isExistingItem(item: CreateItemPayload | Item): item is UpdateItemPayload & Item {
+    return 'id' in item && Boolean(item.id);
   }
 }
 
 type CategoryId = LibraryComponent['categories'][number]['id'];
+type StatusFilterId = LibraryStatusFilter;

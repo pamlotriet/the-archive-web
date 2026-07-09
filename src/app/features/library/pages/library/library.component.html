@@ -1,24 +1,25 @@
-<div class="flex flex-col p-12 w-full">
-  <h2 class="text-xl font-bold">
-    {{ 'library.title' | translate }}
-  </h2>
-  <h1 class="font-serif text-4xl font-bold">
-    {{ 'library.subtitle' | translate }}
-  </h1>
-  <div class="flex w-full flex-row items-center justify-between gap-4">
-    <div class="flex w-2/4">
-      <h3 class="font-bold">
-        {{ 'library.entries' | translate: { amount: entriesAmount } }}
+<div class="flex w-full flex-col px-6 py-8 sm:px-10 lg:px-12">
+  <div class="flex flex-col gap-5 border-b border-border/70 pb-8 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <h2 class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+        {{ 'library.title' | translate }}
+      </h2>
+      <h1 class="mt-2 font-serif text-4xl font-bold text-foreground">
+        {{ 'library.subtitle' | translate }}
+      </h1>
+      <h3 class="mt-3 font-bold text-muted-foreground">
+        {{ 'library.entries' | translate: { amount: entriesAmount() } }}
       </h3>
     </div>
-    <div class="ml-auto flex items-center justify-end gap-2">
+
+    <div class="flex flex-wrap items-center gap-2">
       <app-button
         class="shrink-0"
         buttonText="library.addEntry"
         iconName="plus"
         iconPosition="left"
         [showIcon]="true"
-        customClass="!w-fit !p-2 !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !font-extrabold !text-slate-950 hover:brightness-105"
+        customClass="!min-h-11 !w-fit !rounded-xl !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !px-4 !py-2 !font-extrabold !text-slate-950 hover:brightness-105"
         (buttonClick)="openNewEntry()"
       ></app-button>
       <app-button
@@ -51,25 +52,40 @@
       ></app-button>
     </div>
   </div>
-  <div class="mt-8 flex w-full flex-row items-center gap-4">
-    <app-input
-      class="block w-2/4"
-      iconName="search"
-      iconPosition="left"
-      [showIcon]="true"
-      customClass="!min-h-12 !w-full !border-gold/40 !bg-background/80 !text-foreground pt-"
-    ></app-input>
-    <app-button
-      class="shrink-0"
-      buttonText="library.filter"
-      iconName="filter"
-      iconPosition="left"
-      [showIcon]="true"
-      outlined
-      customClass="!p-3 !w-fit !bg-background/80 !border-gold/40 !rounded-md  !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]"
-    ></app-button>
+
+  <div class="mt-8 grid gap-4 xl:grid-cols-[minmax(16rem,1fr)_auto_auto] xl:items-center">
+    <label class="relative block">
+      <span class="sr-only">{{ 'library.search.label' | translate }}</span>
+      <svg
+        class="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+        pIcon="search"
+        aria-hidden="true"
+      ></svg>
+      <input
+        type="search"
+        class="min-h-12 w-full rounded-xl border border-gold/40 bg-background/80 px-11 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+        [value]="searchTerm()"
+        [placeholder]="'library.search.placeholder' | translate"
+        (input)="setSearchTerm($event)"
+      />
+    </label>
+
+    <label class="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+      {{ 'library.pagination.pageSize' | translate }}
+      <select
+        class="min-h-11 rounded-xl border border-border bg-background px-3 text-foreground outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+        [value]="pageSize()"
+        (change)="setPageSize($event)"
+      >
+        <option value="4">4</option>
+        <option value="8">8</option>
+        <option value="12">12</option>
+        <option value="24">24</option>
+      </select>
+    </label>
   </div>
-  <div class="mt-8 flex flex-row flex-wrap gap-3">
+
+  <div class="mt-6 flex flex-row flex-wrap gap-3">
     @for (category of categories; track category.id) {
       <app-button
         class="shrink-0"
@@ -86,13 +102,84 @@
       ></app-button>
     }
   </div>
-  <div class="grid grid-cols-4 gap-4 mt-8">
-    @for (item of filteredItems; track item.id) {
-      <app-item-card [item]="item"></app-item-card>
+
+  <div class="mt-4 flex flex-row flex-wrap gap-3">
+    @for (statusFilter of statusFilters; track statusFilter.id) {
+      <app-button
+        class="shrink-0"
+        [buttonText]="statusFilter.labelKey"
+        [active]="selectedStatus() === statusFilter.id"
+        variant="outlined"
+        [rounded]="true"
+        [customClass]="
+          selectedStatus() === statusFilter.id
+            ? '!border-[#dca945] !bg-[#dca945]/15 !text-[#dca945]'
+            : '!border-border !bg-transparent !text-muted-foreground hover:!border-[#dca945]/50 hover:!text-[#dca945]'
+        "
+        (buttonClick)="selectStatus(statusFilter.id)"
+      ></app-button>
     }
   </div>
 
+  @if (error()) {
+    <p class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+      {{ error() }}
+    </p>
+  }
+
+  @if (isLoading()) {
+    <p class="mt-8 text-muted-foreground">{{ 'library.loading' | translate }}</p>
+  } @else if (items().length === 0) {
+    <section class="mt-8 rounded-2xl border border-border bg-card/70 p-8 text-center">
+      <h2 class="font-serif text-2xl font-bold">{{ 'library.empty.title' | translate }}</h2>
+      <p class="mt-2 text-muted-foreground">{{ 'library.empty.description' | translate }}</p>
+    </section>
+  } @else {
+    <div [class]="itemsGridClass()">
+      @for (item of items(); track item.id) {
+        <app-item-card
+          [item]="item"
+          (itemEdit)="editItem($event)"
+          (itemDelete)="deleteItem($event)"
+        ></app-item-card>
+      }
+    </div>
+  }
+
+  <div
+    class="mt-8 flex flex-col gap-3 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p class="text-sm font-semibold text-muted-foreground">
+      {{
+        'library.pagination.summary'
+          | translate: { page: currentPage(), totalPages: totalPages(), totalItems: entriesAmount() }
+      }}
+    </p>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="min-h-10 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+        [disabled]="currentPage() <= 1"
+        (click)="previousPage()"
+      >
+        {{ 'library.pagination.previous' | translate }}
+      </button>
+      <button
+        type="button"
+        class="min-h-10 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+        [disabled]="currentPage() >= totalPages()"
+        (click)="nextPage()"
+      >
+        {{ 'library.pagination.next' | translate }}
+      </button>
+    </div>
+  </div>
+
   @if (isNewEntryOpen()) {
-    <app-new-entry-dialog (dialogClose)="closeNewEntry()"></app-new-entry-dialog>
+    <app-new-entry-dialog
+      [item]="editingItem()"
+      (itemSave)="saveItem($event)"
+      (dialogClose)="closeNewEntry()"
+    ></app-new-entry-dialog>
   }
 </div>

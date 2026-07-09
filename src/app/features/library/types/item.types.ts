@@ -4,6 +4,7 @@ export type Item = {
   description: string;
   category: category;
   imageUrl: string;
+  sourceUrl?: string;
   author: string;
   producer: string;
   rating: number;
@@ -11,6 +12,16 @@ export type Item = {
   progress: number;
   currentPage?: number;
   totalPages?: number;
+  tags?: string[];
+  note?: string;
+  createdAt?: number | null;
+  updatedAt?: number | null;
+};
+
+export type CreateItemPayload = Omit<Item, 'id' | 'createdAt' | 'updatedAt'>;
+
+export type UpdateItemPayload = Partial<CreateItemPayload> & {
+  id: string;
 };
 
 export type category =
