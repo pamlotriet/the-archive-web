@@ -55,42 +55,10 @@
       </span>
 
       <div class="relative col-start-3 row-start-1 justify-self-end md:col-start-auto md:row-start-auto">
-        <button
-          type="button"
-          class="grid size-9 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
-          aria-label="More options"
-          [attr.aria-expanded]="isActionsOpen()"
-          aria-haspopup="menu"
-          (click)="toggleActions()"
-        >
-          <svg class="size-5" pIcon="ellipsis-h" aria-hidden="true"></svg>
-        </button>
-
-        @if (isActionsOpen()) {
-          <div
-            class="absolute right-0 top-10 z-10 w-36 overflow-hidden rounded-xl border border-border bg-slate-950 p-1 text-sm text-white shadow-xl shadow-slate-950/40"
-            role="menu"
-          >
-            <button
-              type="button"
-              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10"
-              role="menuitem"
-              (click)="editItem(currentItem)"
-            >
-              <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
-              <span>Edit</span>
-            </button>
-            <button
-              type="button"
-              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100"
-              role="menuitem"
-              (click)="deleteItem(currentItem)"
-            >
-              <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
-              <span>Delete</span>
-            </button>
-          </div>
-        }
+        <app-item-actions-menu
+          (itemEdit)="editItem(currentItem)"
+          (itemDelete)="deleteItem(currentItem)"
+        ></app-item-actions-menu>
       </div>
     </div>
   } @else {
@@ -117,42 +85,14 @@
           </span>
         </div>
 
-        <button
-          type="button"
-          class="absolute right-3 top-3 flex size-10 items-center justify-center rounded-full bg-slate-950/55 text-white"
-          aria-label="More options"
-          [attr.aria-expanded]="isActionsOpen()"
-          aria-haspopup="menu"
-          (click)="toggleActions()"
-        >
-          <svg class="size-5" pIcon="ellipsis-h" aria-hidden="true"></svg>
-        </button>
-
-        @if (isActionsOpen()) {
-          <div
-            class="absolute right-3 top-15 z-10 w-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1 text-sm text-white shadow-xl shadow-slate-950/40 backdrop-blur"
-            role="menu"
-          >
-            <button
-              type="button"
-              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
-              role="menuitem"
-              (click)="editItem(currentItem)"
-            >
-              <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
-              <span>Edit</span>
-            </button>
-            <button
-              type="button"
-              class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
-              role="menuitem"
-              (click)="deleteItem(currentItem)"
-            >
-              <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
-              <span>Delete</span>
-            </button>
-          </div>
-        }
+        <div class="absolute right-3 top-3">
+          <app-item-actions-menu
+            buttonClass="flex size-10 items-center justify-center rounded-full bg-slate-950/55 text-white"
+            menuClass="absolute right-0 top-12 z-10 w-36 overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1 text-sm text-white shadow-xl shadow-slate-950/40 backdrop-blur"
+            (itemEdit)="editItem(currentItem)"
+            (itemDelete)="deleteItem(currentItem)"
+          ></app-item-actions-menu>
+        </div>
 
         @if (currentItem.sourceUrl) {
           <a

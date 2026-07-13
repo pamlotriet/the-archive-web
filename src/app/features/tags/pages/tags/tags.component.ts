@@ -1,5 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@app/shared/components/button/button';
+import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
+import { eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { TagsApiFacade } from '../../state/tags-api';
@@ -9,7 +11,7 @@ import { TagsApiFacade } from '../../state/tags-api';
   host: {
     class: 'block min-w-0 w-full',
   },
-  imports: [TranslatePipe, ButtonComponent, PIcon],
+  imports: [TranslatePipe, ButtonComponent, PageHeaderComponent, PIcon],
   templateUrl: './tags.component.html',
   styleUrl: './tags.component.css',
 })
@@ -50,8 +52,7 @@ export class TagsComponent implements OnInit {
   ];
 
   protected setTagColor(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const color = input.value;
+    const color = eventValue(event);
 
     if (!/^#[0-9a-fA-F]{6}$/.test(color)) {
       return;
@@ -69,8 +70,7 @@ export class TagsComponent implements OnInit {
   }
 
   protected setNewTagName(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.newTagName.set(input.value);
+    this.newTagName.set(eventValue(event));
   }
 
   protected saveNewTag(event?: Event): void {

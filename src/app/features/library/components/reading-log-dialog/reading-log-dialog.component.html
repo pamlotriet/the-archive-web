@@ -1,0 +1,160 @@
+<app-dialog-shell
+  ariaLabelKey="library.readingLog.title"
+  eyebrowKey="library.readingLog.eyebrow"
+  titleKey="library.readingLog.title"
+  closeLabelKey="library.readingLog.closeLabel"
+  overlayClass="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm"
+  (dialogClose)="close()"
+>
+      @if (loggableItems().length > 0) {
+        <label class="grid gap-2">
+          <span class="text-sm font-bold">{{ 'library.readingLog.fields.item' | translate }}</span>
+          <select
+            class="min-h-12 rounded-xl border border-border bg-background px-4 text-foreground outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="selectedLogItem()?.id"
+            (change)="setLogItem($event)"
+          >
+            @for (item of loggableItems(); track item.id) {
+              <option [value]="item.id">{{ item.title }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="grid gap-2">
+          <span class="text-sm font-bold">{{ 'library.readingLog.fields.mode' | translate }}</span>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              class="min-h-11 rounded-xl border px-4 font-bold transition"
+              [class.border-gold]="logMode() === 'reading'"
+              [class.bg-gold]="logMode() === 'reading'"
+              [class.text-slate-950]="logMode() === 'reading'"
+              [class.border-border]="logMode() !== 'reading'"
+              [class.text-muted-foreground]="logMode() !== 'reading'"
+              (click)="setLogMode('reading')"
+            >
+              {{ 'library.readingLog.modes.reading' | translate }}
+            </button>
+            <button
+              type="button"
+              class="min-h-11 rounded-xl border px-4 font-bold transition"
+              [class.border-gold]="logMode() === 'listening'"
+              [class.bg-gold]="logMode() === 'listening'"
+              [class.text-slate-950]="logMode() === 'listening'"
+              [class.border-border]="logMode() !== 'listening'"
+              [class.text-muted-foreground]="logMode() !== 'listening'"
+              (click)="setLogMode('listening')"
+            >
+              {{ 'library.readingLog.modes.listening' | translate }}
+            </button>
+          </div>
+        </div>
+
+        @if (selectedLogItem(); as selectedItem) {
+          <div class="grid gap-4 rounded-2xl border border-border bg-background/50 p-4 sm:grid-cols-2">
+            @if (shouldShowPageLogging(selectedItem)) {
+              <label class="grid gap-2">
+                <span class="text-sm font-bold">
+                  {{ 'library.readingLog.fields.pages' | translate }}
+                </span>
+                <input
+                  type="number"
+                  min="0"
+                  class="min-h-12 rounded-xl border border-border bg-background px-4 text-foreground outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                  [value]="logPages()"
+                  (input)="setLogPages($event)"
+                />
+              </label>
+            }
+
+            <label class="grid gap-2">
+              <span class="text-sm font-bold">
+                {{ 'library.readingLog.fields.minutes' | translate }}
+              </span>
+              <input
+                type="number"
+                min="0"
+                class="min-h-12 rounded-xl border border-border bg-background px-4 text-foreground outline-none focus:border-gold focus:ring-2 focus:ring-gold/20"
+                [value]="logMinutes()"
+                (input)="setLogMinutes($event)"
+              />
+            </label>
+          </div>
+        }
+
+        <div class="rounded-2xl border border-border bg-background/50 p-4">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p class="text-sm font-bold text-muted-foreground">
+                {{ 'library.readingLog.timer.label' | translate }}
+              </p>
+              <strong class="mt-1 block font-serif text-4xl text-foreground">
+                {{ timerLabel() }}
+              </strong>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                class="min-h-10 rounded-xl bg-gold px-4 font-extrabold text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
+                [disabled]="!!timerStartedAt()"
+                (click)="startTimer()"
+              >
+                {{ 'library.readingLog.timer.start' | translate }}
+              </button>
+              <button
+                type="button"
+                class="min-h-10 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                [disabled]="!timerStartedAt()"
+                (click)="stopTimer()"
+              >
+                {{ 'library.readingLog.timer.stop' | translate }}
+              </button>
+              <button
+                type="button"
+                class="min-h-10 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+                (click)="resetTimer()"
+              >
+                {{ 'library.readingLog.timer.reset' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold">{{ 'library.readingLog.fields.note' | translate }}</span>
+          <textarea
+            rows="3"
+            class="rounded-xl border border-border bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [placeholder]="'library.readingLog.fields.notePlaceholder' | translate"
+            [value]="logNote()"
+            (input)="setLogNote($event)"
+          ></textarea>
+        </label>
+      } @else {
+        <div class="rounded-2xl border border-border bg-background/50 p-6 text-center">
+          <h3 class="font-serif text-2xl font-bold">
+            {{ 'library.readingLog.empty.title' | translate }}
+          </h3>
+          <p class="mt-2 text-muted-foreground">
+            {{ 'library.readingLog.empty.description' | translate }}
+          </p>
+        </div>
+      }
+    <ng-container dialog-footer>
+      <button
+        type="button"
+        class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+        (click)="close()"
+      >
+        {{ 'library.readingLog.actions.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="min-h-11 rounded-xl bg-gold px-5 font-extrabold text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="!canSaveReadingLog()"
+        (click)="saveReadingLog()"
+      >
+        {{ 'library.readingLog.actions.save' | translate }}
+      </button>
+    </ng-container>
+</app-dialog-shell>

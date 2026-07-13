@@ -1,0 +1,33 @@
+<button
+  type="button"
+  [class]="buttonClass()"
+  aria-label="More options"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="menu"
+  (click)="toggleActions()"
+>
+  <svg class="size-5" pIcon="ellipsis-h" aria-hidden="true"></svg>
+</button>
+
+@if (isOpen()) {
+  <div [class]="menuClass()" role="menu">
+    <button
+      type="button"
+      class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+      role="menuitem"
+      (click)="editItem()"
+    >
+      <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+      <span>Edit</span>
+    </button>
+    <button
+      type="button"
+      class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-red-200 transition hover:bg-red-500/20 hover:text-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+      role="menuitem"
+      (click)="deleteItem()"
+    >
+      <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
+      <span>Delete</span>
+    </button>
+  </div>
+}

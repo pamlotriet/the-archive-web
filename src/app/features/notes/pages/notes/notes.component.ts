@@ -1,6 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ButtonComponent } from '@app/shared/components/button/button';
+import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
+import { eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { LibraryApiFacade } from '../../../library/state/library-api';
@@ -14,7 +16,7 @@ import type { CreateNotePayload, Note, UpdateNotePayload } from '../../types/not
   host: {
     class: 'block min-w-0 w-full',
   },
-  imports: [ButtonComponent, NgTemplateOutlet, PIcon, TranslatePipe],
+  imports: [ButtonComponent, NgTemplateOutlet, PageHeaderComponent, PIcon, TranslatePipe],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
@@ -98,19 +100,19 @@ export class NotesComponent implements OnInit {
   }
 
   protected setSearchTerm(event: Event): void {
-    this.searchTerm.set(this.inputValue(event));
+    this.searchTerm.set(eventValue(event));
   }
 
   protected setTitle(event: Event): void {
-    this.title.set(this.inputValue(event));
+    this.title.set(eventValue(event));
   }
 
   protected setBody(event: Event): void {
-    this.body.set(this.inputValue(event));
+    this.body.set(eventValue(event));
   }
 
   protected selectItem(event: Event): void {
-    this.itemId.set(this.inputValue(event));
+    this.itemId.set(eventValue(event));
   }
 
   protected togglePinned(): void {
@@ -200,9 +202,5 @@ export class NotesComponent implements OnInit {
           .filter((tagName) => tagName && existingTagNames.has(tagName)),
       ),
     ];
-  }
-
-  private inputValue(event: Event): string {
-    return (event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
   }
 }

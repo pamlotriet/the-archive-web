@@ -1,18 +1,13 @@
 <div class="flex w-full flex-col px-6 py-8 sm:px-10 lg:px-12">
-  <div class="flex flex-col gap-5 border-b border-border/70 pb-8 xl:flex-row xl:items-end xl:justify-between">
-    <div>
-      <h2 class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
-        {{ 'notes.title' | translate }}
-      </h2>
-      <h1 class="mt-2 font-serif text-4xl font-bold text-foreground">
-        {{ 'notes.subtitle' | translate }}
-      </h1>
-      <p class="mt-3 text-lg text-muted-foreground">
-        {{ 'notes.summary' | translate: { amount: notes().length } }}
-      </p>
-    </div>
-
+  <app-page-header
+    eyebrowKey="notes.title"
+    titleKey="notes.subtitle"
+    summaryKey="notes.summary"
+    [summaryParams]="{ amount: notes().length }"
+    titleClass="mt-2 font-serif text-4xl font-bold text-foreground"
+  >
     <app-button
+      page-actions
       buttonText="notes.newNote"
       iconName="plus"
       iconPosition="left"
@@ -20,7 +15,7 @@
       customClass="!min-h-12 !w-fit !rounded-xl !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !px-5 !py-3 !font-extrabold !text-slate-950 hover:brightness-105"
       (buttonClick)="openNewNote()"
     ></app-button>
-  </div>
+  </app-page-header>
 
   <label class="relative mt-8 block">
     <span class="sr-only">{{ 'notes.search.label' | translate }}</span>

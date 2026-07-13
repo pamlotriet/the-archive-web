@@ -1,13 +1,14 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
+import { DialogShellComponent } from '@app/shared/components/dialog-shell/dialog-shell.component';
+import { eventNumber, eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PIcon } from '@primeicons/angular/p-icon';
 import { CollectionsApiFacade } from '../../../collections/state/collections-api';
 import { TagsApiFacade } from '../../../tags/state/tags-api';
 import type { CreateItemPayload, Item, category, status } from '../../types/item.types';
 
 @Component({
   selector: 'app-new-entry-dialog',
-  imports: [PIcon, TranslatePipe],
+  imports: [DialogShellComponent, TranslatePipe],
   templateUrl: './new-entry-dialog.component.html',
   styleUrl: './new-entry-dialog.component.css',
 })
@@ -61,15 +62,15 @@ export class NewEntryDialogComponent implements OnInit {
   }
 
   protected setTitle(event: Event): void {
-    this.title.set(this.inputValue(event));
+    this.title.set(eventValue(event));
   }
 
   protected setCreator(event: Event): void {
-    this.creator.set(this.inputValue(event));
+    this.creator.set(eventValue(event));
   }
 
   protected setCategory(event: Event): void {
-    const category = this.inputValue(event) as category;
+    const category = eventValue(event) as category;
 
     this.category.set(category);
 
@@ -80,15 +81,15 @@ export class NewEntryDialogComponent implements OnInit {
   }
 
   protected setStatusMode(event: Event): void {
-    this.statusMode.set(this.inputValue(event) as 'wantToStart' | 'inProgress' | 'completed');
+    this.statusMode.set(eventValue(event) as 'wantToStart' | 'inProgress' | 'completed');
   }
 
   protected setRating(event: Event): void {
-    this.rating.set(this.numberValue(event));
+    this.rating.set(eventNumber(event));
   }
 
   protected setProgress(event: Event): void {
-    this.progress.set(this.numberValue(event));
+    this.progress.set(eventNumber(event));
   }
 
   protected setCurrentPage(event: Event): void {
@@ -126,11 +127,11 @@ export class NewEntryDialogComponent implements OnInit {
   }
 
   protected setNote(event: Event): void {
-    this.note.set(this.inputValue(event));
+    this.note.set(eventValue(event));
   }
 
   protected setImageUrl(event: Event): void {
-    this.imageUrl.set(this.inputValue(event));
+    this.imageUrl.set(eventValue(event));
   }
 
   protected save(): void {
@@ -237,10 +238,6 @@ export class NewEntryDialogComponent implements OnInit {
     ];
   }
 
-  private inputValue(event: Event): string {
-    return (event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
-  }
-
   private normalizeImageUrl(imageUrl: string): string {
     const trimmedImageUrl = imageUrl.trim();
 
@@ -272,12 +269,8 @@ export class NewEntryDialogComponent implements OnInit {
     }
   }
 
-  private numberValue(event: Event): number {
-    return Number(this.inputValue(event)) || 0;
-  }
-
   private optionalNumberValue(event: Event): number | undefined {
-    const value = this.inputValue(event);
+    const value = eventValue(event);
 
     return value ? Number(value) : undefined;
   }

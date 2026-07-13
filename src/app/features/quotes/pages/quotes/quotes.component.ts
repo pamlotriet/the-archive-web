@@ -1,5 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@app/shared/components/button/button';
+import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
+import { eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { LibraryApiFacade } from '../../../library/state/library-api';
@@ -12,7 +14,7 @@ import type { CreateQuotePayload, Quote, UpdateQuotePayload } from '../../types/
   host: {
     class: 'block min-w-0 w-full',
   },
-  imports: [ButtonComponent, PIcon, TranslatePipe],
+  imports: [ButtonComponent, PageHeaderComponent, PIcon, TranslatePipe],
   templateUrl: './quotes.component.html',
   styleUrl: './quotes.component.css',
 })
@@ -93,7 +95,7 @@ export class QuotesComponent implements OnInit {
   }
 
   protected setSearchTerm(event: Event): void {
-    this.searchTerm.set(this.inputValue(event));
+    this.searchTerm.set(eventValue(event));
   }
 
   protected toggleFavoritesOnly(): void {
@@ -101,23 +103,23 @@ export class QuotesComponent implements OnInit {
   }
 
   protected setText(event: Event): void {
-    this.text.set(this.inputValue(event));
+    this.text.set(eventValue(event));
   }
 
   protected setAuthor(event: Event): void {
-    this.author.set(this.inputValue(event));
+    this.author.set(eventValue(event));
   }
 
   protected setSource(event: Event): void {
-    this.source.set(this.inputValue(event));
+    this.source.set(eventValue(event));
   }
 
   protected setNote(event: Event): void {
-    this.note.set(this.inputValue(event));
+    this.note.set(eventValue(event));
   }
 
   protected selectItem(event: Event): void {
-    const itemId = this.inputValue(event);
+    const itemId = eventValue(event);
     const item = this.linkedItem(itemId);
 
     this.itemId.set(itemId);
@@ -178,9 +180,5 @@ export class QuotesComponent implements OnInit {
 
   protected itemCreator(item: Item): string {
     return item.author || item.producer || 'Unknown creator';
-  }
-
-  private inputValue(event: Event): string {
-    return (event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).value;
   }
 }

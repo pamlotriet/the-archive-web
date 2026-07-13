@@ -1,4 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
 import { LibraryApiFacade } from '@features/library/state/library-api';
 import type { category, Item, status } from '@features/library/types/item.types';
 import { ReadingLogApiFacade } from '@features/reading-log/state/reading-log-api';
@@ -13,7 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   host: {
     class: 'block min-w-0 w-full',
   },
-  imports: [TranslatePipe],
+  imports: [PageHeaderComponent, TranslatePipe],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.css',
 })

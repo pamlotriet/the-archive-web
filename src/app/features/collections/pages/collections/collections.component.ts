@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@app/shared/components/button/button';
+import { eventValue } from '@app/shared/utils/form-event';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
@@ -144,19 +145,19 @@ export class CollectionsComponent implements OnInit {
   }
 
   protected setName(event: Event): void {
-    this.name.set(this.inputValue(event));
+    this.name.set(eventValue(event));
   }
 
   protected setDescription(event: Event): void {
-    this.description.set(this.inputValue(event));
+    this.description.set(eventValue(event));
   }
 
   protected setColor(event: Event): void {
-    this.color.set(this.inputValue(event));
+    this.color.set(eventValue(event));
   }
 
   protected setItemSearchTerm(event: Event): void {
-    this.itemSearchTerm.set(this.inputValue(event));
+    this.itemSearchTerm.set(eventValue(event));
   }
 
   protected selectColor(color: string): void {
@@ -227,9 +228,5 @@ export class CollectionsComponent implements OnInit {
       id: item.id,
       collectionIds,
     });
-  }
-
-  private inputValue(event: Event): string {
-    return (event.target as HTMLInputElement | HTMLTextAreaElement).value;
   }
 }

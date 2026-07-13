@@ -1,0 +1,40 @@
+<section
+  [class]="overlayClass()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="ariaLabelKey() | translate"
+>
+  <div [class]="panelClass()">
+    <header class="flex items-start justify-between gap-4 border-b border-border/70 p-6">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.35em] text-gold">
+          {{ eyebrowKey() | translate }}
+        </p>
+        <h2 class="mt-2 font-serif text-3xl font-bold text-foreground">
+          {{ titleKey() | translate }}
+        </h2>
+        @if (descriptionKey()) {
+          <p class="mt-1 text-sm text-muted-foreground">
+            {{ descriptionKey()! | translate }}
+          </p>
+        }
+      </div>
+      <button
+        type="button"
+        class="grid size-10 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
+        [attr.aria-label]="closeLabelKey() | translate"
+        (click)="dialogClose.emit()"
+      >
+        <svg class="size-5" pIcon="times" aria-hidden="true"></svg>
+      </button>
+    </header>
+
+    <div [class]="bodyClass()">
+      <ng-content></ng-content>
+    </div>
+
+    <footer [class]="footerClass()">
+      <ng-content select="[dialog-footer]"></ng-content>
+    </footer>
+  </div>
+</section>

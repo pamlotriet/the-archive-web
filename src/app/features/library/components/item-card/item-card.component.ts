@@ -1,5 +1,6 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { PIcon } from '@primeicons/angular/p-icon';
+import { ItemActionsMenuComponent } from '../item-actions-menu/item-actions-menu.component';
 import type { Item } from '../../types/item.types';
 import type { category, status } from '../../types/item.types';
 
@@ -8,7 +9,7 @@ import type { category, status } from '../../types/item.types';
   host: {
     class: 'block',
   },
-  imports: [PIcon],
+  imports: [PIcon, ItemActionsMenuComponent],
   templateUrl: './item-card.component.html',
   styleUrl: './item-card.component.css',
 })
@@ -19,7 +20,6 @@ export class ItemCardComponent {
   viewMode = input<'grid' | 'list'>('grid');
   readonly itemEdit = output<Item>();
   readonly itemDelete = output<string>();
-  protected readonly isActionsOpen = signal(false);
 
   protected categoryLabel(category: category): string {
     const labels = {
@@ -98,22 +98,12 @@ export class ItemCardComponent {
     image.src = this.fallbackImageUrl;
   }
 
-  protected toggleActions(): void {
-    this.isActionsOpen.update((isOpen) => !isOpen);
-  }
-
-  protected closeActions(): void {
-    this.isActionsOpen.set(false);
-  }
-
   protected editItem(item: Item): void {
     this.itemEdit.emit(item);
-    this.closeActions();
   }
 
   protected deleteItem(item: Item): void {
     this.itemDelete.emit(item.id);
-    this.closeActions();
   }
 
   protected statusLabel(status: status): string {
