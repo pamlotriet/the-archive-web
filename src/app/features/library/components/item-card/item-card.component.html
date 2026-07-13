@@ -5,11 +5,14 @@
     <div
       class="relative grid min-h-28 grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 gap-y-3 border-b border-border/70 bg-card px-3 py-4 first:rounded-t-2xl last:rounded-b-2xl last:border-b-0 md:min-h-[7rem] md:grid-cols-[5.25rem_minmax(0,1fr)_12.5rem_4.25rem_2rem] md:gap-4 md:px-4"
     >
-      <div
-        class="grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-linear-to-br text-white md:size-20"
-        [class]="thumbnailClass(currentItem.category)"
-      >
-        <span class="font-serif text-2xl font-bold md:text-3xl">{{ initials(currentItem) }}</span>
+      <div class="size-12 shrink-0 overflow-hidden rounded-lg bg-muted shadow-sm ring-1 ring-border md:size-20 md:rounded-xl">
+        <img
+          class="h-full w-full object-cover"
+          [src]="imageSource(currentItem)"
+          [alt]="currentItem.title"
+          loading="lazy"
+          (error)="useFallbackImage($event)"
+        />
       </div>
 
       <div class="min-w-0">

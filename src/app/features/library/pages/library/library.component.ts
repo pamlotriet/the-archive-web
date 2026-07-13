@@ -144,7 +144,7 @@ export class LibraryComponent implements OnInit {
   protected itemsGridClass(): string {
     return this.viewMode() === 'grid'
       ? 'mt-8 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4'
-      : 'mt-8 max-w-6xl overflow-visible rounded-2xl border border-border bg-card';
+      : 'mt-8 w-full overflow-visible rounded-2xl border border-border bg-card';
   }
 
   private isExistingItem(item: CreateItemPayload | Item): item is UpdateItemPayload & Item {
