@@ -1,59 +1,93 @@
-# TheArchiveWeb
+# The Archive
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.3.
+The Archive is a personal media tracker for keeping books, movies, series, games, music, podcasts, and audiobooks in one place. It provides tools for organizing a library, recording reading and listening activity, saving notes and quotes, and reviewing progress through a dashboard and statistics.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Email-based authentication backed by Firebase
+- A searchable media library with progress, status, ratings, and cover images
+- Collections and tags for organizing entries
+- Notes and quotes linked to your archive
+- Reading and listening logs, including pages and time spent
+- Dashboard and statistics views for activity, completion, ratings, and media types
+- Responsive light and dark themes
+- Internationalization support through JSON translation files
 
-```bash
-ng serve
-```
+## Tech stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- [Angular 21](https://angular.dev/) with standalone components and lazy-loaded routes
+- [NgRx](https://ngrx.io/) for state management and effects
+- [Firebase](https://firebase.google.com/) Authentication and Cloud Firestore
+- [PrimeNG](https://primeng.org/) and [Tailwind CSS](https://tailwindcss.com/) for the interface
+- [ngx-translate](https://github.com/ngx-translate/core) for localization
+- [Vitest](https://vitest.dev/) for unit tests
 
-## Code scaffolding
+## Getting started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Prerequisites
 
-```bash
-ng generate component component-name
-```
+- Node.js supported by Angular 21
+- npm
+- A Firebase project with Authentication and Cloud Firestore enabled
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Installation
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Clone the repository and install its dependencies:
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
+Update the Firebase configuration in both environment files with the web app configuration from your Firebase project:
 
-For end-to-end (e2e) testing, run:
+- `src/environments/environment.ts`
+- `src/environments/environment.development.ts`
+
+Then start the development server:
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Open [http://localhost:4200](http://localhost:4200). The development server reloads automatically when source files change.
 
-## Additional Resources
+## Available scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Command                          | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `npm start`                      | Start the Angular development server                  |
+| `npm run build`                  | Create an optimized production build in `dist/`       |
+| `npm run watch`                  | Build continuously with the development configuration |
+| `npm test`                       | Run the Vitest unit test suite                        |
+| `npm run prettier`               | Format the project with Prettier                      |
+| `npm run create:store -- <name>` | Generate NgRx store files in the current directory    |
+
+## Project structure
+
+```text
+src/
+├── app/
+│   ├── core/          # Guards, Firebase setup, and development scripts
+│   ├── features/      # Feature pages, components, types, and NgRx state
+│   └── shared/        # Reusable UI components, types, and utilities
+├── environments/     # Development and production configuration
+└── styles.css         # Global styles and Tailwind theme
+public/
+└── assets/
+    ├── i18n/          # Translation files
+    └── images/        # Static image assets
+```
+
+Feature routes are defined in `src/app/app.routes.ts`. Authenticated areas are protected by `AuthGuard`, while feature data is loaded from Firestore through NgRx effects and services.
+
+## Localization
+
+English translations live in `public/assets/i18n/en.json`. Add another JSON file in the same directory and register its language through the translation service to support an additional locale.
+
+## Building for production
+
+```bash
+npm run build
+```
+
+Angular writes the production artifacts to `dist/`. Deploy those files to a static host configured to fall back to `index.html` for client-side routes.

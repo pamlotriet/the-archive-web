@@ -3,22 +3,13 @@
 @if (currentItem) {
   @if (viewMode() === 'list') {
     <div
-      class="relative grid min-h-28 grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 gap-y-3 border-b border-border/70 bg-card px-3 py-4 first:rounded-t-2xl last:rounded-b-2xl last:border-b-0 md:grid-cols-[4.5rem_minmax(0,1fr)_14rem_4rem_2.5rem] md:gap-4 md:px-5"
+      class="relative grid min-h-28 grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 gap-y-3 border-b border-border/70 bg-card px-3 py-4 first:rounded-t-2xl last:rounded-b-2xl last:border-b-0 md:min-h-[7rem] md:grid-cols-[5.25rem_minmax(0,1fr)_12.5rem_4.25rem_2rem] md:gap-4 md:px-4"
     >
       <div
-        class="grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-linear-to-br text-white md:size-14"
+        class="grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-linear-to-br text-white md:size-20"
         [class]="thumbnailClass(currentItem.category)"
       >
-        @if (currentItem.imageUrl) {
-          <img
-            class="h-full w-full object-cover"
-            [src]="imageSource(currentItem)"
-            [alt]="currentItem.title"
-            (error)="useFallbackImage($event)"
-          />
-        } @else {
-          <span class="font-serif text-2xl font-bold">{{ initials(currentItem) }}</span>
-        }
+        <span class="font-serif text-2xl font-bold md:text-3xl">{{ initials(currentItem) }}</span>
       </div>
 
       <div class="min-w-0">
@@ -38,14 +29,13 @@
         </p>
       </div>
 
-      <div class="col-start-2 grid gap-2 md:col-span-1 md:col-start-auto">
+      <div class="col-start-2 grid gap-2 md:col-span-1 md:col-start-auto md:justify-self-stretch">
         @if (currentItem.progress > 0 && currentItem.progress < 100) {
-          <div class="h-1.5 overflow-hidden rounded-full bg-muted">
+          <div class="h-1.5 w-full overflow-hidden rounded-full bg-muted md:w-[12.5rem]">
             <span class="block h-full rounded-full bg-gold" [style.width.%]="currentItem.progress"></span>
           </div>
-          <span class="text-xs font-bold text-gold">{{ progressLabel(currentItem) }}</span>
         } @else {
-          <span class="text-sm text-muted-foreground">{{ rowStatusLabel(currentItem.status) }}</span>
+          <span class="text-sm text-muted-foreground md:text-center">{{ rowStatusLabel(currentItem.status) }}</span>
         }
       </div>
 
@@ -56,6 +46,7 @@
 
       <div class="relative col-start-3 row-start-1 justify-self-end md:col-start-auto md:row-start-auto">
         <app-item-actions-menu
+          buttonClass="grid size-8 place-items-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground"
           (itemEdit)="editItem(currentItem)"
           (itemDelete)="deleteItem(currentItem)"
         ></app-item-actions-menu>

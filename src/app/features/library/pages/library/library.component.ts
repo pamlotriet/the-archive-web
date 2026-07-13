@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@app/shared/components/button/button';
 import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
+import { eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { ItemCardComponent } from '../../components/item-card/item-card.component';
@@ -78,7 +79,7 @@ export class LibraryComponent implements OnInit {
   }
 
   protected setSearchTerm(event: Event): void {
-    this.libraryApiFacade.setSearchTerm((event.target as HTMLInputElement).value);
+    this.libraryApiFacade.setSearchTerm(eventValue(event));
   }
 
   protected setViewMode(mode: 'grid' | 'list'): void {
@@ -94,7 +95,7 @@ export class LibraryComponent implements OnInit {
   }
 
   protected setPageSize(event: Event): void {
-    this.libraryApiFacade.setPageSize(Number((event.target as HTMLSelectElement).value));
+    this.libraryApiFacade.setPageSize(Number(eventValue(event)));
   }
 
   protected previousPage(): void {
