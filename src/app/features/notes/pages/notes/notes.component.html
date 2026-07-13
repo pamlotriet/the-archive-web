@@ -1,1 +1,284 @@
-<p>notes works!</p>
+<div class="flex w-full flex-col px-6 py-8 sm:px-10 lg:px-12">
+  <div class="flex flex-col gap-5 border-b border-border/70 pb-8 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <h2 class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+        {{ 'notes.title' | translate }}
+      </h2>
+      <h1 class="mt-2 font-serif text-4xl font-bold text-foreground">
+        {{ 'notes.subtitle' | translate }}
+      </h1>
+      <p class="mt-3 text-lg text-muted-foreground">
+        {{ 'notes.summary' | translate: { amount: notes().length } }}
+      </p>
+    </div>
+
+    <app-button
+      buttonText="notes.newNote"
+      iconName="plus"
+      iconPosition="left"
+      [showIcon]="true"
+      customClass="!min-h-12 !w-fit !rounded-xl !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !px-5 !py-3 !font-extrabold !text-slate-950 hover:brightness-105"
+      (buttonClick)="openNewNote()"
+    ></app-button>
+  </div>
+
+  <label class="relative mt-8 block">
+    <span class="sr-only">{{ 'notes.search.label' | translate }}</span>
+    <svg
+      class="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+      pIcon="search"
+      aria-hidden="true"
+    ></svg>
+    <input
+      type="search"
+      class="min-h-12 w-full rounded-xl border border-gold/40 bg-background/80 px-11 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+      [value]="searchTerm()"
+      [placeholder]="'notes.search.placeholder' | translate"
+      (input)="setSearchTerm($event)"
+    />
+  </label>
+
+  @if (error()) {
+    <p class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+      {{ error() }}
+    </p>
+  }
+
+  @if (loading()) {
+    <p class="mt-8 text-muted-foreground">{{ 'notes.loading' | translate }}</p>
+  } @else if (filteredNotes().length === 0) {
+    <section class="mt-8 rounded-2xl border border-border bg-card/70 p-8 text-center">
+      <h2 class="font-serif text-2xl font-bold">{{ 'notes.empty.title' | translate }}</h2>
+      <p class="mt-2 text-muted-foreground">{{ 'notes.empty.description' | translate }}</p>
+    </section>
+  } @else {
+    @if (pinnedNotes().length > 0) {
+      <section class="mt-8">
+        <h2 class="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+          <svg class="size-4 text-gold" pIcon="bookmark" aria-hidden="true"></svg>
+          {{ 'notes.pinned' | translate }}
+        </h2>
+        <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-5">
+          @for (note of pinnedNotes(); track note.id) {
+            <ng-container [ngTemplateOutlet]="noteCard" [ngTemplateOutletContext]="{ note: note }"></ng-container>
+          }
+        </div>
+      </section>
+    }
+
+    <section class="mt-10">
+      <h2 class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+        {{ 'notes.allNotes' | translate }}
+      </h2>
+      <div class="mt-4 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-5">
+        @for (note of unpinnedNotes(); track note.id) {
+          <ng-container [ngTemplateOutlet]="noteCard" [ngTemplateOutletContext]="{ note: note }"></ng-container>
+        }
+      </div>
+    </section>
+  }
+
+  <ng-template #noteCard let-note="note">
+    @let linkedLibraryItem = linkedItem(note.itemId);
+
+    <article class="rounded-2xl border border-border bg-card/75 p-6">
+      <div class="flex items-start justify-between gap-4">
+        <svg class="size-5 shrink-0 text-gold" pIcon="file" aria-hidden="true"></svg>
+        <div class="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            class="grid size-9 place-items-center rounded-lg text-gold transition hover:bg-gold/10"
+            [attr.aria-label]="'notes.actions.pin' | translate"
+            [attr.aria-pressed]="note.pinned"
+            (click)="toggleNotePinned(note)"
+          >
+            <svg class="size-4" pIcon="bookmark" aria-hidden="true"></svg>
+          </button>
+          <button
+            type="button"
+            class="grid size-9 place-items-center rounded-lg text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            [attr.aria-label]="'notes.actions.edit' | translate"
+            (click)="editNote(note)"
+          >
+            <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+          </button>
+          <button
+            type="button"
+            class="grid size-9 place-items-center rounded-lg text-red-200 transition hover:bg-red-500/15"
+            [attr.aria-label]="'notes.actions.delete' | translate"
+            (click)="deleteNote(note.id)"
+          >
+            <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
+          </button>
+        </div>
+      </div>
+
+      <h3 class="mt-8 font-serif text-2xl font-bold leading-tight text-foreground">
+        {{ note.title }}
+      </h3>
+      <p class="mt-4 min-h-20 text-muted-foreground">
+        {{ notePreview(note) }}
+      </p>
+
+      @if (linkedLibraryItem) {
+        <div class="mt-5 rounded-xl border border-gold/25 bg-gold/10 px-3 py-2">
+          <p class="text-xs font-bold uppercase tracking-[0.14em] text-gold">
+            {{ 'notes.linkedItem' | translate }}
+          </p>
+          <p class="mt-1 truncate text-sm font-bold text-foreground">
+            {{ linkedLibraryItem.title }}
+          </p>
+          <p class="truncate text-xs text-muted-foreground">
+            {{ itemCreator(linkedLibraryItem) }}
+          </p>
+        </div>
+      }
+
+      <div class="mt-6 flex flex-wrap gap-2 border-t border-border/70 pt-4">
+        @for (tag of note.tags ?? []; track tag) {
+          <span class="rounded-full border border-border bg-muted/25 px-3 py-1 text-xs font-bold text-muted-foreground">
+            {{ tag }}
+          </span>
+        }
+      </div>
+    </article>
+  </ng-template>
+
+  @if (isDialogOpen()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-6 backdrop-blur-sm"
+      role="presentation"
+      (click)="closeDialog()"
+    >
+      <section
+        class="flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gold/25 bg-surface-elevated shadow-2xl shadow-slate-950/40"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="note-dialog-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="flex items-start justify-between gap-4 border-b border-border/80 bg-card px-6 py-5">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold">
+              {{ 'notes.dialog.eyebrow' | translate }}
+            </p>
+            <h2 id="note-dialog-title" class="mt-1 font-serif text-2xl font-bold">
+              {{
+                editingNote()
+                  ? ('notes.dialog.editTitle' | translate)
+                  : ('notes.dialog.newTitle' | translate)
+              }}
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="grid size-10 shrink-0 place-items-center rounded-xl text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            [attr.aria-label]="'notes.dialog.closeLabel' | translate"
+            (click)="closeDialog()"
+          >
+            <svg class="size-5" pIcon="times" aria-hidden="true"></svg>
+          </button>
+        </header>
+
+        <form class="grid gap-5 overflow-y-auto px-6 py-5">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold">{{ 'notes.dialog.fields.title.label' | translate }}</span>
+            <input
+              type="text"
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="title()"
+              [placeholder]="'notes.dialog.fields.title.placeholder' | translate"
+              (input)="setTitle($event)"
+            />
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold">{{ 'notes.dialog.fields.body.label' | translate }}</span>
+            <textarea
+              class="min-h-56 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="body()"
+              [placeholder]="'notes.dialog.fields.body.placeholder' | translate"
+              (input)="setBody($event)"
+            ></textarea>
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold">{{ 'notes.dialog.fields.item.label' | translate }}</span>
+            <select
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="itemId()"
+              (change)="selectItem($event)"
+            >
+              <option value="">{{ 'notes.dialog.fields.item.none' | translate }}</option>
+              @for (item of items(); track item.id) {
+                <option [value]="item.id">{{ item.title }} - {{ itemCreator(item) }}</option>
+              }
+            </select>
+          </label>
+
+          <fieldset class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'notes.dialog.fields.tags.label' | translate }}
+            </span>
+            @if (tags().length > 0) {
+              <div class="flex flex-wrap gap-2">
+                @for (tag of tags(); track tag.id) {
+                  <button
+                    type="button"
+                    class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    [class]="
+                      isTagSelected(tag.name)
+                        ? 'border-gold bg-gold/15 text-gold'
+                        : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
+                    "
+                    [attr.aria-pressed]="isTagSelected(tag.name)"
+                    (click)="toggleTag(tag.name)"
+                  >
+                    <span class="size-3 rounded-full" [style.background]="tag.color" aria-hidden="true"></span>
+                    <span>{{ tag.name }}</span>
+                  </button>
+                }
+              </div>
+            } @else {
+              <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+                {{ 'notes.dialog.fields.tags.empty' | translate }}
+              </p>
+            }
+          </fieldset>
+
+          <button
+            type="button"
+            class="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl border px-4 font-bold transition"
+            [class]="
+              pinned()
+                ? 'border-gold bg-gold/15 text-gold'
+                : 'border-border text-muted-foreground hover:border-gold/50 hover:text-foreground'
+            "
+            [attr.aria-pressed]="pinned()"
+            (click)="togglePinned()"
+          >
+            <svg class="size-5" pIcon="bookmark" aria-hidden="true"></svg>
+            <span>{{ 'notes.dialog.fields.pinned' | translate }}</span>
+          </button>
+        </form>
+
+        <footer class="flex items-center justify-end gap-3 border-t border-border/80 bg-card px-6 py-4">
+          <button
+            type="button"
+            class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+            (click)="closeDialog()"
+          >
+            {{ 'notes.dialog.actions.cancel' | translate }}
+          </button>
+          <button
+            type="button"
+            class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
+            (click)="saveNote()"
+          >
+            {{ 'notes.dialog.actions.save' | translate }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  }
+</div>
