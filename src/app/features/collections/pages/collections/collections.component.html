@@ -1,1 +1,354 @@
-<p>collections works!</p>
+<div class="flex w-full flex-col px-6 py-8 sm:px-10 lg:px-12">
+  @if (!selectedCollection()) {
+    <div class="flex flex-col gap-5 border-b border-border/70 pb-8 xl:flex-row xl:items-end xl:justify-between">
+      <div>
+        <h2 class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+          {{ 'collections.title' | translate }}
+        </h2>
+        <h1 class="mt-2 font-serif text-4xl font-bold text-foreground">
+          {{ 'collections.subtitle' | translate }}
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground">
+          {{ 'collections.description' | translate }}
+        </p>
+        <p class="mt-2 font-bold text-muted-foreground">
+          {{
+            'collections.summary'
+              | translate: { collections: collections().length, entries: totalAssignedItems() }
+          }}
+        </p>
+      </div>
+
+      <app-button
+        buttonText="collections.newCollection"
+        iconName="folder-plus"
+        iconPosition="left"
+        [showIcon]="true"
+        customClass="!min-h-12 !w-fit !rounded-xl !border-0 !bg-[linear-gradient(100deg,#dca945,#f2c65f)] !px-5 !py-3 !font-extrabold !text-slate-950 hover:brightness-105"
+        (buttonClick)="openNewCollection()"
+      ></app-button>
+    </div>
+
+    @if (error()) {
+      <p class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+        {{ error() }}
+      </p>
+    }
+
+    @if (loading()) {
+      <p class="mt-8 text-muted-foreground">{{ 'collections.loading' | translate }}</p>
+    } @else if (collections().length === 0) {
+      <section class="mt-8 rounded-2xl border border-border bg-card/70 p-8 text-center">
+        <h2 class="font-serif text-2xl font-bold">{{ 'collections.empty.title' | translate }}</h2>
+        <p class="mt-2 text-muted-foreground">{{ 'collections.empty.description' | translate }}</p>
+      </section>
+    } @else {
+      <div class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-5">
+        @for (collection of collections(); track collection.id) {
+          <article
+            class="overflow-hidden rounded-2xl border border-border bg-card/75 transition hover:-translate-y-0.5 hover:border-gold/45 hover:shadow-lg hover:shadow-slate-950/20"
+            role="button"
+            tabindex="0"
+            (click)="openCollection(collection.id)"
+            (keydown.enter)="openCollection(collection.id)"
+            (keydown.space)="openCollection(collection.id)"
+          >
+            <div
+              class="h-36 border-b border-border"
+              [style.background]="
+                'linear-gradient(145deg, ' +
+                collection.color +
+                ', color-mix(in oklch, ' +
+                collection.color +
+                ' 35%, black))'
+              "
+            >
+              <div class="flex justify-end p-3">
+                <div class="flex rounded-xl bg-slate-950/35 p-1 text-white">
+                  <button
+                    type="button"
+                    class="grid size-9 place-items-center rounded-lg transition hover:bg-white/15"
+                    [attr.aria-label]="'collections.actions.edit' | translate"
+                    (click)="$event.stopPropagation(); editCollection(collection)"
+                  >
+                    <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="grid size-9 place-items-center rounded-lg transition hover:bg-red-500/25"
+                    [attr.aria-label]="'collections.actions.delete' | translate"
+                    (click)="$event.stopPropagation(); deleteCollection(collection.id)"
+                  >
+                    <svg class="size-4" pIcon="trash" aria-hidden="true"></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                  <h2 class="truncate font-serif text-2xl font-bold">{{ collection.name }}</h2>
+                  <p class="mt-2 min-h-12 text-muted-foreground">
+                    {{ collection.description || ('collections.noDescription' | translate) }}
+                  </p>
+                </div>
+                <svg
+                  class="mt-2 size-5 shrink-0 text-gold"
+                  pIcon="angle-right"
+                  aria-hidden="true"
+                ></svg>
+              </div>
+              <p class="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                {{ 'collections.entries' | translate: { amount: collectionItemCount(collection.id) } }}
+              </p>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  } @else {
+    @let collection = selectedCollection();
+
+    <div class="border-b border-border/70 pb-8">
+      <button
+        type="button"
+        class="inline-flex min-h-10 items-center gap-2 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+        (click)="backToCollections()"
+      >
+        <svg class="size-4" pIcon="angle-left" aria-hidden="true"></svg>
+        <span>{{ 'collections.detail.back' | translate }}</span>
+      </button>
+
+      <div class="mt-6 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.25em] text-muted-foreground">
+            {{ 'collections.title' | translate }}
+          </p>
+          <h1 class="mt-2 font-serif text-4xl font-bold text-foreground">
+            {{ collection.name }}
+          </h1>
+          <p class="mt-3 max-w-3xl text-lg text-muted-foreground">
+            {{ collection.description || ('collections.noDescription' | translate) }}
+          </p>
+          <p class="mt-2 font-bold text-muted-foreground">
+            {{ 'collections.entries' | translate: { amount: assignedItems().length } }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl border border-border px-4 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+          (click)="editCollection(collection)"
+        >
+          <svg class="size-4" pIcon="pencil" aria-hidden="true"></svg>
+          <span>{{ 'collections.actions.edit' | translate }}</span>
+        </button>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+        {{ error() }}
+      </p>
+    }
+
+    <section class="mt-8">
+      <h2 class="font-serif text-2xl font-bold">{{ 'collections.detail.itemsTitle' | translate }}</h2>
+
+      @if (assignedItems().length === 0) {
+        <div class="mt-4 rounded-2xl border border-border bg-card/70 p-8 text-center">
+          <h3 class="font-serif text-xl font-bold">{{ 'collections.detail.empty.title' | translate }}</h3>
+          <p class="mt-2 text-muted-foreground">{{ 'collections.detail.empty.description' | translate }}</p>
+        </div>
+      } @else {
+        <div class="mt-4 grid gap-3">
+          @for (item of assignedItems(); track item.id) {
+            <article class="flex items-center gap-4 rounded-2xl border border-border bg-card/75 p-3">
+              <img
+                class="size-18 shrink-0 rounded-xl object-cover"
+                [src]="item.imageUrl"
+                [alt]="item.title"
+              />
+              <div class="min-w-0 flex-1">
+                <h3 class="truncate font-serif text-xl font-bold">{{ item.title }}</h3>
+                <p class="truncate text-sm text-muted-foreground">{{ itemCreator(item) }}</p>
+                <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-gold">
+                  {{ item.category }}
+                </p>
+              </div>
+              <button
+                type="button"
+                class="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border border-red-400/30 px-3 text-sm font-bold text-red-200 transition hover:bg-red-500/15"
+                (click)="removeItemFromSelectedCollection(item)"
+              >
+                <svg class="size-4" pIcon="times" aria-hidden="true"></svg>
+                <span>{{ 'collections.detail.removeItem' | translate }}</span>
+              </button>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="mt-10 border-t border-border/70 pt-8">
+      <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+          <h2 class="font-serif text-2xl font-bold">{{ 'collections.detail.addItemsTitle' | translate }}</h2>
+          <p class="mt-2 text-muted-foreground">{{ 'collections.detail.addItemsDescription' | translate }}</p>
+        </div>
+        <label class="relative block w-full xl:max-w-md">
+          <span class="sr-only">{{ 'collections.detail.searchLabel' | translate }}</span>
+          <svg
+            class="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            pIcon="search"
+            aria-hidden="true"
+          ></svg>
+          <input
+            type="search"
+            class="min-h-12 w-full rounded-xl border border-gold/40 bg-background/80 px-11 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="itemSearchTerm()"
+            [placeholder]="'collections.detail.searchPlaceholder' | translate"
+            (input)="setItemSearchTerm($event)"
+          />
+        </label>
+      </div>
+
+      @if (availableItems().length === 0) {
+        <p class="mt-5 rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+          {{ 'collections.detail.noAvailableItems' | translate }}
+        </p>
+      } @else {
+        <div class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-3">
+          @for (item of availableItems(); track item.id) {
+            <article class="rounded-2xl border border-border bg-card/75 p-4">
+              <div class="flex gap-3">
+                <img
+                  class="size-16 shrink-0 rounded-xl object-cover"
+                  [src]="item.imageUrl"
+                  [alt]="item.title"
+                />
+                <div class="min-w-0">
+                  <h3 class="truncate font-serif text-lg font-bold">{{ item.title }}</h3>
+                  <p class="truncate text-sm text-muted-foreground">{{ itemCreator(item) }}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-gold px-3 text-sm font-extrabold text-gold-foreground transition hover:brightness-105"
+                (click)="addItemToSelectedCollection(item)"
+              >
+                <svg class="size-4" pIcon="plus" aria-hidden="true"></svg>
+                <span>{{ 'collections.detail.addItem' | translate }}</span>
+              </button>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  @if (isDialogOpen()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-6 backdrop-blur-sm"
+      role="presentation"
+      (click)="closeDialog()"
+    >
+      <section
+        class="flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gold/25 bg-surface-elevated shadow-2xl shadow-slate-950/40"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="collection-dialog-title"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="flex items-start justify-between gap-4 border-b border-border/80 bg-card px-6 py-5">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold">
+              {{ 'collections.dialog.eyebrow' | translate }}
+            </p>
+            <h2 id="collection-dialog-title" class="mt-1 font-serif text-2xl font-bold">
+              {{
+                editingCollection()
+                  ? ('collections.dialog.editTitle' | translate)
+                  : ('collections.dialog.newTitle' | translate)
+              }}
+            </h2>
+          </div>
+          <button
+            type="button"
+            class="grid size-10 shrink-0 place-items-center rounded-xl text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            [attr.aria-label]="'collections.dialog.closeLabel' | translate"
+            (click)="closeDialog()"
+          >
+            <svg class="size-5" pIcon="times" aria-hidden="true"></svg>
+          </button>
+        </header>
+
+        <form class="grid gap-5 px-6 py-5">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold">{{ 'collections.dialog.fields.name.label' | translate }}</span>
+            <input
+              type="text"
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="name()"
+              [placeholder]="'collections.dialog.fields.name.placeholder' | translate"
+              (input)="setName($event)"
+            />
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold">{{ 'collections.dialog.fields.description.label' | translate }}</span>
+            <textarea
+              class="min-h-24 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="description()"
+              [placeholder]="'collections.dialog.fields.description.placeholder' | translate"
+              (input)="setDescription($event)"
+            ></textarea>
+          </label>
+
+          <div class="grid gap-3">
+            <label class="grid gap-2">
+              <span class="text-sm font-bold">{{ 'collections.dialog.fields.color.label' | translate }}</span>
+              <input
+                type="color"
+                class="h-12 w-24 rounded-xl border border-input bg-background p-1"
+                [value]="color()"
+                (input)="setColor($event)"
+              />
+            </label>
+            <div class="flex flex-wrap gap-2">
+              @for (preset of colorPresets; track preset) {
+                <button
+                  type="button"
+                  class="size-10 rounded-xl border border-border transition hover:scale-105"
+                  [class.outline]="color() === preset"
+                  [class.outline-2]="color() === preset"
+                  [class.outline-gold]="color() === preset"
+                  [style.background]="preset"
+                  [attr.aria-label]="preset"
+                  (click)="selectColor(preset)"
+                ></button>
+              }
+            </div>
+          </div>
+        </form>
+
+        <footer class="flex items-center justify-end gap-3 border-t border-border/80 bg-card px-6 py-4">
+          <button
+            type="button"
+            class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+            (click)="closeDialog()"
+          >
+            {{ 'collections.dialog.actions.cancel' | translate }}
+          </button>
+          <button
+            type="button"
+            class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
+            (click)="saveCollection()"
+          >
+            {{ 'collections.dialog.actions.save' | translate }}
+          </button>
+        </footer>
+      </section>
+    </div>
+  }
+</div>
