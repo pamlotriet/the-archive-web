@@ -14,6 +14,7 @@ import {
   selectLibraryTotalItems,
   selectLibraryTotalPages,
   selectLibraryVisiblePage,
+  selectLibraryItems,
   selectPagedLibraryItems,
 } from './libraryApi.selectors';
 import type { LibraryCategoryFilter, LibraryStatusFilter } from './libraryApi.state';
@@ -24,6 +25,7 @@ import type { LibraryCategoryFilter, LibraryStatusFilter } from './libraryApi.st
 export class LibraryApiFacade {
   private readonly store = inject(Store);
 
+  readonly allItems = this.store.selectSignal(selectLibraryItems);
   readonly items = this.store.selectSignal(selectPagedLibraryItems);
   readonly totalItems = this.store.selectSignal(selectLibraryTotalItems);
   readonly totalPages = this.store.selectSignal(selectLibraryTotalPages);

@@ -98,6 +98,9 @@ export class LibraryApiService implements LibraryApiInterface {
       currentPage: this.mapOptionalNumber(data['currentPage']),
       totalPages: this.mapOptionalNumber(data['totalPages']),
       tags: Array.isArray(data['tags']) ? data['tags'].filter((tag) => typeof tag === 'string') : [],
+      collectionIds: Array.isArray(data['collectionIds'])
+        ? data['collectionIds'].filter((collectionId) => typeof collectionId === 'string')
+        : [],
       note: this.mapString(data['note']),
       createdAt: data['createdAt']?.toMillis?.() ?? null,
       updatedAt: data['updatedAt']?.toMillis?.() ?? null,

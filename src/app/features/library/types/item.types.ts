@@ -13,6 +13,7 @@ export type Item = {
   currentPage?: number;
   totalPages?: number;
   tags?: string[];
+  collectionIds?: string[];
   note?: string;
   createdAt?: number | null;
   updatedAt?: number | null;

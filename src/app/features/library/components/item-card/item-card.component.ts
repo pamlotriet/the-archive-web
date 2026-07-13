@@ -6,7 +6,7 @@ import type { category, status } from '../../types/item.types';
 @Component({
   selector: 'app-item-card',
   host: {
-    class: 'block h-[28rem]',
+    class: 'block',
   },
   imports: [PIcon],
   templateUrl: './item-card.component.html',
@@ -16,6 +16,7 @@ export class ItemCardComponent {
   private readonly fallbackImageUrl = '/assets/images/library-login-background.png';
 
   item = input<Item>();
+  viewMode = input<'grid' | 'list'>('grid');
   readonly itemEdit = output<Item>();
   readonly itemDelete = output<string>();
   protected readonly isActionsOpen = signal(false);
@@ -64,6 +65,29 @@ export class ItemCardComponent {
     return item.imageUrl || this.fallbackImageUrl;
   }
 
+  protected initials(item: Item): string {
+    return item.title
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((word) => word[0]?.toUpperCase())
+      .join('');
+  }
+
+  protected thumbnailClass(category: category): string {
+    const classes = {
+      books: 'from-sky-500 to-slate-950',
+      movies: 'from-red-400 to-orange-950',
+      series: 'from-cyan-500 to-slate-950',
+      games: 'from-orange-500 to-amber-950',
+      music: 'from-lime-500 to-green-950',
+      podcasts: 'from-violet-500 to-slate-950',
+      audioBooks: 'from-blue-500 to-indigo-950',
+    } satisfies Record<category, string>;
+
+    return classes[category];
+  }
+
   protected useFallbackImage(event: Event): void {
     const image = event.target as HTMLImageElement;
 
@@ -102,6 +126,18 @@ export class ItemCardComponent {
     }
 
     return 'WANT TO START';
+  }
+
+  protected rowStatusLabel(status: status): string {
+    if (this.isComplete(status)) {
+      return 'Completed';
+    }
+
+    if (this.isInProgress(status)) {
+      return 'In progress';
+    }
+
+    return 'Want to start';
   }
 
   protected statusClass(status: status): string {

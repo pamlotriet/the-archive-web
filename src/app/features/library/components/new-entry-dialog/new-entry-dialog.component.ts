@@ -1,6 +1,7 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
+import { CollectionsApiFacade } from '../../../collections/state/collections-api';
 import { TagsApiFacade } from '../../../tags/state/tags-api';
 import type { CreateItemPayload, Item, category, status } from '../../types/item.types';
 
@@ -12,6 +13,7 @@ import type { CreateItemPayload, Item, category, status } from '../../types/item
 })
 export class NewEntryDialogComponent implements OnInit {
   private readonly tagsApiFacade = inject(TagsApiFacade);
+  private readonly collectionsApiFacade = inject(CollectionsApiFacade);
   private readonly fallbackImageUrl = '/assets/images/library-login-background.png';
 
   readonly dialogClose = output<void>();
@@ -27,9 +29,11 @@ export class NewEntryDialogComponent implements OnInit {
   protected readonly currentPage = signal<number | undefined>(undefined);
   protected readonly totalPages = signal<number | undefined>(undefined);
   protected readonly selectedTagNames = signal<string[]>([]);
+  protected readonly selectedCollectionIds = signal<string[]>([]);
   protected readonly note = signal('');
   protected readonly imageUrl = signal('');
   protected readonly firebaseTags = this.tagsApiFacade.tags;
+  protected readonly collections = this.collectionsApiFacade.collections;
 
   protected readonly entryTypes = [
     { id: 'books', labelKey: 'library.newEntry.types.books' },
@@ -52,6 +56,7 @@ export class NewEntryDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.tagsApiFacade.loadTags();
+    this.collectionsApiFacade.loadCollections();
     this.populateForm(this.item());
   }
 
@@ -108,6 +113,18 @@ export class NewEntryDialogComponent implements OnInit {
     return this.selectedTagNames().includes(tagName);
   }
 
+  protected toggleCollection(collectionId: string): void {
+    this.selectedCollectionIds.update((collectionIds) =>
+      collectionIds.includes(collectionId)
+        ? collectionIds.filter((selectedCollectionId) => selectedCollectionId !== collectionId)
+        : [...collectionIds, collectionId],
+    );
+  }
+
+  protected isCollectionSelected(collectionId: string): boolean {
+    return this.selectedCollectionIds().includes(collectionId);
+  }
+
   protected setNote(event: Event): void {
     this.note.set(this.inputValue(event));
   }
@@ -147,6 +164,7 @@ export class NewEntryDialogComponent implements OnInit {
       currentPage: category === 'books' ? this.currentPage() : undefined,
       totalPages: category === 'books' ? this.totalPages() : undefined,
       tags,
+      collectionIds: this.collectionIds(),
       note: this.note().trim(),
     };
 
@@ -173,6 +191,7 @@ export class NewEntryDialogComponent implements OnInit {
     this.currentPage.set(item.currentPage);
     this.totalPages.set(item.totalPages);
     this.selectedTagNames.set(item.tags ?? []);
+    this.selectedCollectionIds.set(item.collectionIds ?? []);
     this.note.set(item.note || item.description);
     this.imageUrl.set(item.sourceUrl || item.imageUrl);
   }
@@ -199,6 +218,21 @@ export class NewEntryDialogComponent implements OnInit {
         this.selectedTagNames()
           .map((tagName) => tagName.trim())
           .filter((tagName) => tagName && existingTagNames.has(tagName)),
+      ),
+    ];
+  }
+
+  private collectionIds(): string[] {
+    const existingCollectionIds = new Set([
+      ...this.collections().map((collection) => collection.id),
+      ...(this.item()?.collectionIds ?? []),
+    ]);
+
+    return [
+      ...new Set(
+        this.selectedCollectionIds().filter((collectionId) =>
+          existingCollectionIds.has(collectionId),
+        ),
       ),
     ];
   }

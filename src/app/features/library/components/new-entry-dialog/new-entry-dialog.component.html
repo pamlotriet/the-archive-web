@@ -206,6 +206,40 @@
           }
         </fieldset>
 
+        <fieldset class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.collections.label' | translate }}
+          </span>
+          @if (collections().length > 0) {
+            <div class="flex flex-wrap gap-2">
+              @for (collection of collections(); track collection.id) {
+                <button
+                  type="button"
+                  class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  [class]="
+                    isCollectionSelected(collection.id)
+                      ? 'border-gold bg-gold/15 text-gold'
+                      : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
+                  "
+                  [attr.aria-pressed]="isCollectionSelected(collection.id)"
+                  (click)="toggleCollection(collection.id)"
+                >
+                  <span
+                    class="size-3 rounded-full"
+                    [style.background]="collection.color"
+                    aria-hidden="true"
+                  ></span>
+                  <span>{{ collection.name }}</span>
+                </button>
+              }
+            </div>
+          } @else {
+            <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+              {{ 'library.newEntry.fields.collections.empty' | translate }}
+            </p>
+          }
+        </fieldset>
+
         <label class="grid gap-2">
           <span class="text-sm font-bold text-foreground">
             {{ 'library.newEntry.fields.note.label' | translate }}
