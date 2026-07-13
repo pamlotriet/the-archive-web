@@ -1,45 +1,25 @@
-# syntax = docker/dockerfile:1
+# syntax=docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
 ARG NODE_VERSION=22.21.1
-FROM node:${NODE_VERSION}-slim AS base
+FROM node:${NODE_VERSION}-slim AS build
 
-LABEL fly_launch_runtime="Node.js"
-
-# Node.js app lives here
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
-
-
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
-
-# Install node modules
 COPY package-lock.json package.json ./
-RUN npm ci --include=dev
+RUN npm ci
 
 # Copy application code
 COPY . .
 
-# Build application
 RUN npm run build
 
-# Remove development dependencies
-RUN npm prune --omit=dev
+FROM nginx:1.29-alpine AS runtime
 
+LABEL fly_launch_runtime="nginx"
 
-# Final stage for app image
-FROM base
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/the-archive-web/browser /usr/share/nginx/html
 
-# Copy built application
-COPY --from=build /app /app
+EXPOSE 8080
 
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 80
-CMD [ "npm", "run", "start" ]
+CMD ["nginx", "-g", "daemon off;"]
