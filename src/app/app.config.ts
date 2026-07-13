@@ -21,6 +21,22 @@ import {
   libraryApiReducer,
 } from '@features/library/state/library-api';
 import { TagsApiEffects, tagsApiFeatureKey, tagsApiReducer } from '@features/tags/state/tags-api';
+import {
+  CollectionsApiEffects,
+  collectionsApiFeatureKey,
+  collectionsApiReducer,
+} from '@features/collections/state/collections-api';
+import {
+  QuotesApiEffects,
+  quotesApiFeatureKey,
+  quotesApiReducer,
+} from '@features/quotes/state/quotes-api';
+import { NotesApiEffects, notesApiFeatureKey, notesApiReducer } from '@features/notes/state/notes-api';
+import {
+  ReadingLogApiEffects,
+  readingLogApiFeatureKey,
+  readingLogApiReducer,
+} from '@features/reading-log/state/reading-log-api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,7 +47,19 @@ export const appConfig: ApplicationConfig = {
     provideState(authenticationApiFeatureKey, authenticationApiReducer),
     provideState(libraryApiFeatureKey, libraryApiReducer),
     provideState(tagsApiFeatureKey, tagsApiReducer),
-    provideEffects(AuthenticationApiEffects, LibraryApiEffects, TagsApiEffects),
+    provideState(collectionsApiFeatureKey, collectionsApiReducer),
+    provideState(quotesApiFeatureKey, quotesApiReducer),
+    provideState(notesApiFeatureKey, notesApiReducer),
+    provideState(readingLogApiFeatureKey, readingLogApiReducer),
+    provideEffects(
+      AuthenticationApiEffects,
+      LibraryApiEffects,
+      TagsApiEffects,
+      CollectionsApiEffects,
+      QuotesApiEffects,
+      NotesApiEffects,
+      ReadingLogApiEffects,
+    ),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

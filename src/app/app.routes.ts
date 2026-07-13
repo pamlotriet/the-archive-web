@@ -2,7 +2,9 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'authentication' },
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'home', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'homepage', pathMatch: 'full', redirectTo: 'dashboard' },
   {
     path: 'authentication',
     loadComponent: () =>
@@ -28,6 +30,14 @@ export const routes: Routes = [
   },
   {
     path: 'collections',
+    loadComponent: () =>
+      import('@features/collections/pages/collections/collections.component').then(
+        (m) => m.CollectionsComponent,
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'collections/:collectionId',
     loadComponent: () =>
       import('@features/collections/pages/collections/collections.component').then(
         (m) => m.CollectionsComponent,

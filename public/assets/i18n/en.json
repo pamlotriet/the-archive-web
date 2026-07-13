@@ -69,6 +69,38 @@
     "subtitle": "Everything in one place",
     "entries": "{{ amount }} entries",
     "addEntry": "New",
+    "readingLog": {
+      "open": "Log session",
+      "eyebrow": "Reading log",
+      "title": "Log reading or listening",
+      "closeLabel": "Close reading log popup",
+      "fields": {
+        "item": "Book or audiobook",
+        "mode": "Mode",
+        "pages": "Pages read",
+        "minutes": "Minutes",
+        "note": "Session note",
+        "notePlaceholder": "A thought, stopping point, or tiny victory..."
+      },
+      "modes": {
+        "reading": "Reading",
+        "listening": "Listening"
+      },
+      "timer": {
+        "label": "Timer",
+        "start": "Start",
+        "stop": "Stop",
+        "reset": "Reset"
+      },
+      "empty": {
+        "title": "No books or audiobooks yet",
+        "description": "Add a book or audiobook before logging a reading or listening session."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save session"
+      }
+    },
     "filter": "Filter",
     "gridView": "Grid view",
     "listView": "List view",
@@ -184,6 +216,10 @@
           "placeholder": "classic, sci-fi, comfort-watch",
           "empty": "Create tags first, then select them here."
         },
+        "collections": {
+          "label": "Collections",
+          "empty": "Create collections first, then select them here."
+        },
         "note": {
           "label": "Note",
           "placeholder": "What made this worth saving?"
@@ -199,6 +235,215 @@
       "actions": {
         "cancel": "Cancel",
         "save": "Save entry"
+      }
+    }
+  },
+  "dashboard": {
+    "seeAll": "See all",
+    "quickActions": {
+      "title": "Quick actions",
+      "subtitle": "Add to your archive",
+      "addEntry": "Add entry",
+      "addQuote": "Add quote",
+      "addNote": "Add note",
+      "newCollection": "New collection"
+    },
+    "hero": {
+      "greeting": "Good evening, {{ name }}.",
+      "description": "A quiet overview of what you are keeping, reading, watching, and thinking through."
+    },
+    "quote": {
+      "title": "Quote of the day",
+      "empty": "Save a favorite quote to see it here.",
+      "unknownAuthor": "Unknown author"
+    },
+    "stats": {
+      "total": "Total entries",
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "wantToStart": "Want to start",
+      "rating": "Avg. rating"
+    },
+    "continue": {
+      "title": "Continue where you left off",
+      "empty": "No in-progress entries yet."
+    },
+    "recent": {
+      "title": "Recently added",
+      "empty": "Add something to your library to see it here."
+    },
+    "notes": {
+      "title": "Recent notes",
+      "empty": "No notes yet."
+    },
+    "archive": {
+      "title": "Archive pulse",
+      "collections": "{{ amount }} collections",
+      "quotes": "{{ amount }} quotes",
+      "notes": "{{ amount }} notes"
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Curated shelves",
+    "description": "Group the things that belong together.",
+    "summary": "{{ collections }} collections · {{ entries }} assigned entries",
+    "newCollection": "New collection",
+    "loading": "Loading your collections...",
+    "entries": "{{ amount }} entries",
+    "noDescription": "No description yet.",
+    "empty": {
+      "title": "No collections yet",
+      "description": "Create a collection, then assign books, movies, games, and more from the library popup."
+    },
+    "actions": {
+      "edit": "Edit collection",
+      "delete": "Delete collection"
+    },
+    "detail": {
+      "back": "Collections",
+      "itemsTitle": "Items in this collection",
+      "addItemsTitle": "Add items",
+      "addItemsDescription": "Add existing library items to this collection.",
+      "searchLabel": "Search available items",
+      "searchPlaceholder": "Search library items",
+      "addItem": "Add item",
+      "removeItem": "Remove",
+      "noAvailableItems": "No available items found.",
+      "empty": {
+        "title": "Nothing here yet",
+        "description": "Add existing library items below to build this collection."
+      }
+    },
+    "dialog": {
+      "eyebrow": "Collections",
+      "newTitle": "New collection",
+      "editTitle": "Edit collection",
+      "closeLabel": "Close collection popup",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Life-changing books"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "The ones I return to when I need to remember who I am."
+        },
+        "color": {
+          "label": "Color"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save collection"
+      }
+    }
+  },
+  "quotes": {
+    "title": "Quotes",
+    "subtitle": "Lines worth returning to",
+    "summary": "{{ amount }} passages saved",
+    "newQuote": "New quote",
+    "favorites": "Favorites",
+    "loading": "Loading your quotes...",
+    "unknownAuthor": "Unknown author",
+    "unknownSource": "Unknown source",
+    "search": {
+      "label": "Search quotes",
+      "placeholder": "Search quotes, authors, sources..."
+    },
+    "empty": {
+      "title": "No quotes found",
+      "description": "Save a quote and link it to a library item when it belongs somewhere specific."
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "favorite": "Favorite quote"
+    },
+    "dialog": {
+      "eyebrow": "Quotes",
+      "newTitle": "New quote",
+      "editTitle": "Edit quote",
+      "closeLabel": "Close quote popup",
+      "fields": {
+        "text": {
+          "label": "Quote",
+          "placeholder": "The line you want to keep..."
+        },
+        "item": {
+          "label": "Linked library item",
+          "none": "No linked item"
+        },
+        "author": {
+          "label": "Author",
+          "placeholder": "Ursula K. Le Guin"
+        },
+        "source": {
+          "label": "Source",
+          "placeholder": "The Left Hand of Darkness"
+        },
+        "note": {
+          "label": "Note",
+          "placeholder": "Why this line matters"
+        },
+        "favorite": "Mark as favorite"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save quote"
+      }
+    }
+  },
+  "notes": {
+    "title": "Notes",
+    "subtitle": "Your thinking, held loosely",
+    "summary": "{{ amount }} notes · sorted by recently updated",
+    "newNote": "New note",
+    "pinned": "Pinned",
+    "allNotes": "All notes",
+    "linkedItem": "Linked item",
+    "loading": "Loading your notes...",
+    "search": {
+      "label": "Search notes",
+      "placeholder": "Search your notes..."
+    },
+    "empty": {
+      "title": "No notes found",
+      "description": "Create a note and link it to existing tags when it belongs to a thread of thought."
+    },
+    "actions": {
+      "pin": "Pin note",
+      "edit": "Edit note",
+      "delete": "Delete note"
+    },
+    "dialog": {
+      "eyebrow": "Notes",
+      "newTitle": "New note",
+      "editTitle": "Edit note",
+      "closeLabel": "Close note popup",
+      "fields": {
+        "title": {
+          "label": "Title",
+          "placeholder": "On slow reading"
+        },
+        "body": {
+          "label": "Note",
+          "placeholder": "Capture the thought before it drifts away..."
+        },
+        "item": {
+          "label": "Linked library item",
+          "none": "No linked item"
+        },
+        "tags": {
+          "label": "Tags",
+          "empty": "Create tags first, then select them here."
+        },
+        "pinned": "Pin this note"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save note"
       }
     }
   },
@@ -247,6 +492,53 @@
         "cancel": "Cancel",
         "save": "Save tag"
       }
+    }
+  },
+  "stats": {
+    "title": "Statistics",
+    "subtitle": "A year in reading, watching, listening",
+    "empty": "Add library entries to see your stats.",
+    "cards": {
+      "entries": "Entries",
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "hours": "Hours",
+      "pagesRead": "Pages read",
+      "readingHours": "Reading hours",
+      "listeningHours": "Listening hours",
+      "rating": "Avg. rating"
+    },
+    "readingLog": {
+      "title": "Reading and listening log",
+      "description": "Actual pages and hours from saved sessions.",
+      "pages": "Pages",
+      "reading": "Read",
+      "listening": "Listen",
+      "bucketSummary": "{{ pages }} pages Â· {{ reading }}h read Â· {{ listening }}h listened",
+      "periods": {
+        "week": "Week",
+        "month": "Month",
+        "year": "Year"
+      }
+    },
+    "byType": {
+      "title": "By type"
+    },
+    "ratings": {
+      "title": "Ratings distribution"
+    },
+    "monthly": {
+      "title": "Monthly activity",
+      "caption": "Last 12 months"
+    },
+    "categories": {
+      "books": "Book",
+      "series": "Series",
+      "games": "Game",
+      "music": "Album",
+      "movies": "Movie",
+      "podcasts": "Podcast",
+      "audioBooks": "Audiobook"
     }
   },
   "settings": {
