@@ -266,9 +266,12 @@
     },
     "continue": {
       "title": "Continue where you left off",
-      "empty": "No in-progress entries yet."
+      "subtitle": "Your current chapter",
+      "empty": "No in-progress entries yet.",
+      "prompt": "Choose something from your library to begin."
     },
     "recent": {
+      "eyebrow": "The shelves",
       "title": "Recently added",
       "empty": "Add something to your library to see it here."
     },
@@ -278,6 +281,9 @@
     },
     "archive": {
       "title": "Archive pulse",
+      "collectionsLabel": "Collections",
+      "quotesLabel": "Quotes",
+      "notesLabel": "Notes",
       "collections": "{{ amount }} collections",
       "quotes": "{{ amount }} quotes",
       "notes": "{{ amount }} notes"
