@@ -1,16 +1,22 @@
-import { Component, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, effect, inject, input, OnInit, output, signal } from '@angular/core';
 import { DialogShellComponent } from '@app/shared/components/dialog-shell/dialog-shell.component';
 import { eventNumber, eventValue } from '@app/shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionsApiFacade } from '../../../collections/state/collections-api';
 import { TagsApiFacade } from '../../../tags/state/tags-api';
-import type { CreateItemPayload, Item, category, status } from '../../types/item.types';
+import type {
+  BookFormat,
+  BookOwnership,
+  CreateItemPayload,
+  Item,
+  category,
+  status,
+} from '../../types/item.types';
 
 @Component({
   selector: 'app-new-entry-dialog',
   imports: [DialogShellComponent, TranslatePipe],
   templateUrl: './new-entry-dialog.component.html',
-  styleUrl: './new-entry-dialog.component.css',
 })
 export class NewEntryDialogComponent implements OnInit {
   private readonly tagsApiFacade = inject(TagsApiFacade);
@@ -29,12 +35,30 @@ export class NewEntryDialogComponent implements OnInit {
   protected readonly progress = signal(0);
   protected readonly currentPage = signal<number | undefined>(undefined);
   protected readonly totalPages = signal<number | undefined>(undefined);
+  protected readonly genre = signal('');
+  protected readonly format = signal<BookFormat>('paperback');
+  protected readonly publicationDate = signal('');
+  protected readonly isSeries = signal(false);
+  protected readonly seriesBookNumber = signal<number | undefined>(undefined);
+  protected readonly ownership = signal<BookOwnership>('owned');
+  protected readonly audiobookHours = signal<number | undefined>(undefined);
+  protected readonly spiceRating = signal(0);
+  protected readonly isFavourite = signal(false);
+  protected readonly wouldRecommend = signal(false);
+  protected readonly wouldReread = signal(false);
+  protected readonly yearRead = signal<number | undefined>(undefined);
+  protected readonly startDate = signal('');
+  protected readonly endDate = signal('');
   protected readonly selectedTagNames = signal<string[]>([]);
   protected readonly selectedCollectionIds = signal<string[]>([]);
   protected readonly note = signal('');
   protected readonly imageUrl = signal('');
   protected readonly firebaseTags = this.tagsApiFacade.tags;
   protected readonly collections = this.collectionsApiFacade.collections;
+
+  private readonly populateFormOnEdit = effect(() => {
+    this.populateForm(this.item());
+  });
 
   protected readonly entryTypes = [
     { id: 'books', labelKey: 'library.newEntry.types.books' },
@@ -43,8 +67,21 @@ export class NewEntryDialogComponent implements OnInit {
     { id: 'games', labelKey: 'library.newEntry.types.games' },
     { id: 'music', labelKey: 'library.newEntry.types.music' },
     { id: 'podcasts', labelKey: 'library.newEntry.types.podcasts' },
-    { id: 'audioBooks', labelKey: 'library.newEntry.types.audioBooks' },
   ] as const satisfies ReadonlyArray<{ id: category; labelKey: string }>;
+
+  protected readonly formats = [
+    { id: 'paperback', labelKey: 'library.newEntry.formats.paperback' },
+    { id: 'hardcover', labelKey: 'library.newEntry.formats.hardcover' },
+    { id: 'ebook', labelKey: 'library.newEntry.formats.ebook' },
+    { id: 'audiobook', labelKey: 'library.newEntry.formats.audiobook' },
+  ] as const satisfies ReadonlyArray<{ id: string; labelKey: string }>;
+
+  protected readonly ownershipOptions = [
+    { id: 'owned', labelKey: 'library.newEntry.ownership.owned' },
+    { id: 'borrowed', labelKey: 'library.newEntry.ownership.borrowed' },
+    { id: 'library', labelKey: 'library.newEntry.ownership.library' },
+    { id: 'digitalSubscription', labelKey: 'library.newEntry.ownership.digitalSubscription' },
+  ] as const satisfies ReadonlyArray<{ id: BookOwnership; labelKey: string }>;
 
   protected readonly entryStatuses = [
     { id: 'wantToStart', labelKey: 'library.newEntry.statuses.wantToStart' },
@@ -58,7 +95,6 @@ export class NewEntryDialogComponent implements OnInit {
   ngOnInit(): void {
     this.tagsApiFacade.loadTags();
     this.collectionsApiFacade.loadCollections();
-    this.populateForm(this.item());
   }
 
   protected setTitle(event: Event): void {
@@ -100,6 +136,30 @@ export class NewEntryDialogComponent implements OnInit {
   protected setTotalPages(event: Event): void {
     this.totalPages.set(this.optionalNumberValue(event));
     this.syncProgressFromPages();
+  }
+
+  protected setText(target: { set(value: string): void }, event: Event): void {
+    target.set(eventValue(event));
+  }
+
+  protected setOptionalNumber(
+    target: { set(value: number | undefined): void },
+    event: Event,
+  ): void {
+    target.set(this.optionalNumberValue(event));
+  }
+
+  protected setFormat(event: Event): void {
+    this.format.set(eventValue(event) as BookFormat);
+    if (this.format() !== 'audiobook') this.audiobookHours.set(undefined);
+  }
+
+  protected setOwnership(event: Event): void {
+    this.ownership.set(eventValue(event) as BookOwnership);
+  }
+
+  protected setBoolean(target: { set(value: boolean): void }, event: Event): void {
+    target.set((event.target as HTMLInputElement).checked);
   }
 
   protected toggleTag(tagName: string): void {
@@ -149,14 +209,20 @@ export class NewEntryDialogComponent implements OnInit {
       title,
       description: this.note().trim(),
       category,
-      imageUrl: this.isLikelyImageUrl(normalizedImageUrl) ? normalizedImageUrl : this.fallbackImageUrl,
+      imageUrl: this.isLikelyImageUrl(normalizedImageUrl)
+        ? normalizedImageUrl
+        : this.fallbackImageUrl,
       sourceUrl:
-        normalizedImageUrl && !this.isLikelyImageUrl(normalizedImageUrl)
-          ? normalizedImageUrl
+        normalizedImageUrl && !this.isLikelyImageUrl(normalizedImageUrl) ? normalizedImageUrl : '',
+      author:
+        category === 'books' || category === 'music' || category === 'podcasts'
+          ? this.creator().trim()
           : '',
-      author: category === 'books' || category === 'music' || category === 'podcasts' ? this.creator().trim() : '',
       producer:
-        category === 'movies' || category === 'series' || category === 'games' || category === 'audioBooks'
+        category === 'movies' ||
+        category === 'series' ||
+        category === 'games' ||
+        category === 'audioBooks'
           ? this.creator().trim()
           : '',
       rating: this.rating(),
@@ -164,6 +230,24 @@ export class NewEntryDialogComponent implements OnInit {
       progress: this.itemProgress(category),
       currentPage: category === 'books' ? this.currentPage() : undefined,
       totalPages: category === 'books' ? this.totalPages() : undefined,
+      genre: category === 'books' ? this.genre().trim() : undefined,
+      format: category === 'books' ? this.format() : undefined,
+      publicationDate: category === 'books' ? this.publicationDate() : undefined,
+      isSeries: category === 'books' ? this.isSeries() : undefined,
+      seriesBookNumber:
+        category === 'books' && this.isSeries() ? this.seriesBookNumber() : undefined,
+      ownership: category === 'books' ? this.ownership() : undefined,
+      audiobookHours:
+        category === 'books' && this.format() === 'audiobook'
+          ? this.audiobookHours()
+          : undefined,
+      spiceRating: category === 'books' ? this.spiceRating() : undefined,
+      isFavourite: category === 'books' ? this.isFavourite() : undefined,
+      wouldRecommend: category === 'books' ? this.wouldRecommend() : undefined,
+      wouldReread: category === 'books' ? this.wouldReread() : undefined,
+      yearRead: category === 'books' ? this.yearRead() : undefined,
+      startDate: category === 'books' ? this.startDate() : undefined,
+      endDate: category === 'books' ? this.endDate() : undefined,
       tags,
       collectionIds: this.collectionIds(),
       note: this.note().trim(),
@@ -191,6 +275,20 @@ export class NewEntryDialogComponent implements OnInit {
     this.progress.set(item.progress);
     this.currentPage.set(item.currentPage);
     this.totalPages.set(item.totalPages);
+    this.genre.set(item.genre ?? '');
+    this.format.set(item.format ?? 'paperback');
+    this.publicationDate.set(item.publicationDate ?? '');
+    this.isSeries.set(item.isSeries ?? false);
+    this.seriesBookNumber.set(item.seriesBookNumber);
+    this.ownership.set(item.ownership ?? 'owned');
+    this.audiobookHours.set(item.audiobookHours);
+    this.spiceRating.set(item.spiceRating ?? 0);
+    this.isFavourite.set(item.isFavourite ?? false);
+    this.wouldRecommend.set(item.wouldRecommend ?? false);
+    this.wouldReread.set(item.wouldReread ?? false);
+    this.yearRead.set(item.yearRead);
+    this.startDate.set(item.startDate ?? '');
+    this.endDate.set(item.endDate ?? '');
     this.selectedTagNames.set(item.tags ?? []);
     this.selectedCollectionIds.set(item.collectionIds ?? []);
     this.note.set(item.note || item.description);
@@ -200,7 +298,9 @@ export class NewEntryDialogComponent implements OnInit {
   private incrementAssignedTagCounts(tags: string[]): void {
     const existingTagNames = new Set((this.item()?.tags ?? []).map((tag) => tag.toLowerCase()));
     const newlyAssignedTags = tags.filter((tag) => !existingTagNames.has(tag.toLowerCase()));
-    const uniqueAssignedTagNames = new Set(newlyAssignedTags.map((tagName) => tagName.toLowerCase()));
+    const uniqueAssignedTagNames = new Set(
+      newlyAssignedTags.map((tagName) => tagName.toLowerCase()),
+    );
 
     this.firebaseTags()
       .filter((tag) => uniqueAssignedTagNames.has(tag.name.toLowerCase()))

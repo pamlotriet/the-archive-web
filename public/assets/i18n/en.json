@@ -178,6 +178,18 @@
         "inProgress": "In progress",
         "completed": "Completed"
       },
+      "formats": {
+        "paperback": "Paperback",
+        "hardcover": "Hardcover",
+        "ebook": "E-book",
+        "audiobook": "Audiobook"
+      },
+      "ownership": {
+        "owned": "Owned",
+        "borrowed": "Borrowed",
+        "library": "Library loan",
+        "digitalSubscription": "Digital subscription"
+      },
       "fields": {
         "title": {
           "label": "Title",
@@ -194,6 +206,20 @@
         "type": {
           "label": "Type"
         },
+        "format": { "label": "Format" },
+        "genre": { "label": "Genre" },
+        "publicationDate": { "label": "Publication date" },
+        "ownership": { "label": "Ownership" },
+        "audiobookHours": { "label": "Audiobook hours" },
+        "spiceRating": { "label": "Spice rating" },
+        "isSeries": { "label": "Part of a series" },
+        "seriesBookNumber": { "label": "Book #" },
+        "isFavourite": { "label": "Favourite" },
+        "wouldRecommend": { "label": "Would recommend" },
+        "wouldReread": { "label": "Would reread" },
+        "yearRead": { "label": "Year read" },
+        "startDate": { "label": "Start date" },
+        "endDate": { "label": "End date" },
         "status": {
           "label": "Status"
         },

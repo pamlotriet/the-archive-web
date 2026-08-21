@@ -30,6 +30,18 @@
         <p class="mt-1 truncate text-sm text-muted-foreground">
           {{ creator(currentItem) }}
         </p>
+        @if (bookMetadata(currentItem).length) {
+          <p class="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+            {{ bookMetadata(currentItem).join(' · ') }}
+          </p>
+        }
+        @if (bookFlags(currentItem).length) {
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            @for (flag of bookFlags(currentItem); track flag) {
+              <span class="rounded-full bg-gold/15 px-2 py-1 text-[0.68rem] font-bold text-gold">{{ flag }}</span>
+            }
+          </div>
+        }
       </div>
 
       <div class="col-start-2 grid gap-2 md:col-span-1 md:col-start-auto md:justify-self-stretch">
@@ -57,7 +69,7 @@
     </div>
   } @else {
     <div
-      class="flex h-[28rem] flex-col overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md"
+      class="flex h-[34rem] w-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md"
     >
       <div class="relative h-64 shrink-0 overflow-hidden rounded-xl bg-slate-900">
         <img
@@ -117,6 +129,20 @@
         <p class="mt-1 truncate text-sm text-muted-foreground">
           {{ creator(currentItem) }}
         </p>
+
+        @if (bookMetadata(currentItem).length) {
+          <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+            {{ bookMetadata(currentItem).join(' · ') }}
+          </p>
+        }
+
+        @if (bookFlags(currentItem).length) {
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            @for (flag of bookFlags(currentItem); track flag) {
+              <span class="rounded-full bg-gold/15 px-2 py-1 text-[0.68rem] font-bold text-gold">{{ flag }}</span>
+            }
+          </div>
+        }
 
         <div class="mt-auto flex items-end gap-3 pt-3 text-sm">
           <span class="flex items-center gap-1 font-bold text-[#e3b34c]">

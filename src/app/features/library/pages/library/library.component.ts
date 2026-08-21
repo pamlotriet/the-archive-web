@@ -143,7 +143,7 @@ export class LibraryComponent implements OnInit {
 
   protected itemsGridClass(): string {
     return this.viewMode() === 'grid'
-      ? 'mt-8 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4'
+      ? 'mt-8 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
       : 'mt-8 w-full overflow-visible rounded-2xl border border-border bg-card';
   }
 

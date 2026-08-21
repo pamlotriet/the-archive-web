@@ -97,6 +97,20 @@ export class LibraryApiService implements LibraryApiInterface {
       progress: this.mapNumber(data['progress']),
       currentPage: this.mapOptionalNumber(data['currentPage']),
       totalPages: this.mapOptionalNumber(data['totalPages']),
+      genre: this.mapString(data['genre']),
+      format: data['format'],
+      publicationDate: this.mapString(data['publicationDate']),
+      isSeries: this.mapBoolean(data['isSeries']),
+      seriesBookNumber: this.mapOptionalNumber(data['seriesBookNumber']),
+      ownership: data['ownership'],
+      audiobookHours: this.mapOptionalNumber(data['audiobookHours']),
+      spiceRating: this.mapOptionalNumber(data['spiceRating']),
+      isFavourite: this.mapBoolean(data['isFavourite']),
+      wouldRecommend: this.mapBoolean(data['wouldRecommend']),
+      wouldReread: this.mapBoolean(data['wouldReread']),
+      yearRead: this.mapOptionalNumber(data['yearRead']),
+      startDate: this.mapString(data['startDate']),
+      endDate: this.mapString(data['endDate']),
       tags: Array.isArray(data['tags']) ? data['tags'].filter((tag) => typeof tag === 'string') : [],
       collectionIds: Array.isArray(data['collectionIds'])
         ? data['collectionIds'].filter((collectionId) => typeof collectionId === 'string')
@@ -145,6 +159,10 @@ export class LibraryApiService implements LibraryApiInterface {
 
   private mapOptionalNumber(value: unknown): number | undefined {
     return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+  }
+
+  private mapBoolean(value: unknown): boolean {
+    return value === true;
   }
 
   private itemWriteData(

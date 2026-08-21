@@ -12,12 +12,30 @@ export type Item = {
   progress: number;
   currentPage?: number;
   totalPages?: number;
+  genre?: string;
+  format?: BookFormat;
+  publicationDate?: string;
+  isSeries?: boolean;
+  seriesBookNumber?: number;
+  ownership?: BookOwnership;
+  audiobookHours?: number;
+  spiceRating?: number;
+  isFavourite?: boolean;
+  wouldRecommend?: boolean;
+  wouldReread?: boolean;
+  yearRead?: number;
+  startDate?: string;
+  endDate?: string;
   tags?: string[];
   collectionIds?: string[];
   note?: string;
   createdAt?: number | null;
   updatedAt?: number | null;
 };
+
+export type BookFormat = 'paperback' | 'hardcover' | 'ebook' | 'audiobook';
+
+export type BookOwnership = 'owned' | 'borrowed' | 'library' | 'digitalSubscription';
 
 export type CreateItemPayload = Omit<Item, 'id' | 'createdAt' | 'updatedAt'>;
 

@@ -9,239 +9,301 @@
   footerClass="flex items-center justify-end gap-3 border-t border-border/80 bg-card px-6 py-4"
   (dialogClose)="close()"
 >
-    <form>
-      <div class="grid w-full gap-4">
+  <form>
+    <div class="grid w-full gap-4">
+      <label class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.title.label' | translate }}
+        </span>
+        <input
+          type="text"
+          class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+          [value]="title()"
+          [placeholder]="'library.newEntry.fields.title.placeholder' | translate"
+          (input)="setTitle($event)"
+        />
+      </label>
+
+      <label class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.creator.label' | translate }}
+        </span>
+        <input
+          type="text"
+          class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+          [value]="creator()"
+          [placeholder]="'library.newEntry.fields.creator.placeholder' | translate"
+          (input)="setCreator($event)"
+        />
+      </label>
+
+      <label class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.imageUrl.label' | translate }}
+        </span>
+        <input
+          type="url"
+          class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+          [value]="imageUrl()"
+          [placeholder]="'library.newEntry.fields.imageUrl.placeholder' | translate"
+          (input)="setImageUrl($event)"
+        />
+      </label>
+
+      <div class="grid gap-4 md:grid-cols-2">
         <label class="grid gap-2">
           <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.title.label' | translate }}
+            {{ 'library.newEntry.fields.type.label' | translate }}
           </span>
-          <input
-            type="text"
-            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-            [value]="title()"
-            [placeholder]="'library.newEntry.fields.title.placeholder' | translate"
-            (input)="setTitle($event)"
-          />
+          <select
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="category()"
+            (change)="setCategory($event)"
+          >
+            @for (type of entryTypes; track type.id) {
+              <option [value]="type.id">{{ type.labelKey | translate }}</option>
+            }
+          </select>
         </label>
-
-        <label class="grid gap-2">
-          <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.creator.label' | translate }}
-          </span>
-          <input
-            type="text"
-            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-            [value]="creator()"
-            [placeholder]="'library.newEntry.fields.creator.placeholder' | translate"
-            (input)="setCreator($event)"
-          />
-        </label>
-
-        <label class="grid gap-2">
-          <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.imageUrl.label' | translate }}
-          </span>
-          <input
-            type="url"
-            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-            [value]="imageUrl()"
-            [placeholder]="'library.newEntry.fields.imageUrl.placeholder' | translate"
-            (input)="setImageUrl($event)"
-          />
-        </label>
-
-        <div class="grid gap-4 md:grid-cols-2">
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.type.label' | translate }}
-            </span>
-            <select
-              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
-              [value]="category()"
-              (change)="setCategory($event)"
-            >
-              @for (type of entryTypes; track type.id) {
-                <option [value]="type.id">{{ type.labelKey | translate }}</option>
-              }
-            </select>
-          </label>
-
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.status.label' | translate }}
-            </span>
-            <select
-              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
-              [value]="statusMode()"
-              (change)="setStatusMode($event)"
-            >
-              @for (status of entryStatuses; track status.id) {
-                <option [value]="status.id">{{ status.labelKey | translate }}</option>
-              }
-            </select>
-          </label>
-        </div>
-
-        <div class="grid gap-4 md:grid-cols-2">
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.rating.label' | translate }}: {{ rating() }}
-            </span>
-            <input
-              class="accent-gold"
-              type="range"
-              min="0"
-              max="5"
-              step="0.5"
-              [value]="rating()"
-              (input)="setRating($event)"
-            />
-          </label>
-
-          <label class="grid gap-2">
-            <span class="text-sm font-bold text-foreground">
-              {{ 'library.newEntry.fields.progress.label' | translate }}: {{ progress() }}%
-            </span>
-            <input
-              class="accent-gold"
-              type="range"
-              min="0"
-              max="100"
-              step="1"
-              [value]="progress()"
-              [disabled]="isProgressCalculatedFromPages()"
-              (input)="setProgress($event)"
-            />
-          </label>
-        </div>
 
         @if (category() === 'books') {
-          <div class="grid gap-4 rounded-xl border border-border bg-muted/25 p-4 md:grid-cols-2">
-            <label class="grid gap-2">
-              <span class="text-sm font-bold text-foreground">
-                {{ 'library.newEntry.fields.currentPage.label' | translate }}
-              </span>
-              <input
-                type="number"
-                min="0"
-                class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-                [value]="currentPage() ?? ''"
-                [placeholder]="'library.newEntry.fields.currentPage.placeholder' | translate"
-                (input)="setCurrentPage($event)"
-              />
-            </label>
-
-            <label class="grid gap-2">
-              <span class="text-sm font-bold text-foreground">
-                {{ 'library.newEntry.fields.totalPages.label' | translate }}
-              </span>
-              <input
-                type="number"
-                min="1"
-                class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-                [value]="totalPages() ?? ''"
-                [placeholder]="'library.newEntry.fields.totalPages.placeholder' | translate"
-                (input)="setTotalPages($event)"
-              />
-            </label>
-          </div>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.format.label' | translate }}
+            </span>
+            <select
+              class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="format()"
+              (change)="setFormat($event)"
+            >
+              @for (format of formats; track format.id) {
+                <option [value]="format.id">{{ format.labelKey | translate }}</option>
+              }
+            </select>
+          </label>
         }
-
-        <fieldset class="grid gap-2">
-          <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.tags.label' | translate }}
-          </span>
-          @if (firebaseTags().length > 0) {
-            <div class="flex flex-wrap gap-2">
-              @for (tag of firebaseTags(); track tag.id) {
-                <button
-                  type="button"
-                  class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  [class]="
-                    isTagSelected(tag.name)
-                      ? 'border-gold bg-gold/15 text-gold'
-                      : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
-                  "
-                  [attr.aria-pressed]="isTagSelected(tag.name)"
-                  (click)="toggleTag(tag.name)"
-                >
-                  <span
-                    class="size-3 rounded-full"
-                    [style.background]="tag.color"
-                    aria-hidden="true"
-                  ></span>
-                  <span>{{ tag.name }}</span>
-                </button>
-              }
-            </div>
-          } @else {
-            <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
-              {{ 'library.newEntry.fields.tags.empty' | translate }}
-            </p>
-          }
-        </fieldset>
-
-        <fieldset class="grid gap-2">
-          <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.collections.label' | translate }}
-          </span>
-          @if (collections().length > 0) {
-            <div class="flex flex-wrap gap-2">
-              @for (collection of collections(); track collection.id) {
-                <button
-                  type="button"
-                  class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  [class]="
-                    isCollectionSelected(collection.id)
-                      ? 'border-gold bg-gold/15 text-gold'
-                      : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
-                  "
-                  [attr.aria-pressed]="isCollectionSelected(collection.id)"
-                  (click)="toggleCollection(collection.id)"
-                >
-                  <span
-                    class="size-3 rounded-full"
-                    [style.background]="collection.color"
-                    aria-hidden="true"
-                  ></span>
-                  <span>{{ collection.name }}</span>
-                </button>
-              }
-            </div>
-          } @else {
-            <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
-              {{ 'library.newEntry.fields.collections.empty' | translate }}
-            </p>
-          }
-        </fieldset>
 
         <label class="grid gap-2">
           <span class="text-sm font-bold text-foreground">
-            {{ 'library.newEntry.fields.note.label' | translate }}
+            {{ 'library.newEntry.fields.status.label' | translate }}
           </span>
-          <textarea
-            class="min-h-28 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
-            [value]="note()"
-            [placeholder]="'library.newEntry.fields.note.placeholder' | translate"
-            (input)="setNote($event)"
-          ></textarea>
+          <select
+            class="min-h-12 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20"
+            [value]="statusMode()"
+            (change)="setStatusMode($event)"
+          >
+            @for (status of entryStatuses; track status.id) {
+              <option [value]="status.id">{{ status.labelKey | translate }}</option>
+            }
+          </select>
         </label>
       </div>
-    </form>
-    <ng-container dialog-footer>
-      <button
-        type="button"
-        class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
-        (click)="close()"
-      >
-        {{ 'library.newEntry.actions.cancel' | translate }}
-      </button>
-      <button
-        type="button"
-        class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
-        (click)="save()"
-      >
-        {{ 'library.newEntry.actions.save' | translate }}
-      </button>
-    </ng-container>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.rating.label' | translate }}: {{ rating() }}
+          </span>
+          <input
+            class="accent-gold"
+            type="range"
+            min="0"
+            max="5"
+            step="0.5"
+            [value]="rating()"
+            (input)="setRating($event)"
+          />
+        </label>
+
+        <label class="grid gap-2">
+          <span class="text-sm font-bold text-foreground">
+            {{ 'library.newEntry.fields.progress.label' | translate }}: {{ progress() }}%
+          </span>
+          <input
+            class="accent-gold"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            [value]="progress()"
+            [disabled]="isProgressCalculatedFromPages()"
+            (input)="setProgress($event)"
+          />
+        </label>
+      </div>
+
+      @if (category() === 'books') {
+        <div class="grid gap-4 rounded-xl border border-border bg-muted/25 p-4 md:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.genre.label' | translate }}</span>
+            <input type="text" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="genre()" (input)="setText(genre, $event)" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.publicationDate.label' | translate }}</span>
+            <input type="date" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="publicationDate()" (input)="setText(publicationDate, $event)" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.ownership.label' | translate }}</span>
+            <select class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="ownership()" (change)="setOwnership($event)">
+              @for (option of ownershipOptions; track option.id) { <option [value]="option.id">{{ option.labelKey | translate }}</option> }
+            </select>
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.yearRead.label' | translate }}</span>
+            <input type="number" min="0" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="yearRead() ?? ''" (input)="setOptionalNumber(yearRead, $event)" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.currentPage.label' | translate }}
+            </span>
+            <input
+              type="number"
+              min="0"
+              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="currentPage() ?? ''"
+              [placeholder]="'library.newEntry.fields.currentPage.placeholder' | translate"
+              (input)="setCurrentPage($event)"
+            />
+          </label>
+
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">
+              {{ 'library.newEntry.fields.totalPages.label' | translate }}
+            </span>
+            <input
+              type="number"
+              min="1"
+              class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+              [value]="totalPages() ?? ''"
+              [placeholder]="'library.newEntry.fields.totalPages.placeholder' | translate"
+              (input)="setTotalPages($event)"
+            />
+          </label>
+          @if (format() === 'audiobook') {
+            <label class="grid gap-2">
+              <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.audiobookHours.label' | translate }}</span>
+              <input type="number" min="0" step="0.25" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="audiobookHours() ?? ''" (input)="setOptionalNumber(audiobookHours, $event)" />
+            </label>
+          }
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.startDate.label' | translate }}</span>
+            <input type="date" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="startDate()" (input)="setText(startDate, $event)" />
+          </label>
+          <label class="grid gap-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.endDate.label' | translate }}</span>
+            <input type="date" class="min-h-11 rounded-xl border border-input bg-background px-4 text-foreground" [value]="endDate()" (input)="setText(endDate, $event)" />
+          </label>
+          <label class="grid gap-2 md:col-span-2">
+            <span class="text-sm font-bold text-foreground">{{ 'library.newEntry.fields.spiceRating.label' | translate }}: {{ spiceRating() }}</span>
+            <input class="accent-gold" type="range" min="0" max="5" step="0.5" [value]="spiceRating()" (input)="spiceRating.set($any($event.target).valueAsNumber)" />
+          </label>
+          <div class="flex flex-wrap gap-4 md:col-span-2">
+            <label class="flex items-center gap-2"><input type="checkbox" class="accent-gold" [checked]="isSeries()" (change)="setBoolean(isSeries, $event)" />{{ 'library.newEntry.fields.isSeries.label' | translate }}</label>
+            @if (isSeries()) {
+              <label class="flex items-center gap-2">{{ 'library.newEntry.fields.seriesBookNumber.label' | translate }}<input type="number" min="1" class="w-24 rounded-lg border border-input bg-background px-3 py-2" [value]="seriesBookNumber() ?? ''" (input)="setOptionalNumber(seriesBookNumber, $event)" /></label>
+            }
+            <label class="flex items-center gap-2"><input type="checkbox" class="accent-gold" [checked]="isFavourite()" (change)="setBoolean(isFavourite, $event)" />{{ 'library.newEntry.fields.isFavourite.label' | translate }}</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="accent-gold" [checked]="wouldRecommend()" (change)="setBoolean(wouldRecommend, $event)" />{{ 'library.newEntry.fields.wouldRecommend.label' | translate }}</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="accent-gold" [checked]="wouldReread()" (change)="setBoolean(wouldReread, $event)" />{{ 'library.newEntry.fields.wouldReread.label' | translate }}</label>
+          </div>
+        </div>
+      }
+
+      <fieldset class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.tags.label' | translate }}
+        </span>
+        @if (firebaseTags().length > 0) {
+          <div class="flex flex-wrap gap-2">
+            @for (tag of firebaseTags(); track tag.id) {
+              <button
+                type="button"
+                class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                [class]="
+                  isTagSelected(tag.name)
+                    ? 'border-gold bg-gold/15 text-gold'
+                    : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
+                "
+                [attr.aria-pressed]="isTagSelected(tag.name)"
+                (click)="toggleTag(tag.name)"
+              >
+                <span
+                  class="size-3 rounded-full"
+                  [style.background]="tag.color"
+                  aria-hidden="true"
+                ></span>
+                <span>{{ tag.name }}</span>
+              </button>
+            }
+          </div>
+        } @else {
+          <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+            {{ 'library.newEntry.fields.tags.empty' | translate }}
+          </p>
+        }
+      </fieldset>
+
+      <fieldset class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.collections.label' | translate }}
+        </span>
+        @if (collections().length > 0) {
+          <div class="flex flex-wrap gap-2">
+            @for (collection of collections(); track collection.id) {
+              <button
+                type="button"
+                class="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                [class]="
+                  isCollectionSelected(collection.id)
+                    ? 'border-gold bg-gold/15 text-gold'
+                    : 'border-border bg-muted/25 text-muted-foreground hover:border-gold/50 hover:text-foreground'
+                "
+                [attr.aria-pressed]="isCollectionSelected(collection.id)"
+                (click)="toggleCollection(collection.id)"
+              >
+                <span
+                  class="size-3 rounded-full"
+                  [style.background]="collection.color"
+                  aria-hidden="true"
+                ></span>
+                <span>{{ collection.name }}</span>
+              </button>
+            }
+          </div>
+        } @else {
+          <p class="rounded-xl border border-border bg-muted/25 p-4 text-sm text-muted-foreground">
+            {{ 'library.newEntry.fields.collections.empty' | translate }}
+          </p>
+        }
+      </fieldset>
+
+      <label class="grid gap-2">
+        <span class="text-sm font-bold text-foreground">
+          {{ 'library.newEntry.fields.note.label' | translate }}
+        </span>
+        <textarea
+          class="min-h-28 resize-none rounded-xl border border-input bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20"
+          [value]="note()"
+          [placeholder]="'library.newEntry.fields.note.placeholder' | translate"
+          (input)="setNote($event)"
+        ></textarea>
+      </label>
+    </div>
+  </form>
+  <ng-container dialog-footer>
+    <button
+      type="button"
+      class="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground transition hover:border-gold/50 hover:text-foreground"
+      (click)="close()"
+    >
+      {{ 'library.newEntry.actions.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="min-h-11 rounded-xl bg-[linear-gradient(100deg,#dca945,#f2c65f)] px-5 font-extrabold text-slate-950 transition hover:brightness-105"
+      (click)="save()"
+    >
+      {{ 'library.newEntry.actions.save' | translate }}
+    </button>
+  </ng-container>
 </app-dialog-shell>

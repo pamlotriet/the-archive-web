@@ -61,6 +61,44 @@ export class ItemCardComponent {
     return `${item.progress}%`;
   }
 
+  protected bookMetadata(item: Item): string[] {
+    if (item.category !== 'books') {
+      return [];
+    }
+
+    return [
+      item.genre,
+      item.format ? this.formatLabel(item.format) : '',
+      item.isSeries
+        ? `Series${item.seriesBookNumber !== undefined ? ` #${item.seriesBookNumber}` : ''}`
+        : '',
+      item.ownership ? this.ownershipLabel(item.ownership) : '',
+      item.format === 'audiobook' && item.audiobookHours !== undefined
+        ? `${item.audiobookHours} hours`
+        : item.totalPages !== undefined
+          ? `${item.totalPages} pages`
+          : '',
+      item.publicationDate ? `Published ${this.displayDate(item.publicationDate)}` : '',
+      item.yearRead !== undefined ? `Read ${item.yearRead}` : '',
+      this.readingDateRange(item),
+      item.spiceRating !== undefined && item.spiceRating > 0
+        ? `Spice ${item.spiceRating}/5`
+        : '',
+    ].filter((value): value is string => Boolean(value));
+  }
+
+  protected bookFlags(item: Item): string[] {
+    if (item.category !== 'books') {
+      return [];
+    }
+
+    return [
+      item.isFavourite ? 'Favourite' : '',
+      item.wouldRecommend ? 'Would recommend' : '',
+      item.wouldReread ? 'Would reread' : '',
+    ].filter(Boolean);
+  }
+
   protected imageSource(item: Item): string {
     return item.imageUrl || this.fallbackImageUrl;
   }
@@ -125,5 +163,49 @@ export class ItemCardComponent {
 
   private isInProgress(status: status): boolean {
     return ['watching', 'reading', 'playing', 'listening'].includes(status);
+  }
+
+  private displayDate(value: string): string {
+    const [year, month, day] = value.split('-').map(Number);
+
+    if (!year || !month || !day) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(year, month - 1, day));
+  }
+
+  private readingDateRange(item: Item): string {
+    if (item.startDate && item.endDate) {
+      return `${this.displayDate(item.startDate)} – ${this.displayDate(item.endDate)}`;
+    }
+
+    if (item.startDate) {
+      return `Started ${this.displayDate(item.startDate)}`;
+    }
+
+    return item.endDate ? `Finished ${this.displayDate(item.endDate)}` : '';
+  }
+
+  private formatLabel(format: NonNullable<Item['format']>): string {
+    return {
+      paperback: 'Paperback',
+      hardcover: 'Hardcover',
+      ebook: 'E-book',
+      audiobook: 'Audiobook',
+    }[format];
+  }
+
+  private ownershipLabel(ownership: NonNullable<Item['ownership']>): string {
+    return {
+      owned: 'Owned',
+      borrowed: 'Borrowed',
+      library: 'Library loan',
+      digitalSubscription: 'Digital subscription',
+    }[ownership];
   }
 }
