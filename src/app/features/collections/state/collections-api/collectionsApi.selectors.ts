@@ -9,7 +9,7 @@ export const selectCollectionsApiState =
 
 export const selectCollections = createSelector(
   selectCollectionsApiState,
-  (state) => state.collections,
+  (state) => state.collections ?? [],
 );
 export const selectCollectionsLoading = createSelector(
   selectCollectionsApiState,

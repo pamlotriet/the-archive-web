@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { LibraryApiActions, initialState } from '@features/library/state/library-api';
+import { LibraryApiActions } from '@features/library/state/library-api/libraryApi.actions';
+import { initialState } from '@features/library/state/library-api/libraryApi.state';
 
 export const libraryApiFeatureKey = 'libraryApi';
 

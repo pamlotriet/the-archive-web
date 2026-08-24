@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { QuotesApiActions, initialState } from '@features/quotes/state/quotes-api';
+import { QuotesApiActions } from '@features/quotes/state/quotes-api/quotesApi.actions';
+import { initialState } from '@features/quotes/state/quotes-api/quotesApi.state';
 
 export const quotesApiFeatureKey = 'quotesApi';
 

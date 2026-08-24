@@ -1,8 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import {
-  initialState,
-  AuthenticationApiActions,
-} from '@features/authentication/state/authentication-api';
+import { AuthenticationApiActions } from '@features/authentication/state/authentication-api/authenticationApi.actions';
+import { initialState } from '@features/authentication/state/authentication-api/authenticationApi.state';
 
 export const authenticationApiFeatureKey = 'authenticationApi';
 

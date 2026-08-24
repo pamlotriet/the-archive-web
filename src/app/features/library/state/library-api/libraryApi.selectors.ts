@@ -3,7 +3,10 @@ import { libraryApiFeatureKey, LibraryApiState } from '@features/library/state/l
 
 export const selectLibraryApiState = createFeatureSelector<LibraryApiState>(libraryApiFeatureKey);
 
-export const selectLibraryItems = createSelector(selectLibraryApiState, (state) => state.items);
+export const selectLibraryItems = createSelector(
+  selectLibraryApiState,
+  (state) => state.items ?? [],
+);
 export const selectLibraryLoading = createSelector(selectLibraryApiState, (state) => state.loading);
 export const selectLibrarySaving = createSelector(selectLibraryApiState, (state) => state.saving);
 export const selectLibraryDeleting = createSelector(
@@ -32,7 +35,7 @@ export const selectLibraryPageSize = createSelector(
 export const selectFilteredLibraryItems = createSelector(selectLibraryApiState, (state) => {
   const searchTerm = state.searchTerm.trim().toLowerCase();
 
-  return state.items.filter((item) => {
+  return (state.items ?? []).filter((item) => {
     const matchesCategory =
       state.categoryFilter === 'all' || item.category === state.categoryFilter;
     const matchesStatus =
