@@ -1,5 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import type { CreateQuotePayload, Quote, UpdateQuotePayload } from '../../types/quote.types';
+import type {
+  CreateQuotePayload,
+  Quote,
+  UpdateQuotePayload,
+} from '@features/quotes/types/quote.types';
 
 export const QuotesApiActions = createActionGroup({
   source: 'QuotesApi',

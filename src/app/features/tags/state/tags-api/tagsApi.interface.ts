@@ -1,4 +1,4 @@
-import type { CreateTagPayload, Tag, UpdateTagPayload } from '../../types/tag.types';
+import type { CreateTagPayload, Tag, UpdateTagPayload } from '@features/tags/types/tag.types';
 
 export interface TagsApiInterface {
   loadTags(): Promise<Tag[]>;

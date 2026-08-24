@@ -1,4 +1,4 @@
-import type { ReadingLogEntry } from '../../types/reading-log.types';
+import type { ReadingLogEntry } from '@features/reading-log/types/reading-log.types';
 
 export interface ReadingLogApiState {
   logs: ReadingLogEntry[];

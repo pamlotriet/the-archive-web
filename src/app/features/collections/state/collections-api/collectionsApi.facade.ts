@@ -3,15 +3,15 @@ import { Store } from '@ngrx/store';
 import type {
   CreateCollectionPayload,
   UpdateCollectionPayload,
-} from '../../types/collection.types';
-import { CollectionsApiActions } from './collectionsApi.actions';
+} from '@features/collections/types/collection.types';
 import {
+  CollectionsApiActions,
   selectCollections,
   selectCollectionsDeleting,
   selectCollectionsError,
   selectCollectionsLoading,
   selectCollectionsSaving,
-} from './collectionsApi.selectors';
+} from '@features/collections/state/collections-api';
 
 @Injectable({
   providedIn: 'root',

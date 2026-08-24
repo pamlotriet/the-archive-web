@@ -1,15 +1,15 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { ButtonComponent } from '@app/shared/components/button/button';
-import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
-import { eventValue } from '@app/shared/utils/form-event';
+import { ButtonComponent } from '@shared/components/button/button';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { eventValue } from '@shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { LibraryApiFacade } from '../../../library/state/library-api';
-import type { Item } from '../../../library/types/item.types';
-import { TagsApiFacade } from '../../../tags/state/tags-api';
-import { NotesApiFacade } from '../../state/notes-api';
-import type { CreateNotePayload, Note, UpdateNotePayload } from '../../types/note.types';
+import { LibraryApiFacade } from '@features/library/state/library-api';
+import type { Item } from '@features/library/types/item.types';
+import { TagsApiFacade } from '@features/tags/state/tags-api';
+import { NotesApiFacade } from '@features/notes/state/notes-api';
+import type { CreateNotePayload, Note, UpdateNotePayload } from '@features/notes/types/note.types';
 
 @Component({
   selector: 'app-notes',
@@ -18,7 +18,6 @@ import type { CreateNotePayload, Note, UpdateNotePayload } from '../../types/not
   },
   imports: [ButtonComponent, NgTemplateOutlet, PageHeaderComponent, PIcon, TranslatePipe],
   templateUrl: './notes.component.html',
-  styleUrl: './notes.component.css',
 })
 export class NotesComponent implements OnInit {
   private readonly notesApiFacade = inject(NotesApiFacade);
@@ -183,9 +182,13 @@ export class NotesComponent implements OnInit {
   }
 
   private incrementAssignedTagCounts(tags: string[]): void {
-    const existingTagNames = new Set((this.editingNote()?.tags ?? []).map((tag) => tag.toLowerCase()));
+    const existingTagNames = new Set(
+      (this.editingNote()?.tags ?? []).map((tag) => tag.toLowerCase()),
+    );
     const newlyAssignedTags = tags.filter((tag) => !existingTagNames.has(tag.toLowerCase()));
-    const uniqueAssignedTagNames = new Set(newlyAssignedTags.map((tagName) => tagName.toLowerCase()));
+    const uniqueAssignedTagNames = new Set(
+      newlyAssignedTags.map((tagName) => tagName.toLowerCase()),
+    );
 
     this.tags()
       .filter((tag) => uniqueAssignedTagNames.has(tag.name.toLowerCase()))

@@ -1,4 +1,4 @@
-import { AppUser } from './user.models';
+import { AppUser } from '@features/authentication/models/user.models';
 
 export interface AuthenticationApiState {
   user: AppUser | null;

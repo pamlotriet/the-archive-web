@@ -1,10 +1,10 @@
 import { Component, computed, inject, input, OnDestroy, output, signal } from '@angular/core';
-import { DialogShellComponent } from '@app/shared/components/dialog-shell/dialog-shell.component';
-import { eventNumber, eventValue } from '@app/shared/utils/form-event';
+import { DialogShellComponent } from '@shared/components/dialog-shell/dialog-shell.component';
+import { eventNumber, eventValue } from '@shared/utils/form-event';
 import { ReadingLogApiFacade } from '@features/reading-log/state/reading-log-api';
 import type { ReadingLogMode } from '@features/reading-log/types/reading-log.types';
 import { TranslatePipe } from '@ngx-translate/core';
-import type { Item } from '../../types/item.types';
+import type { Item } from '@features/library/types/item.types';
 
 @Component({
   selector: 'app-reading-log-dialog',
@@ -175,9 +175,7 @@ export class ReadingLogDialogComponent implements OnDestroy {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    return [hours, minutes, seconds]
-      .map((value) => value.toString().padStart(2, '0'))
-      .join(':');
+    return [hours, minutes, seconds].map((value) => value.toString().padStart(2, '0')).join(':');
   }
 
   private stopTimerInterval(): void {

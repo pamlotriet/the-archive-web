@@ -1,6 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { readingLogApiFeatureKey } from './readingLogApi.reducer';
-import type { ReadingLogApiState } from './readingLogApi.state';
+import {
+  readingLogApiFeatureKey,
+  ReadingLogApiState,
+} from '@features/reading-log/state/reading-log-api';
 
 export const selectReadingLogApiState =
   createFeatureSelector<ReadingLogApiState>(readingLogApiFeatureKey);

@@ -1,4 +1,4 @@
-import type { Collection } from '../../types/collection.types';
+import type { Collection } from '@features/collections/types/collection.types';
 
 export interface CollectionsApiState {
   collections: Collection[];

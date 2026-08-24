@@ -6,8 +6,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, map } from 'rxjs';
 import { ButtonComponent } from '@shared/components/button/button';
 import { InputComponent } from '@shared/components/input/input';
-import { AuthenticationApiFacade } from '../../state/authentication-api';
-import { AuthenticationForm } from './types/authentication.types';
+import { AuthenticationApiFacade } from '@features/authentication/state/authentication-api';
+import { AuthenticationForm } from '@features/authentication/pages/authentication/types/authentication.types';
 
 @Component({
   selector: 'app-authentication',

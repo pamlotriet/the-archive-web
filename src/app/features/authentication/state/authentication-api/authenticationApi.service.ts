@@ -8,10 +8,10 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { collection, doc, getDocs, limit, query, setDoc, where } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
-import { AuthenticationApiInterface } from './authenticationApi.interface';
-import { AppUser, UserProfile } from '../../models/user.models';
-import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
+import { AuthenticationApiInterface } from '@features/authentication/state/authentication-api';
+import { AppUser, UserProfile } from '@features/authentication/models/user.models';
+import { RegistrationDetails, UserCredentials } from '@features/authentication/models/auth.models';
 
 @Injectable({
   providedIn: 'root',

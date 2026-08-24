@@ -14,8 +14,12 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
-import type { CreateQuotePayload, Quote, UpdateQuotePayload } from '../../types/quote.types';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
+import type {
+  CreateQuotePayload,
+  Quote,
+  UpdateQuotePayload,
+} from '@features/quotes/types/quote.types';
 
 @Injectable({
   providedIn: 'root',

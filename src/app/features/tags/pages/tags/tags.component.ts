@@ -1,10 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ButtonComponent } from '@app/shared/components/button/button';
-import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
-import { eventValue } from '@app/shared/utils/form-event';
+import { ButtonComponent } from '@shared/components/button/button';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { eventValue } from '@shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { TagsApiFacade } from '../../state/tags-api';
+import { TagsApiFacade } from '@features/tags/state/tags-api';
 
 @Component({
   selector: 'app-tags',
@@ -13,7 +13,6 @@ import { TagsApiFacade } from '../../state/tags-api';
   },
   imports: [TranslatePipe, ButtonComponent, PageHeaderComponent, PIcon],
   templateUrl: './tags.component.html',
-  styleUrl: './tags.component.css',
 })
 export class TagsComponent implements OnInit {
   private readonly tagsApiFacade = inject(TagsApiFacade);

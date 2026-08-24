@@ -1,4 +1,4 @@
-import type { Tag } from '../../types/tag.types';
+import type { Tag } from '@features/tags/types/tag.types';
 
 export interface TagsApiState {
   tags: Tag[];

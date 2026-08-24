@@ -14,8 +14,8 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
-import type { CreateNotePayload, Note, UpdateNotePayload } from '../../types/note.types';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
+import type { CreateNotePayload, Note, UpdateNotePayload } from '@features/notes/types/note.types';
 
 @Injectable({
   providedIn: 'root',
@@ -84,7 +84,9 @@ export class NotesApiService {
       id: snapshot.id,
       title: this.mapString(data['title'], 'Untitled note'),
       body: this.mapString(data['body']),
-      tags: Array.isArray(data['tags']) ? data['tags'].filter((tag) => typeof tag === 'string') : [],
+      tags: Array.isArray(data['tags'])
+        ? data['tags'].filter((tag) => typeof tag === 'string')
+        : [],
       itemId: this.mapOptionalString(data['itemId']),
       pinned: data['pinned'] === true,
       createdAt: data['createdAt']?.toMillis?.() ?? null,

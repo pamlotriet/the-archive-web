@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AuthenticationApiState } from '../../models/auth.models';
-import { authenticationApiFeatureKey } from './authenticationApi.reducer';
+import { AuthenticationApiState } from '@features/authentication/models/auth.models';
+import { authenticationApiFeatureKey } from '@features/authentication/state/authentication-api';
 
 export const selectAuthenticationApiState = createFeatureSelector<AuthenticationApiState>(
   authenticationApiFeatureKey,

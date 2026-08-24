@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap } from 'rxjs';
-import { QuotesApiActions } from './quotesApi.actions';
-import { QuotesApiService } from './quotesApi.service';
+import { QuotesApiActions, QuotesApiService } from '@features/quotes/state/quotes-api';
 
 @Injectable()
 export class QuotesApiEffects {

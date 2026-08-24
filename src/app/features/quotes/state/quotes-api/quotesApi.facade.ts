@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import type { CreateQuotePayload, UpdateQuotePayload } from '../../types/quote.types';
+import type { CreateQuotePayload, UpdateQuotePayload } from '@features/quotes/types/quote.types';
 import { QuotesApiActions } from './quotesApi.actions';
 import {
   selectQuotes,
@@ -8,7 +8,7 @@ import {
   selectQuotesError,
   selectQuotesLoading,
   selectQuotesSaving,
-} from './quotesApi.selectors';
+} from '@features/quotes/state/quotes-api';
 
 @Injectable({
   providedIn: 'root',

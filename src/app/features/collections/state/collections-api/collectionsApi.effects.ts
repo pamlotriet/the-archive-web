@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap } from 'rxjs';
-import { CollectionsApiActions } from './collectionsApi.actions';
-import { CollectionsApiService } from './collectionsApi.service';
+import {
+  CollectionsApiActions,
+  CollectionsApiService,
+} from '@features/collections/state/collections-api';
 
 @Injectable()
 export class CollectionsApiEffects {

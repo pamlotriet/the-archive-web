@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { QuotesApiActions } from './quotesApi.actions';
-import { initialState } from './quotesApi.state';
+import { QuotesApiActions, initialState } from '@features/quotes/state/quotes-api';
 
 export const quotesApiFeatureKey = 'quotesApi';
 
@@ -34,7 +33,9 @@ export const quotesApiReducer = createReducer(
   on(QuotesApiActions.updateQuoteSuccess, (state, { quote }) => ({
     ...state,
     saving: false,
-    quotes: state.quotes.map((existingQuote) => (existingQuote.id === quote.id ? quote : existingQuote)),
+    quotes: state.quotes.map((existingQuote) =>
+      existingQuote.id === quote.id ? quote : existingQuote,
+    ),
   })),
   on(QuotesApiActions.addQuoteFailure, QuotesApiActions.updateQuoteFailure, (state, { error }) => ({
     ...state,

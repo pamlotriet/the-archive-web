@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap } from 'rxjs';
-import { LibraryApiActions } from './libraryApi.actions';
-import { LibraryApiService } from './libraryApi.service';
+import { LibraryApiActions, LibraryApiService } from '@features/library/state/library-api';
 
 @Injectable()
 export class LibraryApiEffects {

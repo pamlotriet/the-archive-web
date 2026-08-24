@@ -1,4 +1,8 @@
-import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/item.types';
+import type {
+  CreateItemPayload,
+  Item,
+  UpdateItemPayload,
+} from '@features/library/types/item.types';
 
 export interface LibraryApiInterface {
   loadItems(): Promise<Item[]>;

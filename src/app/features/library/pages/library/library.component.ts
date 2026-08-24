@@ -1,15 +1,18 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ButtonComponent } from '@app/shared/components/button/button';
-import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
-import { eventValue } from '@app/shared/utils/form-event';
+import { ButtonComponent } from '@shared/components/button/button';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { eventValue } from '@shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { ItemCardComponent } from '../../components/item-card/item-card.component';
-import { NewEntryDialogComponent } from '../../components/new-entry-dialog/new-entry-dialog.component';
-import { ReadingLogDialogComponent } from '../../components/reading-log-dialog/reading-log-dialog.component';
-import { LibraryApiFacade } from '../../state/library-api';
-import type { LibraryStatusFilter } from '../../state/library-api';
-import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/item.types';
+import { ItemCardComponent } from '@features/library/components/item-card/item-card.component';
+import { NewEntryDialogComponent } from '@features/library/components/new-entry-dialog/new-entry-dialog.component';
+import { ReadingLogDialogComponent } from '@features/library/components/reading-log-dialog/reading-log-dialog.component';
+import { LibraryApiFacade, LibraryStatusFilter } from '@features/library/state/library-api';
+import type {
+  CreateItemPayload,
+  Item,
+  UpdateItemPayload,
+} from '@features/library/types/item.types';
 
 @Component({
   selector: 'app-library',
@@ -26,7 +29,6 @@ import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/ite
     PIcon,
   ],
   templateUrl: './library.component.html',
-  styleUrl: './library.component.css',
 })
 export class LibraryComponent implements OnInit {
   private readonly libraryApiFacade = inject(LibraryApiFacade);
@@ -153,7 +155,9 @@ export class LibraryComponent implements OnInit {
 
   protected updateBookProgress({ item, pages }: { item: Item; pages: number }): void {
     const currentPage = Math.max(item.currentPage ?? 0, 0) + pages;
-    const boundedCurrentPage = item.totalPages ? Math.min(currentPage, item.totalPages) : currentPage;
+    const boundedCurrentPage = item.totalPages
+      ? Math.min(currentPage, item.totalPages)
+      : currentPage;
     const progress = item.totalPages
       ? Math.min(100, Math.round((boundedCurrentPage / item.totalPages) * 100))
       : item.progress;

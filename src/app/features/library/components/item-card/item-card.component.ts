@@ -1,8 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { ItemActionsMenuComponent } from '../item-actions-menu/item-actions-menu.component';
-import type { Item } from '../../types/item.types';
-import type { category, status } from '../../types/item.types';
+import { ItemActionsMenuComponent } from '@features/library/components/item-actions-menu/item-actions-menu.component';
+import type { Item, category, status } from '@features/library/types/item.types';
 
 @Component({
   selector: 'app-item-card',
@@ -11,7 +10,6 @@ import type { category, status } from '../../types/item.types';
   },
   imports: [PIcon, ItemActionsMenuComponent],
   templateUrl: './item-card.component.html',
-  styleUrl: './item-card.component.css',
 })
 export class ItemCardComponent {
   private readonly fallbackImageUrl = '/assets/images/library-login-background.png';
@@ -81,9 +79,7 @@ export class ItemCardComponent {
       item.publicationDate ? `Published ${this.displayDate(item.publicationDate)}` : '',
       item.yearRead !== undefined ? `Read ${item.yearRead}` : '',
       this.readingDateRange(item),
-      item.spiceRating !== undefined && item.spiceRating > 0
-        ? `Spice ${item.spiceRating}/5`
-        : '',
+      item.spiceRating !== undefined && item.spiceRating > 0 ? `Spice ${item.spiceRating}/5` : '',
     ].filter((value): value is string => Boolean(value));
   }
 

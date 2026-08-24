@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap, mergeMap } from 'rxjs';
-import { TagsApiActions } from './tagsApi.actions';
-import { TagsApiService } from './tagsApi.service';
+import { TagsApiActions, TagsApiService } from '@features/tags/state/tags-api';
 
 @Injectable()
 export class TagsApiEffects {

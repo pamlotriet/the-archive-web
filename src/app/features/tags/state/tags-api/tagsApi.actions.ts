@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import type { CreateTagPayload, Tag, UpdateTagPayload } from '../../types/tag.types';
+import type { CreateTagPayload, Tag, UpdateTagPayload } from '@features/tags/types/tag.types';
 
 export const TagsApiActions = createActionGroup({
   source: 'TagsApi',

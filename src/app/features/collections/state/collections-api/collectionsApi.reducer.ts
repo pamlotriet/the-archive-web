@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { CollectionsApiActions } from './collectionsApi.actions';
-import { initialState } from './collectionsApi.state';
+import { CollectionsApiActions, initialState } from '@features/collections/state/collections-api';
 
 export const collectionsApiFeatureKey = 'collectionsApi';
 

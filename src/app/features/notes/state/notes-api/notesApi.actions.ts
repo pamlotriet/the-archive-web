@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import type { CreateNotePayload, Note, UpdateNotePayload } from '../../types/note.types';
+import type { CreateNotePayload, Note, UpdateNotePayload } from '@features/notes/types/note.types';
 
 export const NotesApiActions = createActionGroup({
   source: 'NotesApi',

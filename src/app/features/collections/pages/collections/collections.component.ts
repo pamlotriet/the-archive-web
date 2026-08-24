@@ -1,17 +1,17 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ButtonComponent } from '@app/shared/components/button/button';
-import { eventValue } from '@app/shared/utils/form-event';
+import { ButtonComponent } from '@shared/components/button/button';
+import { eventValue } from '@shared/utils/form-event';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { LibraryApiFacade } from '../../../library/state/library-api';
-import type { Item } from '../../../library/types/item.types';
-import { CollectionsApiFacade } from '../../state/collections-api';
+import { LibraryApiFacade } from '@features/library/state/library-api';
+import type { Item } from '@features/library/types/item.types';
+import { CollectionsApiFacade } from '@features/collections/state/collections-api';
 import type {
   Collection,
   CreateCollectionPayload,
   UpdateCollectionPayload,
-} from '../../types/collection.types';
+} from '@features/collections/types/collection.types';
 
 @Component({
   selector: 'app-collections',
@@ -20,7 +20,6 @@ import type {
   },
   imports: [ButtonComponent, PIcon, TranslatePipe],
   templateUrl: './collections.component.html',
-  styleUrl: './collections.component.css',
 })
 export class CollectionsComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -205,9 +204,7 @@ export class CollectionsComponent implements OnInit {
       return;
     }
 
-    this.updateItemCollections(item, [
-      ...new Set([...(item.collectionIds ?? []), collectionId]),
-    ]);
+    this.updateItemCollections(item, [...new Set([...(item.collectionIds ?? []), collectionId])]);
   }
 
   protected removeItemFromSelectedCollection(item: Item): void {

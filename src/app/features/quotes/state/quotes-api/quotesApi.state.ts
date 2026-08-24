@@ -1,4 +1,4 @@
-import type { Quote } from '../../types/quote.types';
+import type { Quote } from '@features/quotes/types/quote.types';
 
 export interface QuotesApiState {
   quotes: Quote[];

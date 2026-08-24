@@ -1,6 +1,13 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/item.types';
-import type { LibraryCategoryFilter, LibraryStatusFilter } from './libraryApi.state';
+import type {
+  CreateItemPayload,
+  Item,
+  UpdateItemPayload,
+} from '@features/library/types/item.types';
+import type {
+  LibraryCategoryFilter,
+  LibraryStatusFilter,
+} from '@features/library/state/library-api';
 
 export const LibraryApiActions = createActionGroup({
   source: 'LibraryApi',

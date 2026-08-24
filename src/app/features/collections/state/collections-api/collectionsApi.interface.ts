@@ -2,7 +2,7 @@ import type {
   Collection,
   CreateCollectionPayload,
   UpdateCollectionPayload,
-} from '../../types/collection.types';
+} from '@features/collections/types/collection.types';
 
 export interface CollectionsApiInterface {
   loadCollections(): Promise<Collection[]>;

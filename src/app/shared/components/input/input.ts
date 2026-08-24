@@ -7,8 +7,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-
-export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+import { InputType } from '@shared/components/input/types/input.type';
 
 @Component({
   selector: 'app-input',
@@ -24,7 +23,6 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
     NgClass,
   ],
   templateUrl: './input.html',
-  styleUrl: './input.css',
 })
 export class InputComponent {
   control = input<FormControl>(new FormControl(''));

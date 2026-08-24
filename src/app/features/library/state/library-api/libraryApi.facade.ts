@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import type { CreateItemPayload, UpdateItemPayload } from '../../types/item.types';
-import { LibraryApiActions } from './libraryApi.actions';
+import type { CreateItemPayload, UpdateItemPayload } from '@features/library/types/item.types';
 import {
+  LibraryApiActions,
   selectLibraryCategoryFilter,
   selectLibraryDeleting,
   selectLibraryError,
@@ -16,8 +16,9 @@ import {
   selectLibraryVisiblePage,
   selectLibraryItems,
   selectPagedLibraryItems,
-} from './libraryApi.selectors';
-import type { LibraryCategoryFilter, LibraryStatusFilter } from './libraryApi.state';
+  LibraryCategoryFilter,
+  LibraryStatusFilter,
+} from '@features/library/state/library-api';
 
 @Injectable({
   providedIn: 'root',

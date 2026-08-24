@@ -1,4 +1,4 @@
-import { AuthenticationApiState } from '../../models/auth.models';
+import { AuthenticationApiState } from '@features/authentication/models/auth.models';
 
 export const initialState: AuthenticationApiState = {
   user: null,

@@ -1,4 +1,4 @@
-import type { Note } from '../../types/note.types';
+import type { Note } from '@features/notes/types/note.types';
 
 export interface NotesApiState {
   notes: Note[];

@@ -14,12 +14,12 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
 import type {
   CreateReadingLogEntryPayload,
   ReadingLogEntry,
   UpdateReadingLogEntryPayload,
-} from '../../types/reading-log.types';
+} from '@features/reading-log/types/reading-log.types';
 
 @Injectable({
   providedIn: 'root',

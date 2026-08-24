@@ -1,6 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { collectionsApiFeatureKey } from './collectionsApi.reducer';
-import type { CollectionsApiState } from './collectionsApi.state';
+import {
+  collectionsApiFeatureKey,
+  CollectionsApiState,
+} from '@features/collections/state/collections-api';
 
 export const selectCollectionsApiState =
   createFeatureSelector<CollectionsApiState>(collectionsApiFeatureKey);

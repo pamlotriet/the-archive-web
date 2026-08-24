@@ -3,8 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { catchError, defer, exhaustMap, filter, map, of, tap } from 'rxjs';
-import { AuthenticationApiActions } from './authenticationApi.actions';
-import { AuthenticationApiService } from './authenticationApi.service';
+import {
+  AuthenticationApiActions,
+  AuthenticationApiService,
+} from '@features/authentication/state/authentication-api';
 
 @Injectable()
 export class AuthenticationApiEffects {

@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { TagsApiActions } from './tagsApi.actions';
-import { initialState } from './tagsApi.state';
+import { TagsApiActions, initialState } from '@features/tags/state/tags-api';
 
 export const tagsApiFeatureKey = 'tagsApi';
 

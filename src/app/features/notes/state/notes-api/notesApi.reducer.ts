@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { NotesApiActions } from './notesApi.actions';
-import { initialState } from './notesApi.state';
+import { NotesApiActions, initialState } from '@features/notes/state/notes-api';
 
 export const notesApiFeatureKey = 'notesApi';
 

@@ -1,13 +1,17 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ButtonComponent } from '@app/shared/components/button/button';
-import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
-import { eventValue } from '@app/shared/utils/form-event';
+import { ButtonComponent } from '@shared/components/button/button';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { eventValue } from '@shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
-import { LibraryApiFacade } from '../../../library/state/library-api';
-import type { Item } from '../../../library/types/item.types';
-import { QuotesApiFacade } from '../../state/quotes-api';
-import type { CreateQuotePayload, Quote, UpdateQuotePayload } from '../../types/quote.types';
+import { LibraryApiFacade } from '@features/library/state/library-api';
+import type { Item } from '@features/library/types/item.types';
+import { QuotesApiFacade } from '@features/quotes/state/quotes-api';
+import type {
+  CreateQuotePayload,
+  Quote,
+  UpdateQuotePayload,
+} from '@features/quotes/types/quote.types';
 
 @Component({
   selector: 'app-quotes',
@@ -16,7 +20,6 @@ import type { CreateQuotePayload, Quote, UpdateQuotePayload } from '../../types/
   },
   imports: [ButtonComponent, PageHeaderComponent, PIcon, TranslatePipe],
   templateUrl: './quotes.component.html',
-  styleUrl: './quotes.component.css',
 })
 export class QuotesComponent implements OnInit {
   private readonly quotesApiFacade = inject(QuotesApiFacade);
@@ -162,7 +165,10 @@ export class QuotesComponent implements OnInit {
     const editingQuote = this.editingQuote();
 
     if (editingQuote) {
-      this.quotesApiFacade.updateQuote({ id: editingQuote.id, ...quote } satisfies UpdateQuotePayload);
+      this.quotesApiFacade.updateQuote({
+        id: editingQuote.id,
+        ...quote,
+      } satisfies UpdateQuotePayload);
     } else {
       this.quotesApiFacade.addQuote(quote);
     }

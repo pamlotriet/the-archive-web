@@ -3,15 +3,15 @@ import { Store } from '@ngrx/store';
 import type {
   CreateReadingLogEntryPayload,
   UpdateReadingLogEntryPayload,
-} from '../../types/reading-log.types';
-import { ReadingLogApiActions } from './readingLogApi.actions';
+} from '@features/reading-log/types/reading-log.types';
 import {
   selectReadingLogDeleting,
   selectReadingLogError,
   selectReadingLogLoading,
   selectReadingLogs,
   selectReadingLogSaving,
-} from './readingLogApi.selectors';
+  ReadingLogApiActions,
+} from '@features/reading-log/state/reading-log-api';
 
 @Injectable({
   providedIn: 'root',

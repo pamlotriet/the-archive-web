@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { notesApiFeatureKey } from './notesApi.reducer';
-import type { NotesApiState } from './notesApi.state';
+import { notesApiFeatureKey, NotesApiState } from '@features/notes/state/notes-api';
 
 export const selectNotesApiState = createFeatureSelector<NotesApiState>(notesApiFeatureKey);
 

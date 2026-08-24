@@ -1,6 +1,6 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
-import { PageHeaderComponent } from '@app/shared/components/page-header/page-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { AuthenticationApiFacade } from '@features/authentication/state/authentication-api';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
@@ -19,7 +19,6 @@ type AccentOption = {
   },
   imports: [PageHeaderComponent, TranslatePipe, PIcon],
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.css',
 })
 export class SettingsComponent {
   private readonly document = inject(DOCUMENT);

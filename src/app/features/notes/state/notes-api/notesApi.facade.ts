@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import type { CreateNotePayload, UpdateNotePayload } from '../../types/note.types';
-import { NotesApiActions } from './notesApi.actions';
+import type { CreateNotePayload, UpdateNotePayload } from '@features/notes/types/note.types';
 import {
+  NotesApiActions,
   selectNotes,
   selectNotesDeleting,
   selectNotesError,
   selectNotesLoading,
   selectNotesSaving,
-} from './notesApi.selectors';
+} from '@features/notes/state/notes-api';
 
 @Injectable({
   providedIn: 'root',

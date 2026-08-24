@@ -1,5 +1,5 @@
-import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
-import { AppUser, UserProfile } from '../../models/user.models';
+import { RegistrationDetails, UserCredentials } from '@features/authentication/models/auth.models';
+import { AppUser, UserProfile } from '@features/authentication/models/user.models';
 
 export interface AuthenticationApiInterface {
   loginWithEmailAndPassword(user: UserCredentials): Promise<AppUser>;

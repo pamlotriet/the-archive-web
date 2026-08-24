@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap } from 'rxjs';
-import { ReadingLogApiActions } from './readingLogApi.actions';
-import { ReadingLogApiService } from './readingLogApi.service';
+import {
+  ReadingLogApiActions,
+  ReadingLogApiService,
+} from '@features/reading-log/state/reading-log-api';
 
 @Injectable()
 export class ReadingLogApiEffects {

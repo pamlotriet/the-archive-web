@@ -3,7 +3,7 @@ import type {
   CreateReadingLogEntryPayload,
   ReadingLogEntry,
   UpdateReadingLogEntryPayload,
-} from '../../types/reading-log.types';
+} from '@features/reading-log/types/reading-log.types';
 
 export const ReadingLogApiActions = createActionGroup({
   source: 'ReadingLogApi',

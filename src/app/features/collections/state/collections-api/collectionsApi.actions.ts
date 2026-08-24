@@ -3,7 +3,7 @@ import type {
   Collection,
   CreateCollectionPayload,
   UpdateCollectionPayload,
-} from '../../types/collection.types';
+} from '@features/collections/types/collection.types';
 
 export const CollectionsApiActions = createActionGroup({
   source: 'CollectionsApi',

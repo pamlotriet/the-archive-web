@@ -9,7 +9,6 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-button',
   imports: [ButtonDirective, TranslatePipe, ButtonModule, PIcon, NgClass],
   templateUrl: './button.html',
-  styleUrl: './button.css',
 })
 export class ButtonComponent {
   readonly buttonClick = output<void>();

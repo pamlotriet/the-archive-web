@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { quotesApiFeatureKey } from './quotesApi.reducer';
-import type { QuotesApiState } from './quotesApi.state';
+import { quotesApiFeatureKey, QuotesApiState } from '@features/quotes/state/quotes-api';
 
 export const selectQuotesApiState = createFeatureSelector<QuotesApiState>(quotesApiFeatureKey);
 

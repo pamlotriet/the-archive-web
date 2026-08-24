@@ -1,9 +1,9 @@
 import { Component, effect, inject, input, OnInit, output, signal } from '@angular/core';
-import { DialogShellComponent } from '@app/shared/components/dialog-shell/dialog-shell.component';
-import { eventNumber, eventValue } from '@app/shared/utils/form-event';
+import { DialogShellComponent } from '@shared/components/dialog-shell/dialog-shell.component';
+import { eventNumber, eventValue } from '@shared/utils/form-event';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CollectionsApiFacade } from '../../../collections/state/collections-api';
-import { TagsApiFacade } from '../../../tags/state/tags-api';
+import { CollectionsApiFacade } from '@features/collections/state/collections-api';
+import { TagsApiFacade } from '@features/tags/state/tags-api';
 import type {
   BookFormat,
   BookOwnership,
@@ -238,9 +238,7 @@ export class NewEntryDialogComponent implements OnInit {
         category === 'books' && this.isSeries() ? this.seriesBookNumber() : undefined,
       ownership: category === 'books' ? this.ownership() : undefined,
       audiobookHours:
-        category === 'books' && this.format() === 'audiobook'
-          ? this.audiobookHours()
-          : undefined,
+        category === 'books' && this.format() === 'audiobook' ? this.audiobookHours() : undefined,
       spiceRating: category === 'books' ? this.spiceRating() : undefined,
       isFavourite: category === 'books' ? this.isFavourite() : undefined,
       wouldRecommend: category === 'books' ? this.wouldRecommend() : undefined,

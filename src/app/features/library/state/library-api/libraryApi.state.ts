@@ -1,4 +1,4 @@
-import type { category, Item } from '../../types/item.types';
+import type { category, Item } from '@features/library/types/item.types';
 
 export type LibraryCategoryFilter = category | 'all';
 export type LibraryStatusFilter = 'all' | 'wantToStart' | 'inProgress' | 'completed';

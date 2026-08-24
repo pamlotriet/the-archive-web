@@ -2,14 +2,13 @@ import { Component, computed, inject } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NavigationItem } from '@app/shared/types/side-navigation.types';
+import { NavigationItem } from '@app/shared/components/side-navigation/types/side-navigation.types';
 import { AuthenticationApiFacade } from '@features/authentication/state/authentication-api';
 
 @Component({
   selector: 'app-side-navigation',
   imports: [RouterLink, RouterLinkActive, PIcon, TranslatePipe],
   templateUrl: './side-navigation.component.html',
-  styleUrl: './side-navigation.component.css',
 })
 export class SideNavigationComponent {
   private readonly authenticationFacade = inject(AuthenticationApiFacade);

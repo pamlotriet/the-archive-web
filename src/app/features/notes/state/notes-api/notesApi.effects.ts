@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap } from 'rxjs';
-import { NotesApiActions } from './notesApi.actions';
-import { NotesApiService } from './notesApi.service';
+import { NotesApiActions, NotesApiService } from '@features/notes/state/notes-api';
 
 @Injectable()
 export class NotesApiEffects {

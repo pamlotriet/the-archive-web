@@ -1,14 +1,15 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { libraryApiFeatureKey } from './libraryApi.reducer';
-import type { LibraryApiState } from './libraryApi.state';
+import { libraryApiFeatureKey, LibraryApiState } from '@features/library/state/library-api';
 
-export const selectLibraryApiState =
-  createFeatureSelector<LibraryApiState>(libraryApiFeatureKey);
+export const selectLibraryApiState = createFeatureSelector<LibraryApiState>(libraryApiFeatureKey);
 
 export const selectLibraryItems = createSelector(selectLibraryApiState, (state) => state.items);
 export const selectLibraryLoading = createSelector(selectLibraryApiState, (state) => state.loading);
 export const selectLibrarySaving = createSelector(selectLibraryApiState, (state) => state.saving);
-export const selectLibraryDeleting = createSelector(selectLibraryApiState, (state) => state.deleting);
+export const selectLibraryDeleting = createSelector(
+  selectLibraryApiState,
+  (state) => state.deleting,
+);
 export const selectLibraryError = createSelector(selectLibraryApiState, (state) => state.error);
 export const selectLibrarySearchTerm = createSelector(
   selectLibraryApiState,

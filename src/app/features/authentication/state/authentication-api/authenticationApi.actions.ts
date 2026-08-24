@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
-import { AppUser, UserProfile } from '../../models/user.models';
+import { RegistrationDetails, UserCredentials } from '@features/authentication/models/auth.models';
+import { AppUser, UserProfile } from '@features/authentication/models/user.models';
 
 export const AuthenticationApiActions = createActionGroup({
   source: 'AuthenticationApi',

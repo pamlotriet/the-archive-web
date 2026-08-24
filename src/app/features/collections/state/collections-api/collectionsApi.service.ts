@@ -14,13 +14,13 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
 import type {
   Collection,
   CreateCollectionPayload,
   UpdateCollectionPayload,
-} from '../../types/collection.types';
-import type { CollectionsApiInterface } from './collectionsApi.interface';
+} from '@features/collections/types/collection.types';
+import type { CollectionsApiInterface } from '@features/collections/state/collections-api';
 
 @Injectable({
   providedIn: 'root',

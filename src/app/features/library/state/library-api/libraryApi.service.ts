@@ -14,9 +14,13 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
-import type { CreateItemPayload, Item, UpdateItemPayload } from '../../types/item.types';
-import type { LibraryApiInterface } from './libraryApi.interface';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
+import type {
+  CreateItemPayload,
+  Item,
+  UpdateItemPayload,
+} from '@features/library/types/item.types';
+import type { LibraryApiInterface } from '@features/library/state/library-api';
 
 @Injectable({
   providedIn: 'root',
@@ -111,7 +115,9 @@ export class LibraryApiService implements LibraryApiInterface {
       yearRead: this.mapOptionalNumber(data['yearRead']),
       startDate: this.mapString(data['startDate']),
       endDate: this.mapString(data['endDate']),
-      tags: Array.isArray(data['tags']) ? data['tags'].filter((tag) => typeof tag === 'string') : [],
+      tags: Array.isArray(data['tags'])
+        ? data['tags'].filter((tag) => typeof tag === 'string')
+        : [],
       collectionIds: Array.isArray(data['collectionIds'])
         ? data['collectionIds'].filter((collectionId) => typeof collectionId === 'string')
         : [],

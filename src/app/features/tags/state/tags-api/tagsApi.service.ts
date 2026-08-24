@@ -15,9 +15,9 @@ import {
   type DocumentSnapshot,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firebaseAuth, firebaseFirestore } from '../../../../core/data/firebase/firebase.config';
-import type { CreateTagPayload, Tag, UpdateTagPayload } from '../../types/tag.types';
-import type { TagsApiInterface } from './tagsApi.interface';
+import { firebaseAuth, firebaseFirestore } from '@core/data/firebase/firebase.config';
+import type { CreateTagPayload, Tag, UpdateTagPayload } from '@features/tags/types/tag.types';
+import { TagsApiInterface } from '@features/tags/state/tags-api/tagsApi.interface';
 
 @Injectable({
   providedIn: 'root',

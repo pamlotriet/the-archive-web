@@ -1,15 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import type { CreateTagPayload, UpdateTagPayload } from '../../types/tag.types';
-import { TagsApiActions } from './tagsApi.actions';
+import type { CreateTagPayload, UpdateTagPayload } from '@features/tags/types/tag.types';
 import {
+  TagsApiActions,
   selectTags,
   selectTagsDeleting,
   selectTagsError,
   selectTagsLoading,
   selectTagsSaving,
-} from './tagsApi.selectors';
-
+} from '@features/tags/state/tags-api';
 @Injectable({
   providedIn: 'root',
 })

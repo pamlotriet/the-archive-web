@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { RegistrationDetails, UserCredentials } from '../../models/auth.models';
-import { AuthenticationApiActions } from './authenticationApi.actions';
+import { RegistrationDetails, UserCredentials } from '@features/authentication/models/auth.models';
 import {
+  AuthenticationApiActions,
   selectAuthenticationError,
   selectAuthenticationLoading,
   selectAuthenticationProfile,
@@ -10,7 +10,7 @@ import {
   selectAuthenticationProfileLoading,
   selectAuthenticationUser,
   selectIsAuthenticated,
-} from './authenticationApi.selectors';
+} from '@features/authentication/state/authentication-api';
 
 @Injectable({
   providedIn: 'root',

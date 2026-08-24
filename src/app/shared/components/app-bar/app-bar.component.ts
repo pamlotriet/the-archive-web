@@ -8,7 +8,6 @@ import { Sun } from '@primeicons/angular/sun';
   selector: 'app-app-bar',
   imports: [TranslatePipe, Moon, Sun],
   templateUrl: './app-bar.component.html',
-  styleUrl: './app-bar.component.css',
 })
 export class AppBarComponent {
   private readonly document = inject(DOCUMENT);

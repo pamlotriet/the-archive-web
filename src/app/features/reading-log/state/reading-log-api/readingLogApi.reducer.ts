@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { ReadingLogApiActions } from './readingLogApi.actions';
-import { initialState } from './readingLogApi.state';
+import { initialState, ReadingLogApiActions } from '@features/reading-log/state/reading-log-api';
 
 export const readingLogApiFeatureKey = 'readingLogApi';
 
