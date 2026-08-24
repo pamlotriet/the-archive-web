@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import type { CreateQuotePayload, UpdateQuotePayload } from '@features/quotes/types/quote.types';
-import { QuotesApiActions } from './quotesApi.actions';
+import { QuotesApiActions } from '@features/quotes/state/quotes-api/quotesApi.actions';
 import {
   selectQuotes,
   selectQuotesDeleting,

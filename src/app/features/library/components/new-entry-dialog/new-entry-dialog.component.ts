@@ -11,7 +11,7 @@ import type {
   Item,
   category,
   status,
-} from '../../types/item.types';
+} from '@features/library/types/item.types';
 
 @Component({
   selector: 'app-new-entry-dialog',
