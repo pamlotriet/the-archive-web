@@ -69,6 +69,17 @@
     "subtitle": "Everything in one place",
     "entries": "{{ amount }} entries",
     "addEntry": "New",
+    "tbrWheel": {
+      "open": "TBR Wheel",
+      "eyebrow": "What should I read next?",
+      "title": "Spin your TBR",
+      "close": "Close TBR wheel",
+      "spin": "Spin the wheel",
+      "spinning": "Spinning...",
+      "winner": "Your next read",
+      "emptyTitle": "Your TBR is empty",
+      "emptyDescription": "Add a book with the Want to Read status to put it on the wheel."
+    },
     "readingLog": {
       "open": "Log session",
       "eyebrow": "Reading log",

@@ -1,4 +1,5 @@
-import { Component, computed, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -12,8 +13,20 @@ import { AuthenticationApiFacade } from '@features/authentication/state/authenti
 })
 export class SideNavigationComponent {
   private readonly authenticationFacade = inject(AuthenticationApiFacade);
+  private readonly document = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
 
   protected readonly user = this.authenticationFacade.user;
+  protected readonly isDark = signal(false);
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      this.applyTheme(storedTheme ? storedTheme === 'dark' : prefersDark);
+    }
+  }
 
   protected readonly userName = computed(() => {
     const user = this.user();
@@ -81,5 +94,19 @@ export class SideNavigationComponent {
 
   protected logout(): void {
     this.authenticationFacade.logout();
+  }
+
+  protected toggleTheme(): void {
+    const dark = !this.isDark();
+    this.applyTheme(dark);
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+  }
+
+  private applyTheme(dark: boolean): void {
+    this.isDark.set(dark);
+    this.document.documentElement.classList.toggle('dark', dark);
   }
 }

@@ -60,6 +60,21 @@
         <button
           type="button"
           class="flex min-h-14 w-full flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent px-1 py-1 text-muted-foreground transition hover:border-gold/20 hover:bg-gold/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          [attr.aria-label]="(isDark() ? 'common.actions.useLightMode' : 'common.actions.useDarkMode') | translate"
+          [attr.aria-pressed]="isDark()"
+          (click)="toggleTheme()"
+        >
+          <span class="grid size-8 place-items-center">
+            <svg [pIcon]="isDark() ? 'sun' : 'moon'" [size]="20" aria-hidden="true"></svg>
+          </span>
+          <span class="text-[0.65rem]">{{ 'common.actions.theme' | translate }}</span>
+        </button>
+      </li>
+
+      <li class="hidden max-md:block max-md:min-w-17 max-md:flex-1">
+        <button
+          type="button"
+          class="flex min-h-14 w-full flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent px-1 py-1 text-muted-foreground transition hover:border-gold/20 hover:bg-gold/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           (click)="logout()"
         >
           <span class="grid size-8 place-items-center">
@@ -77,6 +92,19 @@
     >
       {{ 'navigation.footer' | translate }}
     </p>
+
+    <button
+      type="button"
+      class="mb-3 flex min-h-11 w-full items-center gap-3 rounded-xl border border-border bg-muted/25 px-3 font-semibold text-muted-foreground transition hover:border-gold/40 hover:bg-gold/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      [attr.aria-label]="(isDark() ? 'common.actions.useLightMode' : 'common.actions.useDarkMode') | translate"
+      [attr.aria-pressed]="isDark()"
+      (click)="toggleTheme()"
+    >
+      <span class="grid size-8 place-items-center rounded-lg bg-gold/15 text-gold">
+        <svg [pIcon]="isDark() ? 'sun' : 'moon'" [size]="18" aria-hidden="true"></svg>
+      </span>
+      <span>{{ 'common.actions.theme' | translate }}</span>
+    </button>
 
     <div class="flex items-center gap-3 rounded-2xl border border-border bg-muted/35 p-3 shadow-sm">
       <span

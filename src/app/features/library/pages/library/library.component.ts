@@ -7,6 +7,7 @@ import { PIcon } from '@primeicons/angular/p-icon';
 import { ItemCardComponent } from '@features/library/components/item-card/item-card.component';
 import { NewEntryDialogComponent } from '@features/library/components/new-entry-dialog/new-entry-dialog.component';
 import { ReadingLogDialogComponent } from '@features/library/components/reading-log-dialog/reading-log-dialog.component';
+import { TbrWheelDialogComponent } from '@features/library/components/tbr-wheel-dialog/tbr-wheel-dialog.component';
 import { LibraryApiFacade, LibraryStatusFilter } from '@features/library/state/library-api';
 import type {
   CreateItemPayload,
@@ -26,6 +27,7 @@ import type {
     ItemCardComponent,
     NewEntryDialogComponent,
     ReadingLogDialogComponent,
+    TbrWheelDialogComponent,
     PIcon,
   ],
   templateUrl: './library.component.html',
@@ -49,6 +51,7 @@ export class LibraryComponent implements OnInit {
   protected readonly isNewEntryOpen = signal(false);
   protected readonly editingItem = signal<Item | null>(null);
   protected readonly isReadingLogOpen = signal(false);
+  protected readonly isTbrWheelOpen = signal(false);
 
   protected readonly categories = [
     { id: 'all', labelKey: 'library.categories.all', contentKey: 'library.content.all' },
@@ -117,6 +120,10 @@ export class LibraryComponent implements OnInit {
     this.isReadingLogOpen.set(true);
   }
 
+  protected openTbrWheel(): void {
+    this.isTbrWheelOpen.set(true);
+  }
+
   protected editItem(item: Item): void {
     this.editingItem.set(item);
     this.isNewEntryOpen.set(true);
@@ -136,6 +143,10 @@ export class LibraryComponent implements OnInit {
 
   protected closeReadingLog(): void {
     this.isReadingLogOpen.set(false);
+  }
+
+  protected closeTbrWheel(): void {
+    this.isTbrWheelOpen.set(false);
   }
 
   protected closeNewEntry(): void {
